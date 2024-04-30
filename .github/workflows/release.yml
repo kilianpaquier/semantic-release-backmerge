@@ -21,6 +21,11 @@ jobs:
     outputs:
       version: v${{ steps.semantic_release.outputs.new_release_version }}
       release: ${{ steps.release.outputs.release }}
+    env:
+      GIT_AUTHOR_NAME: ${{ github.triggering_actor }}
+      GIT_AUTHOR_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
+      GIT_COMMITTER_NAME: ${{ github.triggering_actor }}
+      GIT_COMMITTER_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
     steps:
       - uses: actions/checkout@v4
       - id: sha

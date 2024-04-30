@@ -43,7 +43,6 @@ jobs:
             @semantic-release/npm
             @semantic-release/release-notes-generator
             conventional-changelog-conventionalcommits
-          ci: false
           dry_run: true
           tag_format: v${version}
           branches: |

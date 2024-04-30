@@ -1,0 +1,13 @@
+{
+  "name": "e2e",
+  "type": "module",
+  "devDependencies": {
+    "@kilianpaquier/semantic-release-backmerge": "link:@kilianpaquier/semantic-release-backmerge",
+    "@semantic-release/commit-analyzer": "^12.0.0",
+    "@semantic-release/exec": "^6.0.3",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

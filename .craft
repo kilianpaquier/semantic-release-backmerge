@@ -1,0 +1,9 @@
+# Craft configuration file (https://github.com/kilianpaquier/craft)
+---
+ci:
+  name: github
+maintainers:
+  - name: kilianpaquier
+no_chart: true
+no_makefile: true
+platform: github

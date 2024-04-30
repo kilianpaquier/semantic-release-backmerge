@@ -54,6 +54,7 @@ jobs:
             ]
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: echo $VERSION
         env:
           VERSION: v${{ steps.semantic_release.outputs.new_release_version }}

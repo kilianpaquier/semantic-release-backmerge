@@ -16,8 +16,8 @@ jobs:
   version:
     name: Version
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    if: github.ref_protected == true
+    environment: release
     outputs:
       version: v${{ steps.semantic_release.outputs.new_release_version }}
       release: ${{ steps.release.outputs.release }}
@@ -53,7 +53,7 @@ jobs:
               { "name": "${{ github.ref_name }}", "prerelease": "${{ steps.sha.outputs.sha }}" }
             ]
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: echo $VERSION
         env:
@@ -69,6 +69,7 @@ jobs:
   node-build:
     name: Node Build
     runs-on: ubuntu-latest
+    if: github.ref_protected == true
     needs: version
     steps:
       - uses: actions/checkout@v4

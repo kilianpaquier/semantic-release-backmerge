@@ -28,6 +28,8 @@ jobs:
       GIT_COMMITTER_EMAIL: ${{ github.triggering_actor }}@users.noreply.github.com
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - id: sha
         run: echo "sha=$(echo "$GITHUB_REF_NAME" | sha256sum | cut -c -8)" >> $GITHUB_OUTPUT
       # https://github.com/marketplace/actions/action-for-semantic-release

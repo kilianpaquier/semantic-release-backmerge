@@ -1,3 +1,10 @@
+## [1.0.0-alpha.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2024-05-01)
+
+
+### Documentation
+
+* **readme:** initialize readme ([7fbf413](https://github.com/kilianpaquier/semantic-release-backmerge/commit/7fbf413d94ecf92a3322103ae1f760558a21872e))
+
 ## [1.0.0-alpha.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2024-05-01)
 
 

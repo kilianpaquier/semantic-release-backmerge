@@ -1,5 +1,6 @@
 {
   "name": "@kilianpaquier/semantic-release-backmerge",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "type": "module",
   "version": "1.0.0-alpha.1",

@@ -1,3 +1,11 @@
+## [1.0.0-alpha.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2024-05-01)
+
+
+### Bug Fixes
+
+* **ci:** add artifact upload after node-build on release workflow ([b691b62](https://github.com/kilianpaquier/semantic-release-backmerge/commit/b691b62a8513f3de7e38dd138aee106e337aeb29))
+* **ci:** ensure index.js' path is define in package.json ([7119b71](https://github.com/kilianpaquier/semantic-release-backmerge/commit/7119b71bababdb2836d4cdb0ffe21e746e8b239f))
+
 ## 1.0.0-alpha.1 (2024-04-30)
 
 

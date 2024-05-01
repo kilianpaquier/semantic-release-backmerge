@@ -15,7 +15,7 @@ const configErrors: { [k in keyof BackmergeConfig]: PartialError } = {
         message: "Invalid `ci` configuration (coming from semantic-release options).",
     },
     commit: {
-        details: `[Commit](${linkify("commit")}) must be a string.`,
+        details: `[Commit](${linkify("shared-configuration")}) must be a string.`,
         message: "Invalid `commit` configuration.",
     },
     // shouldn't happen since it comes from semantic-release config
@@ -27,7 +27,7 @@ const configErrors: { [k in keyof BackmergeConfig]: PartialError } = {
         message: "Invalid `dryRun` configuration (coming from semantic-release options).",
     },
     platform: {
-        details: `[Platform](${linkify("platform")}) must be one of 'github', 'gitlab'.`,
+        details: `[Platform](${linkify("shared-configuration")}) must be one of 'github', 'gitlab'.`,
         message: "Invalid `platform` configuration.",
     },
     // shouldn't happen since it comes from semantic-release config
@@ -35,11 +35,11 @@ const configErrors: { [k in keyof BackmergeConfig]: PartialError } = {
         message: "Invalid `repositoryUrl` configuration (coming from semantic-release options).",
     },
     targets: {
-        details: `[Targets](${linkify("targets")}) must be a valid array of targets ({ from: "...", to: "..." }).`,
+        details: `[Targets](${linkify("shared-configuration")}) must be a valid array of targets ({ from: "...", to: "..." }).`,
         message: "Invalid `targets` configuration.",
     },
     title: {
-        details: `[Title](${linkify("title")}) must be a string.`,
+        details: `[Title](${linkify("shared-configuration")}) must be a string.`,
         message: "Invalid `title` configuration.",
     },
 }

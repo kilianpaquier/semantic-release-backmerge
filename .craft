@@ -2,6 +2,7 @@
 ---
 ci:
   name: github
+license: mit
 maintainers:
   - name: kilianpaquier
 no_chart: true

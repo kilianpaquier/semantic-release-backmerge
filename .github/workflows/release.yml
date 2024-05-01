@@ -45,6 +45,7 @@ jobs:
             @semantic-release/npm
             @semantic-release/release-notes-generator
             conventional-changelog-conventionalcommits
+            semantic-release-license
           dry_run: true
           tag_format: v${version}
           branches: |
@@ -86,7 +87,7 @@ jobs:
       - run: bun run build
       - uses: actions/upload-artifact@v4
         with:
-          name: node-build
+          name: build
           path: dist
           retention-days: 1
 
@@ -108,7 +109,7 @@ jobs:
           persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
-          name: node-build
+          name: build
           path: dist
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semantic-release
@@ -123,6 +124,7 @@ jobs:
             @semantic-release/npm
             @semantic-release/release-notes-generator
             conventional-changelog-conventionalcommits
+            semantic-release-license
           dry_run: ${{ inputs.dry_run }}
           tag_format: v${version}
           branches: |

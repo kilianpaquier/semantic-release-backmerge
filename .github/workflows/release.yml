@@ -84,6 +84,11 @@ jobs:
           bun-version: 1.1.6
       - run: bun install --frozen-lockfile
       - run: bun run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: node-build
+          path: dist
+          retention-days: 1
 
   release:
     name: Release
@@ -101,6 +106,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-build
+          path: dist
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semantic-release
         uses: cycjimmy/semantic-release-action@v4

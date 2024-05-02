@@ -132,7 +132,7 @@ export const mergeBranch = async (context: Partial<VerifyConditionsContext>, con
         return await createPullRequest(config, info, from, to)
     }
 
-    const push = ["push", authModificator(info, config.platform, config.token), `HEAD:${to}`]
+    const push = ["push", authModificator(info, config.platform, config.token)]
     if (config.dryRun) {
         context.logger?.log(`Running with --dry-run, push from '${from}' into '${to}' with commit '${commit}' will not update ${remote}.`)
         push.push("--dry-run")

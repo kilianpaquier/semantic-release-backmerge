@@ -1,3 +1,10 @@
+## [1.0.0-alpha.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2024-05-02)
+
+
+### Bug Fixes
+
+* **config:** add env to ensure default function ([64d4c0d](https://github.com/kilianpaquier/semantic-release-backmerge/commit/64d4c0da690ea92359da2607013756035a81ed73))
+
 ## [1.0.0-alpha.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2024-05-02)
 
 

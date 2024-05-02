@@ -10,7 +10,6 @@ import { type VerifyConditionsContext } from "semantic-release"
 import { backmerge } from "../lib/backmerge"
 import { ensureDefault } from "../lib/verify-config"
 
-
 describe("backmerge", () => {
     const mergeSpy = spyOn(git, "mergeBranch")
     const globSpy = spyOn(git, "branchesByGlob")
@@ -30,14 +29,15 @@ describe("backmerge", () => {
         logger: console,
     })
 
+    const info: RepositoryInfo = { owner: "kilianpaquier", repo: "semantic-release-backmerge" }
+
     test("should not do anything since released branch is not in targets", async () => {
         // Arrange
         const context = getContext("main")
         const logSpy = spyOn(context, "logger")
 
         const config: BackmergeConfig = ensureDefault({})
-        const info: RepositoryInfo = {}
-
+        
         // Act
         const errors = await backmerge(context, config, info)
 
@@ -60,8 +60,7 @@ describe("backmerge", () => {
                 { from: "main", to: "develop" }
             ]
         })
-        const info: RepositoryInfo = {}
-
+        
         // Act
         const errors = await backmerge(context, config, info)
 
@@ -84,8 +83,7 @@ describe("backmerge", () => {
                 { from: "v.*", to: "v*" }
             ]
         })
-        const info: RepositoryInfo = {}
-
+        
         // Act
         const errors = await backmerge(context, config, info)
 
@@ -110,8 +108,7 @@ describe("backmerge", () => {
                 { from: "main", to: "develop*" }
             ]
         })
-        const info: RepositoryInfo = {}
-
+        
         // Act
         const errors = await backmerge(context, config, info)
 
@@ -140,8 +137,7 @@ describe("backmerge", () => {
                 { from: "main", to: "staging" }
             ]
         })
-        const info: RepositoryInfo = {}
-
+        
         // Act
         const errors = await backmerge(context, config, info)
 

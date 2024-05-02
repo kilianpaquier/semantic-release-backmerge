@@ -1,109 +1,80 @@
 import { type BackmergeConfig, Platform, type RepositoryInfo } from "./models/config"
-import { getConfigError, getEnvError } from "./error"
 
 import SemanticReleaseError from "@semantic-release/error"
 import escapeStringRegexp from "escape-string-regexp"
 import parseUrl from "parse-url"
 
-import { type VerifyConditionsContext } from "semantic-release"
+import { getConfigError } from "./error"
 
-interface RepositoryInfoResult {
-    info?: RepositoryInfo
-    errors: SemanticReleaseError[]
+// retrieved from https://github.com/semantic-release/github/blob/master/lib/parse-github-url.js
+const parseRepositoryUrl = (repositoryUrl: string): Partial<RepositoryInfo> => {
+    const [match, auth, host, path] = /^(?!.+:\/\/)(?:(?<auth>.*)@)?(?<host>.*?):(?<path>.*)$/.exec(repositoryUrl) ?? []
+    try {
+        const url = new URL(match ? `ssh://${auth ? `${auth}@` : ""}${host}/${path}` : repositoryUrl)
+        const [, owner, repo] = /^\/(?<owner>[^/]+)?\/?(?<repo>.+?)(?:\.git)?$/.exec(url.pathname) ?? []
+        return { owner, repo }
+    } catch {
+        return {}
+    }
 }
 
-const getBitbucketInfo = (context: Partial<VerifyConditionsContext>, repositoryUrl: string): RepositoryInfoResult => {
+const getBitbucketInfo = (repositoryUrl: string, env?: Record<string, string>): [RepositoryInfo | undefined, SemanticReleaseError[]] => {
     const errors: SemanticReleaseError[] = []
 
-    const apiUrl = context.env?.BITBUCKET_API_URL
-    if (!apiUrl) {
-        errors.push(getEnvError("BITBUCKET_API_URL"))
-    }
+    const info = parseRepositoryUrl(repositoryUrl)
 
-    const token = context.env?.BB_TOKEN ?? context.env?.BITBUCKET_TOKEN
-    if (!token) {
-        errors.push(getEnvError("BITBUCKET_TOKEN"))
-    }
-
-    // retrieved from https://github.com/semantic-release/github/blob/master/lib/parse-github-url.js
-    const parseBitbucketURL = (): Partial<RepositoryInfo> => {
-        const [match, auth, host, path] = /^(?!.+:\/\/)(?:(?<auth>.*)@)?(?<host>.*?):(?<path>.*)$/.exec(repositoryUrl) ?? []
-        try {
-            const url = new URL(match ? `ssh://${auth ? `${auth}@` : ""}${host}/${path}` : repositoryUrl)
-            const [, owner, repo] = /^\/(?<owner>[^/]+)?\/?(?<repo>.+?)(?:\.git)?$/.exec(url.pathname) ?? []
-            return { owner, repo }
-        } catch {
-            return {}
-        }
-    }
-    const info = parseBitbucketURL()
-
-    const owner = context.env?.BITBUCKET_WORKSPACE ?? info.owner
-    const repo = context.env?.BITBUCKET_REPO_SLUG ?? info.repo
+    const owner = env?.BITBUCKET_WORKSPACE ?? info.owner
+    const repo = env?.BITBUCKET_REPO_SLUG ?? info.repo
     if (!owner || owner === "" || !repo || repo === "") {
         errors.push(getConfigError("repositoryUrl"))
     }
-    return { errors, info: { apiUrl, owner, repo, token } }
+
+    if (errors.length > 0) {
+        return [, errors]
+    }
+    return [{ owner: owner!, repo: repo! }, []]
 }
 
-const getGithubInfo = (context: Partial<VerifyConditionsContext>, repositoryUrl: string): RepositoryInfoResult => {
+const getGiteaInfo = (repositoryUrl: string): [RepositoryInfo | undefined, SemanticReleaseError[]] => {
     const errors: SemanticReleaseError[] = []
 
-    const apiUrl = context.env?.GITHUB_API_URL
-    if (!apiUrl) {
-        errors.push(getEnvError("GITHUB_API_URL"))
+    const { owner, repo } = parseRepositoryUrl(repositoryUrl)
+    if (!owner || owner === "" || !repo || repo === "") {
+        errors.push(getConfigError("repositoryUrl"))
     }
 
-    const token = context.env?.GH_TOKEN ?? context.env?.GITHUB_TOKEN
-    if (!token) {
-        errors.push(getEnvError("GITHUB_TOKEN"))
+    if (errors.length > 0) {
+        return [, errors]
     }
+    return [{ owner: owner!, repo: repo! }, []]
+}
 
-    // retrieved from https://github.com/semantic-release/github/blob/master/lib/parse-github-url.js
-    const parseGithubURL = (): Partial<RepositoryInfo> => {
-        const [match, auth, host, path] = /^(?!.+:\/\/)(?:(?<auth>.*)@)?(?<host>.*?):(?<path>.*)$/.exec(repositoryUrl) ?? []
-        try {
-            const url = new URL(match ? `ssh://${auth ? `${auth}@` : ""}${host}/${path}` : repositoryUrl)
-            const [, owner, repo] = /^\/(?<owner>[^/]+)?\/?(?<repo>.+?)(?:\.git)?$/.exec(url.pathname) ?? []
-            return { owner, repo }
-        } catch {
-            return {}
-        }
-    }
-    const info = parseGithubURL()
+const getGithubInfo = (repositoryUrl: string, env?: Record<string, string>): [RepositoryInfo | undefined, SemanticReleaseError[]] => {
+    const errors: SemanticReleaseError[] = []
 
-    const owner = context.env?.GITHUB_REPOSITORY_OWNER ?? info.owner
-    const repository = context.env?.GITHUB_REPOSITORY
+    const info = parseRepositoryUrl(repositoryUrl)
+
+    const owner = env?.GITHUB_REPOSITORY_OWNER ?? info.owner
+    const repository = env?.GITHUB_REPOSITORY
     const repo = repository ? repository.replace(`${owner}/`, "") : info.repo
     if (!owner || owner === "" || !repo || repo === "") {
         errors.push(getConfigError("repositoryUrl"))
     }
-    return { errors, info: { apiUrl, owner, repo, token } }
+
+    if (errors.length > 0) {
+        return [, errors]
+    }
+    return [{ owner: owner!, repo: repo! }, []]
 }
 
-const getGitlabInfo = (context: Partial<VerifyConditionsContext>, repositoryUrl: string): RepositoryInfoResult => {
+const getGitlabInfo = (repositoryUrl: string, baseUrl: string, env?: Record<string, string>): [RepositoryInfo | undefined, SemanticReleaseError[]] => {
     const errors: SemanticReleaseError[] = []
-
-    const apiUrl = context.env?.CI_API_V4_URL ?? context.env?.GITLAB_API_URL
-    if (!apiUrl) {
-        errors.push(getEnvError("GITLAB_API_URL"))
-    }
-
-    const gitlabUrl = context.env?.CI_SERVER_URL ?? context.env?.GITLAB_URL
-    if (!gitlabUrl) {
-        errors.push(getEnvError("GITLAB_URL"))
-    }
-
-    const token = context.env?.GL_TOKEN ?? context.env?.GITLAB_TOKEN
-    if (!token) {
-        errors.push(getEnvError("GITLAB_TOKEN"))
-    }
 
     // retrieved from https://github.com/semantic-release/gitlab/blob/master/lib/get-repo-id.js
     const parseGitlabURL = (): string => {
         try {
             return parseUrl(repositoryUrl).pathname.
-                replace(new RegExp(`^${escapeStringRegexp(parseUrl(gitlabUrl ?? "").pathname)}`), "").
+                replace(new RegExp(`^${escapeStringRegexp(parseUrl(baseUrl ?? "").pathname)}`), "").
                 replace(/^\//, "").
                 replace(/\/$/, "").
                 replace(/\.git$/, "")
@@ -114,24 +85,30 @@ const getGitlabInfo = (context: Partial<VerifyConditionsContext>, repositoryUrl:
 
     // projectID is either the real project id number like 1560637 (available in gitlab UI or CI variables)
     // or the full path (later URI encoded in case of pull request creation) to the project like kilianpaquier/semantic-release-backmerge
-    const projectID = context.env?.CI_PROJECT_ID ?? parseGitlabURL()
+    const projectID = env?.CI_PROJECT_ID ?? parseGitlabURL()
     if (projectID === "") {
         errors.push(getConfigError("repositoryUrl"))
     }
 
-    return { errors, info: { apiUrl, repo: projectID, token } }
+    if (errors.length > 0) {
+        return [, errors]
+    }
+    return [{ owner: "", repo: projectID }, []]
 }
 
-export const repositoryInfo = (context: Partial<VerifyConditionsContext>, config: BackmergeConfig): RepositoryInfoResult => {
+export const repositoryInfo = (config: BackmergeConfig, env?: Record<string, string>): [RepositoryInfo | undefined, SemanticReleaseError[]] => {
     switch (config.platform) {
         case Platform.BITBUCKET:
-            return getBitbucketInfo(context, config.repositoryUrl)
+        case Platform.BITBUCKET_CLOUD:
+            return getBitbucketInfo(config.repositoryUrl, env)
+        case Platform.GITEA:
+            return getGiteaInfo(config.repositoryUrl)
         case Platform.GITHUB:
-            return getGithubInfo(context, config.repositoryUrl)
+            return getGithubInfo(config.repositoryUrl, env)
         case Platform.GITLAB:
-            return getGitlabInfo(context, config.repositoryUrl)
+            return getGitlabInfo(config.repositoryUrl, config.baseUrl, env)
         default:
             // shouldn't happen since config is validated beforehand
-            return { errors: [getConfigError("platform", config.platform)] }
+            return [, [getConfigError("platform", config.platform)]]
     }
 }

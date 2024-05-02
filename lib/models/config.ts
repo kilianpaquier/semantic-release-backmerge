@@ -1,8 +1,11 @@
 // eslint-disable-next-line no-shadow
 export enum Platform {
     BITBUCKET = "bitbucket",
+    BITBUCKET_CLOUD = "bitbucket-cloud",
+    GITEA = "gitea",
     GITHUB = "github",
     GITLAB = "gitlab",
+    NULL = "",
 }
 
 export interface Target {
@@ -11,6 +14,8 @@ export interface Target {
 }
 
 export interface BackmergeConfig {
+    apiPathPrefix: string
+    baseUrl: string
     ci: boolean // comes from semantic-release config
     commit: string
     debug: boolean // comes from semantic-release config
@@ -19,13 +24,12 @@ export interface BackmergeConfig {
     repositoryUrl: string // comes from semantic-release config
     targets: Target[]
     title: string
+    token: string
 }
 
 export interface RepositoryInfo {
-    apiUrl?: string
-    owner?: string
-    repo?: string
-    token?: string
+    owner: string
+    repo: string
 }
 
 export const defaultTitle = "Automatic merge failure"

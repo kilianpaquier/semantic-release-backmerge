@@ -1,3 +1,10 @@
+## [1.0.0-alpha.9](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2024-05-02)
+
+
+### Bug Fixes
+
+* **branches:** bad split when multiple branches are returned by ls-remote ([9053d32](https://github.com/kilianpaquier/semantic-release-backmerge/commit/9053d32b629a172a3929a67a0959b3824647dac3))
+
 ## [1.0.0-alpha.8](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2024-05-02)
 
 

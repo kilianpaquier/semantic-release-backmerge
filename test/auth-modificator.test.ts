@@ -6,7 +6,7 @@ import { Platform } from "../lib/models/config"
 import { authModificator } from "../lib/auth-modificator"
 
 describe("modificator", () => {
-    test("should return a valid authenticated git url with bitbucket", () => {
+    test("should return a valid authenticated git ssh url with bitbucket", () => {
         // Arrange
         const info = gitUrlParse("git@github.com:kilianpaquier/semantic-release-backmerge.git")
 
@@ -17,7 +17,18 @@ describe("modificator", () => {
         expect(url).toEqual("https://x-token-auth:token@github.com/kilianpaquier/semantic-release-backmerge.git")
     })
 
-    test("should return a valid authenticated git url with bitbucket cloud", () => {
+    test("should return a valid authenticated git ssh url with bitbucket and port", () => {
+        // Arrange
+        const info = gitUrlParse("ssh://git@github.com:7099/kilianpaquier/semantic-release-backmerge.git")
+
+        // Act
+        const url = authModificator(info, Platform.BITBUCKET, "token")
+
+        // Assert
+        expect(url).toEqual("https://x-token-auth:token@github.com:7099/kilianpaquier/semantic-release-backmerge.git")
+    })
+
+    test("should return a valid authenticated git https url with bitbucket cloud", () => {
         // Arrange
         const info = gitUrlParse("https://github.com/kilianpaquier/semantic-release-backmerge.git")
 
@@ -28,7 +39,7 @@ describe("modificator", () => {
         expect(url).toEqual("https://x-token-auth:token@github.com/kilianpaquier/semantic-release-backmerge.git")
     })
 
-    test("should return a valid authenticated git url with bitbucket and port", () => {
+    test("should return a valid authenticated git https url with bitbucket and port", () => {
         // Arrange
         const info = gitUrlParse("https://github.com:7099/kilianpaquier/semantic-release-backmerge.git")
 
@@ -39,7 +50,7 @@ describe("modificator", () => {
         expect(url).toEqual("https://x-token-auth:token@github.com:7099/kilianpaquier/semantic-release-backmerge.git")
     })
 
-    test("should return a valid authenticated git url with gitea", () => {
+    test("should return a valid authenticated git https url with gitea and git prefix", () => {
         // Arrange
         const info = gitUrlParse("git+https://github.com/kilianpaquier/semantic-release-backmerge.git")
 
@@ -50,7 +61,7 @@ describe("modificator", () => {
         expect(url).toEqual("https://gitea-token:token@github.com/kilianpaquier/semantic-release-backmerge.git")
     })
 
-    test("should return a valid authenticated git url with github", () => {
+    test("should return a valid authenticated git https url with github and already present user/token", () => {
         // Arrange
         const info = gitUrlParse("https://some-user:token@github.com/kilianpaquier/semantic-release-backmerge.git")
 
@@ -61,7 +72,7 @@ describe("modificator", () => {
         expect(url).toEqual("https://x-access-token:token@github.com/kilianpaquier/semantic-release-backmerge.git")
     })
 
-    test("should return a valid authenticated git url with gitlab", () => {
+    test("should return a valid authenticated git ssh url with gitlab with subgroup", () => {
         // Arrange
         const info = gitUrlParse("git@github.com:kilianpaquier/subgroup/semantic-release-backmerge.git")
 

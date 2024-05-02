@@ -138,17 +138,4 @@ describe("getConfigError", () => {
         expect(error.message).toContain("'ci'")
         expect(error.details).toBeEmpty()
     })
-
-    test("should have a valid repositoryUrl error", () => {
-        // Arrange
-        const code = "EINVALIDREPOSITORYURL"
-
-        // Act
-        const error = getConfigError("repositoryUrl", true)
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("'repositoryUrl'")
-        expect(error.details).toBeEmpty()
-    })
 })

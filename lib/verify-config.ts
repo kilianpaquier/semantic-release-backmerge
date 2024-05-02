@@ -34,13 +34,15 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<str
         }
 
         // github
-        if (env?.GH_URL ?? env?.GITHUB_URL ?? env?.GITHUB_API_URL) {
-            return [Platform.GITHUB, env?.GH_URL ?? env?.GITHUB_URL ?? env?.GITHUB_API_URL, config.apiPathPrefix ?? ""]
+        const githubUrl = env?.GH_URL ?? env?.GITHUB_URL ?? env?.GITHUB_API_URL
+        if (githubUrl) {
+            return [Platform.GITHUB, githubUrl, config.apiPathPrefix ?? ""]
         }
 
         // gitlab
-        if (env?.GL_URL ?? env?.GITLAB_URL ?? env?.CI_SERVER_URL) {
-            return [Platform.GITLAB, env?.GL_URL ?? env?.GITLAB_URL ?? env?.CI_SERVER_URL, config.apiPathPrefix ?? "/api/v4"]
+        const gitlabUrl = env?.GL_URL ?? env?.GITLAB_URL ?? env?.CI_SERVER_URL
+        if (gitlabUrl) {
+            return [Platform.GITLAB, gitlabUrl, config.apiPathPrefix ?? "/api/v4"]
         }
 
         return [Platform.NULL, "", ""]
@@ -50,12 +52,10 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<str
     return {
         apiPathPrefix,
         baseUrl,
-        ci: config.ci ?? false, // shouldn't happen since it comes from semantic-release config
         commit: config.commit ?? defaultCommit,
         debug: config.debug ?? false, // shouldn't happen since it comes from semantic-release config
         dryRun: config.dryRun ?? false, // shouldn't happen since it comes from semantic-release config
         platform: config.platform ?? platform,
-        repositoryUrl: config.repositoryUrl ?? "", // shouldn't happen since it comes from semantic-release config
         targets: config.targets ?? [],
         title: config.title ?? defaultTitle,
         // checking all environment variables since it doesn't matter which is valued whatever the platform could be
@@ -72,12 +72,10 @@ export const verifyConfig = (config: BackmergeConfig): SemanticReleaseError[] =>
     const validators: { [k in keyof BackmergeConfig]: ((value: any) => boolean)[] } = {
         apiPathPrefix: [isString],
         baseUrl: [isString, stringNotEmpty],
-        ci: [isBoolean], // shouldn't happen since it comes from semantic-release config
         commit: [isString, stringNotEmpty],
         debug: [isBoolean], // shouldn't happen since it comes from semantic-release config
         dryRun: [isBoolean], // shouldn't happen since it comes from semantic-release config
         platform: [isString, validatePlatform],
-        repositoryUrl: [isString, stringNotEmpty], // shouldn't happen since it comes from semantic-release config
         targets: [isArray, validateTargets],
         title: [isString, stringNotEmpty],
         token: [isString, stringNotEmpty]

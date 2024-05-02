@@ -1,27 +1,28 @@
 // import module for spying / stubbing
 import * as git from "../lib/git"
 
-import type { BackmergeConfig, RepositoryInfo } from "../lib/models/config"
 import { afterAll, afterEach, describe, expect, spyOn, test } from "bun:test"
 
 import SemanticReleaseError from "@semantic-release/error"
+import gitUrlParse from "git-url-parse"
 
+import { type BackmergeConfig } from "../lib/models/config"
 import { type VerifyConditionsContext } from "semantic-release"
 import { backmerge } from "../lib/backmerge"
 import { ensureDefault } from "../lib/verify-config"
 
 describe("backmerge", () => {
     const mergeSpy = spyOn(git, "mergeBranch")
-    const globSpy = spyOn(git, "branchesByGlob")
+    const branchesSpy = spyOn(git, "gitBranches")
 
     afterEach(() => {
         mergeSpy.mockReset()
-        globSpy.mockReset()
+        branchesSpy.mockReset()
     })
 
     afterAll(() => {
         mergeSpy.mockRestore()
-        globSpy.mockRestore()
+        branchesSpy.mockRestore()
     })
 
     const getContext = (branchName: string): Partial<VerifyConditionsContext> => ({
@@ -29,7 +30,7 @@ describe("backmerge", () => {
         logger: console,
     })
 
-    const info: RepositoryInfo = { owner: "kilianpaquier", repo: "semantic-release-backmerge" }
+    const info = gitUrlParse("https://github.com/kilianpaquier/semantic-release-backmerge.git")
 
     test("should not do anything since released branch is not in targets", async () => {
         // Arrange
@@ -43,14 +44,14 @@ describe("backmerge", () => {
 
         // Assert
         expect(errors).toBeEmpty()
-        expect(globSpy).not.toHaveBeenCalled()
+        expect(branchesSpy).not.toHaveBeenCalled()
         expect(mergeSpy).not.toHaveBeenCalled()
         expect(logSpy).toHaveBeenCalledTimes(1)
     })
 
     test("should not do anything since target branches don't exist", async () => {
         // Arrange
-        globSpy.mockImplementation(() => Promise.resolve([]))
+        branchesSpy.mockImplementation(() => Promise.resolve([]))
 
         const context = getContext("main")
         const logSpy = spyOn(context, "logger")
@@ -66,21 +67,21 @@ describe("backmerge", () => {
 
         // Assert
         expect(errors).toBeEmpty()
-        expect(globSpy).toHaveBeenCalledTimes(1)
+        expect(branchesSpy).toHaveBeenCalledTimes(1)
         expect(mergeSpy).not.toHaveBeenCalled()
         expect(logSpy).toHaveBeenCalledTimes(2)
     })
 
     test("should not do anything since target branch exist but is below minor or above major semver", async () => {
         // Arrange
-        globSpy.mockImplementation(() => Promise.resolve(["v1.0", "v2.0"]))
+        branchesSpy.mockImplementation(() => Promise.resolve(["v1.0", "v2.0"]))
 
         const context = getContext("v1.1")
         const logSpy = spyOn(context, "logger")
 
         const config: BackmergeConfig = ensureDefault({
             targets: [
-                { from: "v.*", to: "v*" }
+                { from: "v.*", to: "v.*" }
             ]
         })
         
@@ -89,14 +90,14 @@ describe("backmerge", () => {
 
         // Assert
         expect(errors).toBeEmpty()
-        expect(globSpy).toHaveBeenCalledTimes(1)
+        expect(branchesSpy).toHaveBeenCalledTimes(1)
         expect(mergeSpy).not.toHaveBeenCalled()
         expect(logSpy).toHaveBeenCalledTimes(4)
     })
 
     test("should call merge branch and return error", async () => {
         // Arrange
-        globSpy.mockImplementation(() => Promise.resolve(["develop", "develop_another"]))
+        branchesSpy.mockImplementation(() => Promise.resolve(["develop", "develop_another"]))
         mergeSpy.mockImplementationOnce(() => Promise.resolve(new SemanticReleaseError("a message", "ECODE")))
         mergeSpy.mockImplementationOnce(() => Promise.resolve(new SemanticReleaseError("another message", "ECODE")))
 
@@ -117,15 +118,14 @@ describe("backmerge", () => {
             new SemanticReleaseError("a message", "ECODE"),
             new SemanticReleaseError("another message", "ECODE"),
         ])
-        expect(globSpy).toHaveBeenCalledTimes(1)
+        expect(branchesSpy).toHaveBeenCalledTimes(1)
         expect(mergeSpy).toHaveBeenCalledTimes(2)
         expect(logSpy).toHaveBeenCalledTimes(2)
     })
 
     test("should call merge branch and return success", async () => {
         // Arrange
-        globSpy.mockImplementationOnce(() => Promise.resolve(["develop"]))
-        globSpy.mockImplementationOnce(() => Promise.resolve(["staging"]))
+        branchesSpy.mockImplementation(() => Promise.resolve(["develop", "staging"]))
         mergeSpy.mockImplementation(() => Promise.resolve())
 
         const context = getContext("main")
@@ -143,7 +143,7 @@ describe("backmerge", () => {
 
         // Assert
         expect(errors).toBeEmpty()
-        expect(globSpy).toHaveBeenCalledTimes(2)
+        expect(branchesSpy).toHaveBeenCalledTimes(1)
         expect(mergeSpy).toHaveBeenCalledTimes(2)
         expect(logSpy).toHaveBeenCalledTimes(2)
     })

@@ -1,12 +1,13 @@
-import { type BackmergeConfig, type RepositoryInfo } from "./models/config"
-import { branchesByGlob, mergeBranch } from "./git"
+import { gitBranches, mergeBranch } from "./git"
 
 import type SemanticReleaseError from "@semantic-release/error"
 import semver from "semver"
 
+import { type BackmergeConfig } from "./models/config"
+import { type GitUrl } from "git-url-parse"
 import { type VerifyConditionsContext } from "semantic-release"
 
-export const backmerge = async (context: Partial<VerifyConditionsContext>, config: BackmergeConfig, info: RepositoryInfo): Promise<SemanticReleaseError[]> => {
+export const backmerge = async (context: Partial<VerifyConditionsContext>, config: BackmergeConfig, info: GitUrl): Promise<SemanticReleaseError[]> => {
     const releaseBranch = context.branch!.name
 
     const targets = config.targets.filter(branch => releaseBranch.match(branch.from))
@@ -16,10 +17,9 @@ export const backmerge = async (context: Partial<VerifyConditionsContext>, confi
     }
     context.logger?.log(`Current branch '${releaseBranch}' matches following configured backmerge targets: '${JSON.stringify(targets)}'. Performing backmerge.`)
 
-    const finalBranches = []
-    for (const target of targets) {
-        const branches = await branchesByGlob(context, target.to)
-        const filteredBranches = branches.filter((branch) => {
+    const branches = (await gitBranches(context)).
+        filter(branch => targets.map(target => target.to).find(target => branch.match(target))).
+        filter(branch => {
             const releaseMaintenance = semver.valid(semver.coerce(releaseBranch))
             const branchMaintenance = semver.valid(semver.coerce(branch))
 
@@ -40,16 +40,14 @@ export const backmerge = async (context: Partial<VerifyConditionsContext>, confi
             }
             return true
         })
-        finalBranches.push(...filteredBranches)
-    }
-    if (finalBranches.length === 0) {
+    if (branches.length === 0) {
         context.logger?.log("No configured target is present in remote origin, no backmerge to be done.")
         return []
     }
-    context.logger?.log(`Retrieved following branches present in remote origin: '${JSON.stringify(finalBranches)}'`)
+    context.logger?.log(`Retrieved following branches present in remote origin: '${JSON.stringify(branches)}'`)
 
     const errors: SemanticReleaseError[] = []
-    for (const branch of finalBranches) {
+    for (const branch of branches) {
         const error = await mergeBranch(context, config, info, releaseBranch, branch)
         if (error) {
             errors.push(error)

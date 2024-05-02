@@ -4,9 +4,9 @@ import * as git from "../lib/git"
 import { afterAll, afterEach, describe, expect, spyOn, test } from "bun:test"
 
 import SemanticReleaseError from "@semantic-release/error"
+import gitUrlParse from "git-url-parse"
 
 import { type ExecaReturnValue } from "execa"
-import { type RepositoryInfo } from "../lib/models/config"
 import { type VerifyConditionsContext } from "semantic-release"
 import { ensureDefault } from "../lib/verify-config"
 
@@ -23,7 +23,7 @@ const defaultExeca = (partial: Partial<ExecaReturnValue<string>>): ExecaReturnVa
     timedOut: partial.timedOut ?? false,
 })
 
-describe("branchesByGlob", () => {
+describe("gitBranches", () => {
     const context: Partial<VerifyConditionsContext> = { logger: console }
 
     const gitSpy = spyOn(git, "git")
@@ -39,12 +39,12 @@ describe("branchesByGlob", () => {
         logSpy.mockRestore()
     })
 
-    test("should fail to retrieve branches by glob", async () => {
+    test("should fail to retrieve branches", async () => {
         // Arrange
         gitSpy.mockImplementation(() => Promise.reject(new Error("an error message")))
 
         // Act
-        const branches = await git.branchesByGlob(context, "name")
+        const branches = await git.gitBranches(context)
 
         // Assert
         expect(branches).toBeEmpty()
@@ -59,7 +59,7 @@ describe("branchesByGlob", () => {
         })))
 
         // Act
-        const branches = await git.branchesByGlob(context, "main")
+        const branches = await git.gitBranches(context)
 
         // Assert
         expect(branches).toEqual(["hey"])
@@ -70,7 +70,8 @@ describe("branchesByGlob", () => {
 
 describe("mergeBranch", () => {
     const context: Partial<VerifyConditionsContext> = { logger: console }
-    const info: RepositoryInfo = { owner: "kilianpaquier", repo: "semantic-release-backmerge" }
+    
+    const info = gitUrlParse("git@github.com:kilianpaquier/semantic-release-backmerge.git")
 
     const gitSpy = spyOn(git, "git")
     const prSpy = spyOn(git, "createPullRequest")

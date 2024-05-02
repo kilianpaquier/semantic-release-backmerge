@@ -115,7 +115,8 @@ export const mergeBranch = async (context: Partial<VerifyConditionsContext>, con
 
     const commit = interpolate(config.commit, { from, to })
     try {
-        await git(["merge", `${remote}/${from}`, "--ff", "-m", commit], options)
+        // don't merge with remote part because there's potentiallement a local commit 
+        await git(["merge", `${from}`, "--ff", "-m", commit], options)
     } catch (mergeError) {
         context.logger?.error("Merge conflicts detected! Creating a pull request.", mergeError)
 

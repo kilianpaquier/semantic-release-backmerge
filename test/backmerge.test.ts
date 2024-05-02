@@ -147,4 +147,26 @@ describe("backmerge", () => {
         expect(mergeSpy).toHaveBeenCalledTimes(2)
         expect(logSpy).toHaveBeenCalledTimes(2)
     })
+
+    test("should call merge branch and return success with regexp branches", async () => {
+        // Arrange
+        branchesSpy.mockImplementation(() => Promise.resolve(["v1.0", "v1.3", "v1.4", "v1.5", "v2.0", "v2.4"]))
+        mergeSpy.mockImplementation(() => Promise.resolve())
+
+        const context = getContext("v1.1")
+        const logSpy = spyOn(context, "logger")
+
+        const config: BackmergeConfig = ensureDefault({
+            targets: [ { from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" } ]
+        })
+        
+        // Act
+        const errors = await backmerge(context, config, info)
+
+        // Assert
+        expect(errors).toBeEmpty()
+        expect(branchesSpy).toHaveBeenCalledTimes(1)
+        expect(mergeSpy).toHaveBeenCalledTimes(3)
+        expect(logSpy).toHaveBeenCalledTimes(5)
+    })
 })

@@ -23,8 +23,9 @@ export const gitBranches = async (context: Partial<VerifyConditionsContext>): Pr
     try {
         const branches = await git(["ls-remote", "--heads", remote], options)
         return branches.stdout.toString().
-            trimEnd().
-            split("\t").
+            split("\n").
+            map(branch => branch.split("\t")).
+            flat().
             filter(branch => branch.startsWith("refs/heads/")).
             map(branch => branch.replace("refs/heads/", ""))
     } catch (error) {

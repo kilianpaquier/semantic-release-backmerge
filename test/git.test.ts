@@ -55,14 +55,14 @@ describe("gitBranches", () => {
     test("should filter branches not starting with refs/heads/", async () => {
         // Arrange
         gitSpy.mockImplementation(() => Promise.resolve(defaultExeca({
-            stdout: "blablabla\trefs/heads/hey\tblablabla/refs/heads/"
+            stdout: "somehash\trefs/heads/hey\nsomehash\trefs/heads/hoy\n"
         })))
 
         // Act
         const branches = await git.gitBranches(context)
 
         // Assert
-        expect(branches).toEqual(["hey"])
+        expect(branches).toEqual(["hey", "hoy"])
         expect(gitSpy).toHaveBeenCalledTimes(1)
         expect(logSpy).not.toHaveBeenCalled()
     })

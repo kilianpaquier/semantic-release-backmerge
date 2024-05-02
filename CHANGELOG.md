@@ -1,3 +1,15 @@
+## [1.0.0-alpha.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2024-05-02)
+
+
+### Bug Fixes
+
+* **push:** push to repository url and not just push ([569ebb0](https://github.com/kilianpaquier/semantic-release-backmerge/commit/569ebb02e59d71a531f0921645d4c0c5f3ea6624))
+
+
+### Code Refactoring
+
+* **env:** load env values directly in config verification to guess platform and allow some overrides via config ([059e823](https://github.com/kilianpaquier/semantic-release-backmerge/commit/059e823d0395e3122d1add7972f9f567f29698df))
+
 ## [1.0.0-alpha.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2024-05-01)
 
 

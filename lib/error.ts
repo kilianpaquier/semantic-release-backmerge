@@ -18,10 +18,6 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => PartialErro
         details: `[Base URL](${linkify("shared-configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'baseUrl' configuration.`,
     }),
-    // shouldn't happen since it comes from semantic-release config
-    ci: () => ({
-        message: "Invalid 'ci' configuration (coming from semantic-release options).",
-    }),
     commit: (value: any) => ({
         details: `[Commit](${linkify("shared-configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'commit' configuration.`,

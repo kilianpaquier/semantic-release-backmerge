@@ -125,17 +125,4 @@ describe("getConfigError", () => {
         expect(error.message).toContain("'dryRun'")
         expect(error.details).toBeEmpty()
     })
-
-    test("should have a valid ci error", () => {
-        // Arrange
-        const code = "EINVALIDCI"
-
-        // Act
-        const error = getConfigError("ci", "some invalid ci")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("'ci'")
-        expect(error.details).toBeEmpty()
-    })
 })

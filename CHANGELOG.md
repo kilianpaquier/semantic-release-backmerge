@@ -1,3 +1,10 @@
+## [1.0.0-alpha.6](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2024-05-02)
+
+
+### Bug Fixes
+
+* **pr:** handle response from API as error when it's not ok by fetch ([3fe7730](https://github.com/kilianpaquier/semantic-release-backmerge/commit/3fe7730c3d27c8e39531211b462f6b9f3de63d7f))
+
 ## [1.0.0-alpha.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2024-05-02)
 
 

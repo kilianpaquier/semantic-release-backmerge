@@ -88,8 +88,8 @@ export const createPullRequest = async (config: BackmergeConfig, info: Repositor
                         base: to,
                         baseUrl: apiUrl,
                         head: from,
-                        owner: info.owner!,
-                        repo: info.repo!,
+                        owner: info.owner,
+                        repo: info.repo,
                         title: config.title,
                     })
             } catch (error) {
@@ -98,7 +98,7 @@ export const createPullRequest = async (config: BackmergeConfig, info: Repositor
             break
         case Platform.GITLAB:
             try {
-                await fetch(`${apiUrl}/projects/${encodeURIComponent(info.repo!)}/merge_requests`, {
+                await fetch(`${apiUrl}/projects/${encodeURIComponent(info.repo)}/merge_requests`, {
                     body: JSON.stringify({
                         source_branch: from,
                         target_branch: to,
@@ -153,7 +153,7 @@ export const mergeBranch = async (context: Partial<VerifyConditionsContext>, con
 
     try {
         await git(push, options)
-    } catch (error) {
+    } catch (_error) {
         context.logger?.log(`Failed to backmerge '${from}' to '${to}' with a push, opening pull request.`)
 
         try {

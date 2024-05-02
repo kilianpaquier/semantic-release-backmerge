@@ -21,13 +21,14 @@ export default tseslint.config(
             "camelcase": "off",
             "capitalized-comments": "off",
             "line-comment-position": "off",
-            "max-lines-per-function": ["error", 80],
+            "max-lines-per-function": ["error", 100],
             "max-params": ["error", 6],
-            "max-statements": ["error", 25],
+            "max-statements": ["error", 30],
             "multiline-comment-style": "off",
             "no-await-in-loop": "off",
             "no-inline-comments": "off",
             "no-magic-numbers": "off",
+            "no-sparse-arrays": "off",
             "no-ternary": "warn",
             "one-var": "off",
             "require-unicode-regexp": "off",
@@ -39,6 +40,7 @@ export default tseslint.config(
     {
         files: ["**/*.test.ts", "**/*.spec.ts"],
         rules: {
+            "max-lines": "off",
             "max-lines-per-function": "off",
         }
     },

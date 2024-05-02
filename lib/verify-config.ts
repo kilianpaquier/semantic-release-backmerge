@@ -11,35 +11,36 @@ const validatePlatform = (stringPlatform: string): boolean => Boolean(Object.val
     find(platform => platform.toString() === stringPlatform))
 const stringNotEmpty = (value: string) => value !== ""
 
+// eslint-disable-next-line complexity
 export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<string, string>): BackmergeConfig => {
-    const getURLs = (): [Platform, string, string] => {
+    const getURLs = (): [Platform, string, string] => { // eslint-disable-line complexity
         if (config.baseUrl) {
-            return [Platform.NULL, config.baseUrl, config.apiPathPrefix || ""]
+            return [Platform.NULL, config.baseUrl, config.apiPathPrefix ?? ""]
         }
 
         // bitbucket
         if (env?.BITBUCKET_URL) {
-            return [Platform.BITBUCKET, env?.BITBUCKET_URL, config.apiPathPrefix || "/rest/api/1.0"]
+            return [Platform.BITBUCKET, env?.BITBUCKET_URL, config.apiPathPrefix ?? "/rest/api/1.0"]
         }
         
         // bitbucket cloud
         if (env?.BITBUCKET_CLOUD_URL) {
-            return [Platform.BITBUCKET_CLOUD, env?.BITBUCKET_CLOUD_URL, config.apiPathPrefix || "/2.0"]
+            return [Platform.BITBUCKET_CLOUD, env?.BITBUCKET_CLOUD_URL, config.apiPathPrefix ?? "/2.0"]
         }
 
         // gitea
         if (env?.GITEA_URL) {
-            return [Platform.GITEA, env?.GITEA_URL, config.apiPathPrefix || "/api/v1"]
+            return [Platform.GITEA, env?.GITEA_URL, config.apiPathPrefix ?? "/api/v1"]
         }
 
         // github
-        if (env?.GH_URL || env?.GITHUB_URL || env?.GITHUB_API_URL) {
-            return [Platform.GITHUB, env?.GH_URL || env?.GITHUB_URL || env?.GITHUB_API_URL, config.apiPathPrefix || ""]
+        if (env?.GH_URL ?? env?.GITHUB_URL ?? env?.GITHUB_API_URL) {
+            return [Platform.GITHUB, env?.GH_URL ?? env?.GITHUB_URL ?? env?.GITHUB_API_URL, config.apiPathPrefix ?? ""]
         }
 
         // gitlab
-        if (env?.GL_URL || env?.GITLAB_URL || env?.CI_SERVER_URL) {
-            return [Platform.GITLAB, env?.GL_URL || env?.GITLAB_URL || env?.CI_SERVER_URL, config.apiPathPrefix || "/api/v4"]
+        if (env?.GL_URL ?? env?.GITLAB_URL ?? env?.CI_SERVER_URL) {
+            return [Platform.GITLAB, env?.GL_URL ?? env?.GITLAB_URL ?? env?.CI_SERVER_URL, config.apiPathPrefix ?? "/api/v4"]
         }
 
         return [Platform.NULL, "", ""]
@@ -47,8 +48,8 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<str
 
     const [platform, baseUrl, apiPathPrefix] = getURLs()
     return {
-        apiPathPrefix: apiPathPrefix,
-        baseUrl: baseUrl,
+        apiPathPrefix,
+        baseUrl,
         ci: config.ci ?? false, // shouldn't happen since it comes from semantic-release config
         commit: config.commit ?? defaultCommit,
         debug: config.debug ?? false, // shouldn't happen since it comes from semantic-release config
@@ -58,7 +59,7 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<str
         targets: config.targets ?? [],
         title: config.title ?? defaultTitle,
         // checking all environment variables since it doesn't matter which is valued whatever the platform could be
-        token: env?.BB_TOKEN || env?.BITBUCKET_TOKEN || env?.GITEA_TOKEN || env?.GH_TOKEN || env?.GITHUB_TOKEN || env?.GL_TOKEN || env?.GITLAB_TOKEN || "",
+        token: env?.BB_TOKEN ?? env?.BITBUCKET_TOKEN ?? env?.GITEA_TOKEN ?? env?.GH_TOKEN ?? env?.GITHUB_TOKEN ?? env?.GL_TOKEN ?? env?.GITLAB_TOKEN ?? "",
     }
 }
 

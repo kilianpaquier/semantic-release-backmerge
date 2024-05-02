@@ -1,11 +1,11 @@
+import { type BackmergeConfig, type RepositoryInfo } from "./lib/models/config"
 import { type SuccessContext, type VerifyConditionsContext } from 'semantic-release'
+import { ensureDefault, verifyConfig } from "./lib/verify-config"
 
 import AggregateError from "aggregate-error"
 
-import { type BackmergeConfig, type RepositoryInfo } from "./lib/models/config"
 import { backmerge } from "./lib/backmerge"
 import { repositoryInfo } from "./lib/repository-info"
-import { ensureDefault, verifyConfig } from "./lib/verify-config"
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export const verifyConditions = async (partialConfig: Partial<BackmergeConfig>, context: VerifyConditionsContext): Promise<[BackmergeConfig, RepositoryInfo]> => {  

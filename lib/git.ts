@@ -38,7 +38,10 @@ export const createPullRequest = async (context: Partial<VerifyConditionsContext
         try {
             const response = await fetch(url, {
                 body: JSON.stringify(body),
-                headers: { Authorization: `Bearer ${config.token}` },
+                headers: { 
+                    Authorization: `Bearer ${config.token}`,
+                    "Content-Type": "application/json",
+                },
                 method: "POST",
             })
             if (!response.ok) {

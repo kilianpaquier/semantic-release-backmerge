@@ -16,20 +16,13 @@ export interface Target {
 export interface BackmergeConfig {
     apiPathPrefix: string
     baseUrl: string
-    ci: boolean // comes from semantic-release config
     commit: string
     debug: boolean // comes from semantic-release config
     dryRun: boolean // comes from semantic-release config
     platform: Platform
-    repositoryUrl: string // comes from semantic-release config
     targets: Target[]
     title: string
     token: string
-}
-
-export interface RepositoryInfo {
-    owner: string
-    repo: string
 }
 
 export const defaultTitle = "Automatic merge failure"

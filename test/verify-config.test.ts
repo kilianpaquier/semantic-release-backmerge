@@ -13,12 +13,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "",
             baseUrl: "",
-            ci: false,
             commit: defaultCommit,
             debug: false,
             dryRun: false,
             platform: Platform.NULL,
-            repositoryUrl: "",
             targets: [],
             title: defaultTitle,
             token: ""
@@ -36,12 +34,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "/rest/api/1.0",
             baseUrl: "some value",
-            ci: false,
             commit: defaultCommit,
             debug: false,
             dryRun: false,
             platform: Platform.BITBUCKET,
-            repositoryUrl: "",
             targets: [],
             title: defaultTitle,
             token: ""
@@ -59,12 +55,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "/2.0",
             baseUrl: "some value",
-            ci: false,
             commit: defaultCommit,
             debug: false,
             dryRun: false,
             platform: Platform.BITBUCKET_CLOUD,
-            repositoryUrl: "",
             targets: [],
             title: defaultTitle,
             token: ""
@@ -82,12 +76,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "/api/v1",
             baseUrl: "some value",
-            ci: false,
             commit: defaultCommit,
             debug: false,
             dryRun: false,
             platform: Platform.GITEA,
-            repositoryUrl: "",
             targets: [],
             title: defaultTitle,
             token: ""
@@ -105,12 +97,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "",
             baseUrl: "some value",
-            ci: false,
             commit: defaultCommit,
             debug: false,
             dryRun: false,
             platform: Platform.GITHUB,
-            repositoryUrl: "",
             targets: [],
             title: defaultTitle,
             token: ""
@@ -128,12 +118,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "",
             baseUrl: "some value",
-            ci: false,
             commit: defaultCommit,
             debug: false,
             dryRun: false,
             platform: Platform.GITHUB,
-            repositoryUrl: "",
             targets: [],
             title: defaultTitle,
             token: ""
@@ -151,12 +139,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "/api/v4",
             baseUrl: "some value",
-            ci: false,
             commit: defaultCommit,
             debug: false,
             dryRun: false,
             platform: Platform.GITLAB,
-            repositoryUrl: "",
             targets: [],
             title: defaultTitle,
             token: ""
@@ -174,12 +160,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "/api/v3",
             baseUrl: "some value",
-            ci: false,
             commit: defaultCommit,
             debug: false,
             dryRun: false,
             platform: Platform.GITLAB,
-            repositoryUrl: "",
             targets: [],
             title: defaultTitle,
             token: ""
@@ -196,12 +180,10 @@ describe("ensureDefault", () => {
 
         // Act
         const actual = ensureDefault({
-            ci: true,
             commit: "some commit",
             debug: true,
             dryRun: true,
             platform: Platform.GITLAB,
-            repositoryUrl: "some repository url",
             targets,
             title: "Some title",
             token: "some token" // ensure it's not taken
@@ -211,12 +193,10 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "",
             baseUrl: "",
-            ci: true,
             commit: "some commit",
             debug: true,
             dryRun: true,
             platform: Platform.GITLAB,
-            repositoryUrl: "some repository url",
             targets,
             title: "Some title",
             token: ""
@@ -228,7 +208,6 @@ describe("verifyConfig", () => {
     const validConfig = ensureDefault({
         baseUrl: "https://example.com",
         platform: Platform.GITHUB,
-        repositoryUrl: "some repository url",
     }, { GITHUB_TOKEN: "some token" })
 
     test("should throw an invalid commit with bad format", () => {
@@ -356,7 +335,6 @@ describe("verifyConfig", () => {
         // Arrange
         const config = ensureDefault({
             baseUrl: "https://example.com",
-            repositoryUrl: "some repository url",
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
@@ -371,7 +349,6 @@ describe("verifyConfig", () => {
         const config = ensureDefault({
             baseUrl: "https://example.com",
             platform: Platform.GITHUB,
-            repositoryUrl: "some repository url",
             targets: [
                 { from: "main", to: "develop" },
                 { from: "main", to: "staging" },

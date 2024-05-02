@@ -38,10 +38,6 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => PartialErro
         details: `[Platform](${linkify("shared-configuration")}) must be one of 'bitbucket', 'bitbucket-cloud', 'gitea', 'github', 'gitlab'. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'platform' configuration.`,
     }),
-    // shouldn't happen since it comes from semantic-release config
-    repositoryUrl: () => ({
-        message: "Invalid 'repositoryUrl' configuration (coming from semantic-release options).",
-    }),
     targets: (value: any) => ({
         details: `[Targets](${linkify("shared-configuration")}) must be a valid array of targets ({ from: "...", to: "..." }). Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'targets' configuration.`,

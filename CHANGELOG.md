@@ -1,3 +1,10 @@
+## [1.0.0-alpha.8](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2024-05-02)
+
+
+### Code Refactoring
+
+* **repository url:** rework parsing and add auth modificator to ensure git push works ([6438240](https://github.com/kilianpaquier/semantic-release-backmerge/commit/643824033e65e47d6a912423adc0553648c73d62))
+
 ## [1.0.0-alpha.7](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2024-05-02)
 
 

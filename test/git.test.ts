@@ -203,7 +203,6 @@ describe("mergeBranch", () => {
         gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // checkout
         gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // merge
         gitSpy.mockImplementationOnce(() => Promise.reject(new Error("an error message"))) // push
-        gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // reset hard
 
         const config = ensureDefault({})
 
@@ -212,7 +211,7 @@ describe("mergeBranch", () => {
 
         // Assert
         expect(error).toBeUndefined()
-        expect(gitSpy).toHaveBeenCalledTimes(4)
+        expect(gitSpy).toHaveBeenCalledTimes(3)
         expect(prSpy).toHaveBeenCalledTimes(1)
         expect(logSpy).toHaveBeenCalledTimes(1)
     })

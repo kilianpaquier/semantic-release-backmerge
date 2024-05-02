@@ -7,9 +7,10 @@
   "version": "1.0.0-alpha.4",
   "packageManager": "bun@1.1.6",
   "files": [
+    "CHANGELOG.md",
     "dist/*",
-    "package.json",
     "LICENSE",
+    "package.json",
     "README.md"
   ],
   "publishConfig": {

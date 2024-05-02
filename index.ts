@@ -9,7 +9,7 @@ import { repositoryInfo } from "./lib/repository-info"
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export const verifyConditions = async (partialConfig: Partial<BackmergeConfig>, context: VerifyConditionsContext): Promise<[BackmergeConfig, RepositoryInfo]> => {  
-    const config = ensureDefault(partialConfig)
+    const config = ensureDefault(partialConfig, context.env)
     
     const configErrors = verifyConfig(config)
     if (configErrors.length > 0) {

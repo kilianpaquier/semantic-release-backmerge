@@ -1,3 +1,10 @@
+## [1.0.0-alpha.10](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2024-05-02)
+
+
+### Bug Fixes
+
+* **auth modificator:** add test around port and add replacer in case an user is already in parsed url ([f22477a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/f22477a2f11374ba8074ddc1a82786a1eaa56aa6))
+
 ## [1.0.0-alpha.9](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2024-05-02)
 
 

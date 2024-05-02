@@ -1,3 +1,10 @@
+## [1.0.0-alpha.7](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2024-05-02)
+
+
+### Bug Fixes
+
+* **pr:** add content type to post pull request ([bf0d25c](https://github.com/kilianpaquier/semantic-release-backmerge/commit/bf0d25cbffa2479cc9ce27a50151d21ccbab2637))
+
 ## [1.0.0-alpha.6](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2024-05-02)
 
 

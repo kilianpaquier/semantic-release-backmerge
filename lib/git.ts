@@ -143,14 +143,6 @@ export const mergeBranch = async (context: Partial<VerifyConditionsContext>, con
         await git(push, options)
     } catch (pushError) {
         context.logger?.error(`Failed to backmerge '${from}' into '${to}' with a push, opening pull request.`, pushError)
-
-        try {
-            // reset hard in case a merge commit had been done just previous steps
-            await git(["reset", "--hard", `${remote}/${from}`], options)
-        } catch (resetError) {
-            return new SemanticReleaseError(`Failed to reset branch '${from}' to '${remote}' state before opening pull request.`, "ERESETHARD", String(resetError))
-        }
-
         if (config.dryRun) {
             context.logger?.log(`Running with --dry-run, created pull request would have been from '${from}' into '${to}' with title '${commit}'.`)
             return Promise.resolve()

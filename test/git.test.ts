@@ -160,44 +160,6 @@ describe("mergeBranch", () => {
         expect(logSpy).toHaveBeenCalledTimes(1)
     })
 
-    test("should be fine at git merge, fail at push with dry run and fail at reset hard", async () => {
-        // Arrange
-        gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // checkout
-        gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // merge
-        gitSpy.mockImplementationOnce(() => Promise.reject(new Error("an error message"))) // push
-        gitSpy.mockImplementationOnce(() => Promise.reject(new Error("an error message"))) // reset hard
-
-        const config = ensureDefault({ dryRun: true })
-
-        // Act
-        const error = await git.mergeBranch(context, config, info, "main", "develop")
-
-        // Assert
-        expect(error?.code).toEqual("ERESETHARD")
-        expect(gitSpy).toHaveBeenCalledTimes(4)
-        expect(prSpy).not.toHaveBeenCalled()
-        expect(logSpy).toHaveBeenCalledTimes(2)
-    })
-
-    test("should be fine at git merge, fail at push with dry run but be fine at hard reset", async () => {
-        // Arrange
-        gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // checkout
-        gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // merge
-        gitSpy.mockImplementationOnce(() => Promise.reject(new Error("an error message"))) // push
-        gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // reset hard
-
-        const config = ensureDefault({ dryRun: true })
-
-        // Act
-        const error = await git.mergeBranch(context, config, info, "main", "develop")
-
-        // Assert
-        expect(error).toBeUndefined()
-        expect(gitSpy).toHaveBeenCalledTimes(4)
-        expect(prSpy).not.toHaveBeenCalled()
-        expect(logSpy).toHaveBeenCalledTimes(3)
-    })
-
     test("should be fine at git merge, fail at push and create pull request", async () => {
         // Arrange
         gitSpy.mockImplementationOnce(() => Promise.resolve(defaultExeca({}))) // checkout

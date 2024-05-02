@@ -191,7 +191,7 @@ describe("ensureDefault", () => {
         const targets: Target[] = [
             { from: "main", to: "develop" },
             { from: "main", to: "staging" },
-            { from: "v[0-9]+(\.[0-9]+)?", to: "develop" },
+            { from: "v[0-9]+(.[0-9]+)?", to: "develop" },
         ]
 
         // Act
@@ -375,7 +375,7 @@ describe("verifyConfig", () => {
             targets: [
                 { from: "main", to: "develop" },
                 { from: "main", to: "staging" },
-                { from: "v[0-9]+(\.[0-9]+)?", to: "develop" }
+                { from: "v[0-9]+(.[0-9]+)?", to: "develop" }
             ],
         }, { GITHUB_TOKEN: "some token" })
 

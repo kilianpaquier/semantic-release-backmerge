@@ -21,5 +21,6 @@ export const getUser = (platform: Platform): string => {
 export const authModificator = (url: GitUrl, platform: Platform, token: string): string => {
     const origin = url.toString("https")
     // simple replace to add the authentication after toString
-    return origin.replace("https://", `https://${getUser(platform)}:${token}@`) 
+    return origin.replace(`https://${url.user}@`, "https://").
+        replace("https://", `https://${getUser(platform)}:${token}@`) 
 }

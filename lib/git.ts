@@ -31,18 +31,50 @@ export const branchesByGlob = async (context: Partial<VerifyConditionsContext>, 
     }
 }
 
-
 export const createPullRequest = async (config: BackmergeConfig, info: RepositoryInfo, from: string, to: string): Promise<SemanticReleaseError | void> => {
+    const apiUrl = config.baseUrl + config.apiPathPrefix
     switch (config.platform) {
-        case Platform.BITBUCKET:
+        case Platform.BITBUCKET_CLOUD:
             try {
-                await fetch(`${info.apiUrl}/2.0/repositories/${info.owner}/${info.repo}/pullrequests`, {
+                await fetch(`${apiUrl}/repositories/${info.owner}/${info.repo}/pullrequests`, {
                     body: JSON.stringify({
                         destination: { branch: { name: to } },
                         source: { branch: { name: from } },
                         title: config.title,
                     }),
-                    headers: { Authorization: `Bearer ${info.token}` },
+                    headers: { Authorization: `Bearer ${config.token}` },
+                    method: "POST",
+                })
+            } catch (error) {
+                return new SemanticReleaseError(`Failed to create pull request from '${remote}/${from}' to '${remote}/${to}'`, "EPULLREQUEST", String(error))
+            }
+            break
+        case Platform.BITBUCKET:
+            try {
+                await fetch(`${apiUrl}/projects/${info.owner}/repos/${info.repo}/pull-requests`, {
+                    body: JSON.stringify({
+                        fromRef: { id: `refs/heads/${from}` },
+                        open: true,
+                        state: "OPEN",
+                        title: config.title,
+                        toRef: { id: `refs/heads/${to}` },
+                    }),
+                    headers: { Authorization: `Bearer ${config.token}` },
+                    method: "POST",
+                })
+            } catch (error) {
+                return new SemanticReleaseError(`Failed to create pull request from '${remote}/${from}' to '${remote}/${to}'`, "EPULLREQUEST", String(error))
+            }
+            break
+        case Platform.GITEA:
+            try {
+                await fetch(`${apiUrl}/repos/${info.owner}/${info.repo}/pulls`, {
+                    body: JSON.stringify({
+                        base: to,
+                        head: from,
+                        title: config.title,
+                    }),
+                    headers: { Authorization: `Bearer ${config.token}` },
                     method: "POST",
                 })
             } catch (error) {
@@ -51,10 +83,10 @@ export const createPullRequest = async (config: BackmergeConfig, info: Repositor
             break
         case Platform.GITHUB:
             try {
-                await new Octokit({ auth: info.token, request: { fetch } }).
+                await new Octokit({ auth: config.token, request: { fetch } }).
                     request("POST /repos/{owner}/{repo}/pulls", {
                         base: to,
-                        baseUrl: info.apiUrl,
+                        baseUrl: apiUrl,
                         head: from,
                         owner: info.owner!,
                         repo: info.repo!,
@@ -66,13 +98,13 @@ export const createPullRequest = async (config: BackmergeConfig, info: Repositor
             break
         case Platform.GITLAB:
             try {
-                await fetch(`${info.apiUrl}/projects/${encodeURIComponent(info.repo!)}/merge_requests`, {
+                await fetch(`${apiUrl}/projects/${encodeURIComponent(info.repo!)}/merge_requests`, {
                     body: JSON.stringify({
                         source_branch: from,
                         target_branch: to,
                         title: config.title,
                     }),
-                    headers: { Authorization: `Bearer ${info.token}` },
+                    headers: { Authorization: `Bearer ${config.token}` },
                     method: "POST",
                 })
             } catch (error) {
@@ -101,9 +133,9 @@ export const mergeBranch = async (context: Partial<VerifyConditionsContext>, con
         context.logger?.log("Merge conflicts detected! Creating a pull request.")
 
         try {
-            await git(["merge", "--abort"])
+            await git(["merge", "--abort"], options)
         } catch (error) {
-            return new SemanticReleaseError("Failed to abort merge before creating pull request", "EMERGEABORT", String(error))
+            return new SemanticReleaseError("Failed to abort merge before creating pull request.", "EMERGEABORT", String(error))
         }
 
         if (config.dryRun) {
@@ -122,7 +154,20 @@ export const mergeBranch = async (context: Partial<VerifyConditionsContext>, con
     try {
         await git(push, options)
     } catch (error) {
-        return new SemanticReleaseError(`Failed to push branch ${to} to '${remote}/${to}'.`, "EPUSH", String(error))
+        context.logger?.log(`Failed to backmerge '${from}' to '${to}' with a push, opening pull request.`)
+
+        try {
+            // reset hard in case a merge commit had been done just previous steps
+            await git(["reset", "--hard", `${remote}/${from}`], options)
+        } catch (error) {
+            return new SemanticReleaseError(`Failed to reset branch ${from} to ${remote} state before opening pull request.`, "ERESETHARD", String(error))
+        }
+
+        if (config.dryRun) {
+            context.logger?.log(`Running with --dry-run, created pull request would have been from '${from}' to '${to}' with title '${commit}'.`)
+            return Promise.resolve()
+        }
+        return await createPullRequest(config, info, from, to)
     }
     return Promise.resolve()
 }

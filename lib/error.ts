@@ -9,96 +9,55 @@ interface PartialError {
     details?: string
 }
 
-const configErrors: { [k in keyof BackmergeConfig]: PartialError } = {
+const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => PartialError } = {
+    apiPathPrefix: (value: any) => ({
+        details: `[API Path Prefix](${linkify("shared-configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
+        message: `Invalid 'apiPathPrefix' configuration.`,
+    }),
+    baseUrl: (value: any) => ({
+        details: `[Base URL](${linkify("shared-configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
+        message: `Invalid 'baseUrl' configuration.`,
+    }),
     // shouldn't happen since it comes from semantic-release config
-    ci: {
-        message: "Invalid `ci` configuration (coming from semantic-release options).",
-    },
-    commit: {
-        details: `[Commit](${linkify("shared-configuration")}) must be a string.`,
-        message: "Invalid `commit` configuration.",
-    },
+    ci: () => ({
+        message: "Invalid 'ci' configuration (coming from semantic-release options).",
+    }),
+    commit: (value: any) => ({
+        details: `[Commit](${linkify("shared-configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
+        message: `Invalid 'commit' configuration.`,
+    }),
     // shouldn't happen since it comes from semantic-release config
-    debug: {
-        message: "Invalid `debug` configuration (coming from semantic-release options).",
-    },
+    debug: () => ({
+        message: "Invalid 'debug' configuration (coming from semantic-release options).",
+    }),
     // shouldn't happen since it comes from semantic-release config
-    dryRun: {
-        message: "Invalid `dryRun` configuration (coming from semantic-release options).",
-    },
-    platform: {
-        details: `[Platform](${linkify("shared-configuration")}) must be one of 'github', 'gitlab'.`,
-        message: "Invalid `platform` configuration.",
-    },
+    dryRun: () => ({
+        message: "Invalid 'dryRun' configuration (coming from semantic-release options).",
+    }),
+    platform: (value: any) => ({
+        details: `[Platform](${linkify("shared-configuration")}) must be one of 'bitbucket', 'bitbucket-cloud', 'gitea', 'github', 'gitlab'. Provided value is ${JSON.stringify(value)}.`,
+        message: `Invalid 'platform' configuration.`,
+    }),
     // shouldn't happen since it comes from semantic-release config
-    repositoryUrl: {
-        message: "Invalid `repositoryUrl` configuration (coming from semantic-release options).",
-    },
-    targets: {
-        details: `[Targets](${linkify("shared-configuration")}) must be a valid array of targets ({ from: "...", to: "..." }).`,
-        message: "Invalid `targets` configuration.",
-    },
-    title: {
-        details: `[Title](${linkify("shared-configuration")}) must be a string.`,
-        message: "Invalid `title` configuration.",
-    },
+    repositoryUrl: () => ({
+        message: "Invalid 'repositoryUrl' configuration (coming from semantic-release options).",
+    }),
+    targets: (value: any) => ({
+        details: `[Targets](${linkify("shared-configuration")}) must be a valid array of targets ({ from: "...", to: "..." }). Provided value is ${JSON.stringify(value)}.`,
+        message: `Invalid 'targets' configuration.`,
+    }),
+    title: (value: any) => ({
+        details: `[Title](${linkify("shared-configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
+        message: `Invalid 'title' configuration.`,
+    }),
+    token: () => ({
+        details: `[Token](${linkify("shared-configuration")}) must be a non empty string.`,
+        message: "Invalid 'token' configuration.",
+    })
 }
 
 export const getConfigError = (option: keyof BackmergeConfig, value?: any): SemanticReleaseError => {
     const code = `EINVALID${option.toUpperCase()}`
-
-    const error = configErrors[option]
-    if (error.details && value) {
-        error.details += `Provided value is '${JSON.stringify(value)}'.`
-    }
+    const error = configErrors[option](value)
     return new SemanticReleaseError(error.message, code, error.details)
-}
-
-export interface Envs {
-    BITBUCKET_API_URL: string,
-    BITBUCKET_TOKEN: string,
-    GITHUB_API_URL: string,
-    GITHUB_TOKEN: string,
-    GITLAB_API_URL: string,
-    GITLAB_TOKEN: string,
-    GITLAB_URL: string,
-}
-
-const envErrors: { [k in keyof Envs]: PartialError } = {
-    BITBUCKET_API_URL: {
-        details: `[Bitbucket](${linkify("bitbucket")}) section must be followed when backmerge configured on 'bitbucket'.`,
-        message: "Missing `BITBUCKET_API_URL` environment variable.",
-    },
-    BITBUCKET_TOKEN: {
-        details: `[Bitbucket](${linkify("bitbucket")}) section must be followed when backmerge configured on 'bitbucket'.`,
-        message: "Missing `BITBUCKET_TOKEN` environment variable.",
-    },
-
-    GITHUB_API_URL: {
-        details: `[github](${linkify("github")}) section must be followed when backmerge configured on 'github'.`,
-        message: "Missing `GITHUB_API_URL` environment variable.",
-    },
-    GITHUB_TOKEN: {
-        details: `[Github](${linkify("github")}) section must be followed when backmerge configured on 'github'.`,
-        message: "Missing `GITHUB_TOKEN` or `GH_TOKEN` environment variable.",
-    },
-
-    GITLAB_API_URL: {
-        details: `[Gitlab](${linkify("gitlab")}) section must be followed when backmerge configured on 'gitlab'.`,
-        message: "Missing `GITLAB_API_URL` or `CI_API_V4_URL` environment variable.",
-    },
-    GITLAB_TOKEN: {
-        details: `[Gitlab](${linkify("gitlab")}) section must be followed when backmerge configured on 'gitlab'.`,
-        message: "Missing `GITLAB_TOKEN` or `GL_TOKEN` environment variable.",
-    },
-    GITLAB_URL: {
-        details: `[Gitlab](${linkify("gitlab")}) section must be followed when backmerge configured on 'gitlab'.`,
-        message: "Missing `GITLAB_URL` or `CI_SERVER_URL` environment variable.",
-    },
-}
-
-export const getEnvError = (envName: keyof Envs): SemanticReleaseError => {
-    const code = `EINVALID${envName.replaceAll("_", "").toUpperCase()}`
-    const { message, details } = envErrors[envName]
-    return new SemanticReleaseError(message, code, details)
 }

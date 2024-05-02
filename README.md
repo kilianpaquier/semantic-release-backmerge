@@ -14,8 +14,8 @@ A [semantic-release](https://github.com/semantic-release/semantic-release) plugi
 
 | Step               | Description                                                                                   |
 | ------------------ | --------------------------------------------------------------------------------------------- |
-| `verifyConditions` | verify the presence of specific plugin configuration alongside required environment variables |
-| `success`          | apply backmerge for the appropriate target branches                                           |
+| `verifyConditions` | Verify the presence of specific plugin configuration alongside required environment variables |
+| `success`          | Apply backmerge for the appropriate target branches                                           |
 
 - [How to ?](#how-to-)
 - [Usage](#usage)

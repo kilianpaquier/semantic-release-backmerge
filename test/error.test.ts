@@ -1,7 +1,49 @@
 import { describe, expect, test } from "bun:test"
-import { getConfigError, getEnvError } from "../lib/error"
+
+import { getConfigError } from "../lib/error"
 
 describe("getConfigError", () => {
+    test("should have a valid api path prefix error", () => {
+        // Arrange
+        const code = "EINVALIDAPIPATHPREFIX"
+
+        // Act
+        const error = getConfigError("apiPathPrefix", {})
+
+        // Assert
+        expect(error.code).toEqual(code)
+        expect(error.message).toContain("'apiPathPrefix'")
+        expect(error.details).toContain("must be a string")
+        expect(error.details).toContain("value is {}.")
+    })
+
+    test("should have a valid base url error", () => {
+        // Arrange
+        const code = "EINVALIDBASEURL"
+
+        // Act
+        const error = getConfigError("baseUrl", "")
+
+        // Assert
+        expect(error.code).toEqual(code)
+        expect(error.message).toContain("'baseUrl'")
+        expect(error.details).toContain("must be a non empty string")
+    })
+
+    test("should have a valid token error", () => {
+        // Arrange
+        const code = "EINVALIDTOKEN"
+
+        // Act
+        const error = getConfigError("token", "shouldn't be logged")
+
+        // Assert
+        expect(error.code).toEqual(code)
+        expect(error.message).toContain("'token'")
+        expect(error.details).toContain("must be a non empty string")
+        expect(error.details).not.toContain("shouldn't be logged")
+    })
+
     test("should have a valid targets error", () => {
         // Arrange
         const code = "EINVALIDTARGETS"
@@ -11,7 +53,7 @@ describe("getConfigError", () => {
 
         // Assert
         expect(error.code).toEqual(code)
-        expect(error.message).toContain("`targets`")
+        expect(error.message).toContain("'targets'")
         expect(error.details).toContain("must be a valid array of targets")
         expect(error.details).toContain("some invalid targets")
     })
@@ -25,8 +67,8 @@ describe("getConfigError", () => {
 
         // Assert
         expect(error.code).toEqual(code)
-        expect(error.message).toContain("`platform`")
-        expect(error.details).toContain("must be one of 'github', 'gitlab'")
+        expect(error.message).toContain("'platform'")
+        expect(error.details).toContain("must be one of 'bitbucket', 'bitbucket-cloud', 'gitea', 'github', 'gitlab'")
         expect(error.details).toContain("some invalid platform")
     })
 
@@ -39,7 +81,7 @@ describe("getConfigError", () => {
 
         // Assert
         expect(error.code).toEqual(code)
-        expect(error.message).toContain("`commit`")
+        expect(error.message).toContain("'commit'")
         expect(error.details).toContain("must be a string")
         expect(error.details).toContain("true")
     })
@@ -53,8 +95,8 @@ describe("getConfigError", () => {
 
         // Assert
         expect(error.code).toEqual(code)
-        expect(error.message).toContain("`title`")
-        expect(error.details).toContain("must be a string")
+        expect(error.message).toContain("'title'")
+        expect(error.details).toContain("must be a non empty string")
         expect(error.details).toContain("true")
     })
 
@@ -67,7 +109,7 @@ describe("getConfigError", () => {
 
         // Assert
         expect(error.code).toEqual(code)
-        expect(error.message).toContain("`debug`")
+        expect(error.message).toContain("'debug'")
         expect(error.details).toBeEmpty()
     })
 
@@ -80,7 +122,7 @@ describe("getConfigError", () => {
 
         // Assert
         expect(error.code).toEqual(code)
-        expect(error.message).toContain("`dryRun`")
+        expect(error.message).toContain("'dryRun'")
         expect(error.details).toBeEmpty()
     })
 
@@ -93,7 +135,7 @@ describe("getConfigError", () => {
 
         // Assert
         expect(error.code).toEqual(code)
-        expect(error.message).toContain("`ci`")
+        expect(error.message).toContain("'ci'")
         expect(error.details).toBeEmpty()
     })
 
@@ -106,100 +148,7 @@ describe("getConfigError", () => {
 
         // Assert
         expect(error.code).toEqual(code)
-        expect(error.message).toContain("`repositoryUrl`")
+        expect(error.message).toContain("'repositoryUrl'")
         expect(error.details).toBeEmpty()
-    })
-})
-
-describe("getEnvError", () => {
-    test("should have a valid BITBUCKET_API_URL error", () => {
-        // Arrange
-        const code = "EINVALIDBITBUCKETAPIURL"
-
-        // Act
-        const error = getEnvError("BITBUCKET_API_URL")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("`BITBUCKET_API_URL`")
-        expect(error.details).toContain("section must be followed")
-    })
-
-    test("should have a valid BITBUCKET_TOKEN error", () => {
-        // Arrange
-        const code = "EINVALIDBITBUCKETTOKEN"
-
-        // Act
-        const error = getEnvError("BITBUCKET_TOKEN")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("`BITBUCKET_TOKEN`")
-        expect(error.details).toContain("section must be followed")
-    })
-
-    test("should have a valid GITLAB_API_URL error", () => {
-        // Arrange
-        const code = "EINVALIDGITLABAPIURL"
-
-        // Act
-        const error = getEnvError("GITLAB_API_URL")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("`GITLAB_API_URL` or `CI_API_V4_URL`")
-        expect(error.details).toContain("section must be followed")
-    })
-
-    test("should have a valid GITLAB_URL error", () => {
-        // Arrange
-        const code = "EINVALIDGITLABURL"
-
-        // Act
-        const error = getEnvError("GITLAB_URL")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("`GITLAB_URL` or `CI_SERVER_URL`")
-        expect(error.details).toContain("section must be followed")
-    })
-
-    test("should have a valid GITLAB_TOKEN error", () => {
-        // Arrange
-        const code = "EINVALIDGITLABTOKEN"
-
-        // Act
-        const error = getEnvError("GITLAB_TOKEN")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("`GITLAB_TOKEN` or `GL_TOKEN`")
-        expect(error.details).toContain("section must be followed")
-    })
-
-    test("should have a valid GITHUB_API_URL error", () => {
-        // Arrange
-        const code = "EINVALIDGITHUBAPIURL"
-
-        // Act
-        const error = getEnvError("GITHUB_API_URL")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("`GITHUB_API_URL`")
-        expect(error.details).toContain("section must be followed")
-    })
-
-    test("should have a valid GITHUB_TOKEN error", () => {
-        // Arrange
-        const code = "EINVALIDGITHUBTOKEN"
-
-        // Act
-        const error = getEnvError("GITHUB_TOKEN")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("`GITHUB_TOKEN` or `GH_TOKEN`")
-        expect(error.details).toContain("section must be followed")
     })
 })

@@ -2,44 +2,31 @@ import { type SuccessContext, type VerifyConditionsContext } from 'semantic-rele
 
 import AggregateError from "aggregate-error"
 
-import { type BackmergeConfig } from "./lib/models/config"
+import { type BackmergeConfig, type RepositoryInfo } from "./lib/models/config"
 import { backmerge } from "./lib/backmerge"
 import { repositoryInfo } from "./lib/repository-info"
-import { verifyConfig } from "./lib/verify-config"
+import { ensureDefault, verifyConfig } from "./lib/verify-config"
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export const verifyConditions = async (partialConfig: Partial<BackmergeConfig>, context: VerifyConditionsContext) => {  
-    const verifyResult = verifyConfig(partialConfig)
-    if (verifyResult.errors.length > 0) {
-        throw new AggregateError(verifyResult.errors)
+export const verifyConditions = async (partialConfig: Partial<BackmergeConfig>, context: VerifyConditionsContext): Promise<[BackmergeConfig, RepositoryInfo]> => {  
+    const config = ensureDefault(partialConfig)
+    
+    const configErrors = verifyConfig(config)
+    if (configErrors.length > 0) {
+        throw new AggregateError(configErrors)
     }
 
-    const repositoryResult = repositoryInfo(context, verifyResult.config)
-    if (repositoryResult.errors.length > 0) {
-        throw new AggregateError(repositoryResult.errors)
+    const [info, infoErrors] = repositoryInfo(config, context.env)
+    if (infoErrors.length > 0) {
+        throw new AggregateError(infoErrors)
     }
-
-    if (verifyResult.config.debug) {
-        context.logger.log(`Plugin configuration is ${JSON.stringify(verifyResult.config)}.`)
-    }
+    return [config, info!]
 }
 
 export const success = async (partialConfig: Partial<BackmergeConfig>, context: SuccessContext) => {    
-    const verifyResult = verifyConfig(partialConfig)
-    if (verifyResult.errors.length > 0) {
-        throw new AggregateError(verifyResult.errors)
-    }
+    const [config, info] = await verifyConditions(partialConfig, context)
 
-    const repositoryResult = repositoryInfo(context, verifyResult.config)
-    if (repositoryResult.errors.length > 0) {
-        throw new AggregateError(repositoryResult.errors)
-    }
-
-    if (verifyResult.config.debug) {
-        context.logger.log(`Plugin configuration is ${JSON.stringify(verifyResult.config)}.`)
-    }
-
-    const errors = await backmerge(context, verifyResult.config, repositoryResult.info!)
+    const errors = await backmerge(context, config, info)
     if (errors.length > 0) {
         throw new AggregateError(errors)
     }

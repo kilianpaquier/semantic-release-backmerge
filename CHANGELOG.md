@@ -1,3 +1,16 @@
+## [1.0.0-beta.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2024-05-03)
+
+
+### Chores
+
+* **deps:** update lockb ([cce20a2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/cce20a208f7c31ffb52eb922d6ceee7c73ad2ec3))
+* **deps:** upgrade to bun 1.1.7 ([d6d85d9](https://github.com/kilianpaquier/semantic-release-backmerge/commit/d6d85d968bc8900fb5bf99db48b76be68e918d47))
+
+
+### Code Refactoring
+
+* rework the whole plugin with separated functions, jsdoc, etc. ([1ad6bba](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1ad6bbac2c2cfe1f1fdbcc1cc7b7df3866f4a36d))
+
 ## 1.0.0-beta.1 (2024-05-02)
 
 

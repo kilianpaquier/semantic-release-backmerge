@@ -1,11 +1,6 @@
 import { Options, execa } from "execa"
 
 /**
- * remote is the string representing git remote name.
- */
-const origin = "origin"
-
-/**
  * Git is the class for all related git actions.
  */
 export class Git {
@@ -48,8 +43,8 @@ export class Git {
      * 
      * @throws an error is the git ls-remote cannot be done.
      */
-    public async ls() {
-        const response = await this.exec(["ls-remote", "--heads", origin])
+    public async ls(remote: string) {
+        const response = await this.exec(["ls-remote", "--heads", remote])
         const branches = response.stdout.toString().
             split("\n").
             map(branch => branch.split("\t")).
@@ -68,7 +63,7 @@ export class Git {
      * @throws an error if the checkout cannot be done.
      */
     public async checkout(branch: string) {
-        await this.exec(["checkout", "-B", branch, `${origin}/${branch}`])
+        await this.exec(["checkout", "-b", branch]) 
     }
 
     /**
@@ -96,7 +91,7 @@ export class Git {
         await this.checkout(to)
 
         try {
-            await this.exec(["merge", `${origin}/${from}`, "--ff", "-m", commit])
+            await this.exec(["merge", `${from}`, "--ff", "-m", commit])
         } catch (error) {
             await this.exec(["merge", "--abort"])
             throw error

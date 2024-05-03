@@ -44,12 +44,12 @@ export const getBranches = async (context: Context, remote: string, targets: Tar
         context.logger.log(`Current branch '${releaseBranch}' doesn't match any configured backmerge targets.`)
         return []
     }
-    context.logger.log(`Current branch '${releaseBranch}' matches following configured backmerge targets: '${JSON.stringify(targets)}'. Performing backmerge.`)
+    context.logger.log(`Current branch '${releaseBranch}' matches following configured backmerge targets: '${JSON.stringify(appropriates)}'. Performing backmerge.`)
 
     const git = new Git(context.cwd, context.env)
     await git.fetch(remote)
 
-    const branches = (await git.ls()).
+    const branches = (await git.ls(remote)).
         // don't keep the released branch
         filter(branch => releaseBranch !== branch).
 

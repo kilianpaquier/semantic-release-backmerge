@@ -91,13 +91,15 @@ describe("getBranches", () => {
 
     test("should retrieve some branches", async () => {
         // Arrange
-        let actual = ""
+        let fetchRemote = ""
+        let lsRemote = ""
         await mock.module("../lib/git", () => ({
             Git: class MockGit extends Git {
-                public async fetch(input: string): Promise<void> {
-                    actual = input
+                public async fetch(actualRemote: string): Promise<void> {
+                    fetchRemote = actualRemote
                 }
-                public async ls(): Promise<string[]> {
+                public async ls(actualRemote: string): Promise<string[]> {
+                    lsRemote = actualRemote
                     return ["develop", "staging"]
                 }
             }
@@ -108,7 +110,8 @@ describe("getBranches", () => {
         const branches = await getBranches(context, remote, [{ from: "main", to: "(develop|staging)" }])
 
         // Assert
-        expect(actual).toEqual(remote)
+        expect(fetchRemote).toEqual(remote)
+        expect(lsRemote).toEqual(remote)
         expect(branches).toEqual(["develop", "staging"])
     })
 

@@ -1,5 +1,7 @@
-// eslint-disable-next-line no-shadow
-export enum Platform {
+/**
+ * Platform represents the available implemented platforms to backmerge branches with semantic-release-backmerge.
+ */
+export enum Platform { // eslint-disable-line no-shadow
     BITBUCKET = "bitbucket",
     BITBUCKET_CLOUD = "bitbucket-cloud",
     GITEA = "gitea",
@@ -8,11 +10,17 @@ export enum Platform {
     NULL = "",
 }
 
+/**
+ * Target represents a target configuration for a backmerge with a source branch (from) and a target branch (to).
+ */
 export interface Target {
     from: string
     to: string
 }
 
+/**
+ * BackmergeConfig represesents all the configurable fields (with some exceptions like token, debug and dryRun) for semantic-release-backmerge.
+ */
 export interface BackmergeConfig {
     apiPathPrefix: string
     baseUrl: string
@@ -25,9 +33,13 @@ export interface BackmergeConfig {
     token: string
 }
 
+/**
+ * defaultTitle is the default title for a pull request.
+ */
 export const defaultTitle = "Automatic merge failure"
-export const defaultCommit = "chore(release): merge branch $from into $to [skip ci]"
 
-export const interpolate = (toInterpolate: string, options: Record<string, string>): string =>
-    Object.entries(options).
-        reduce((agg: string, [option, value]) => agg.replaceAll(`$${option}`, value), toInterpolate)
+/**
+ * defaultCommit is the default commit message for a merge commit.
+ * It's interpolated by lodash before being used.
+ */
+export const defaultCommit = "chore(release): merge branch ${ from } into ${ to } [skip ci]" // eslint-disable-line no-template-curly-in-string

@@ -20,12 +20,14 @@ export default tseslint.config(
             "@typescript-eslint/no-unsafe-member-access": "warn",
             "camelcase": "off",
             "capitalized-comments": "off",
+            "complexity": ["error", 25],
             "line-comment-position": "off",
             "max-lines-per-function": ["error", 100],
             "max-params": ["error", 6],
             "max-statements": ["error", 30],
             "multiline-comment-style": "off",
             "no-await-in-loop": "off",
+            "no-continue": "off",
             "no-inline-comments": "off",
             "no-magic-numbers": "off",
             "no-sparse-arrays": "off",
@@ -40,6 +42,10 @@ export default tseslint.config(
     {
         files: ["**/*.test.ts", "**/*.spec.ts"],
         rules: {
+            "@typescript-eslint/no-empty-function": "off",
+            "@typescript-eslint/require-await": "off",
+            "class-methods-use-this": "off",
+            "max-classes-per-file": "off",
             "max-lines": "off",
             "max-lines-per-function": "off",
         }

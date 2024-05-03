@@ -11,13 +11,15 @@
     // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    // "verbatimModuleSyntax": true,
     "noEmit": true,
 
     // Best practices
-    "strict": true,
-    "skipLibCheck": true,
+    "alwaysStrict": true,
     "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictFunctionTypes": true,
 
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,

@@ -1,15 +1,29 @@
 import SemanticReleaseError from "@semantic-release/error"
 
-import type { BackmergeConfig } from "./models/config"
+import { BackmergeConfig } from "./models/config"
 
+/**
+ * linkify returns the right link for semantic-release-backmerge documentation according to input section.
+ * 
+ * @param section the documented section to link.
+ * 
+ * @returns the string link to documented section.
+ */
 const linkify = (section: string): string => `https://github.com/kilianpaquier/semantic-release-backmerge/blob/master/README.md#${section}`
 
-interface PartialError {
+/**
+ * ConfigError represents an error associated to a bad configuration.
+ */
+interface ConfigError {
     message: string
     details?: string
 }
 
-const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => PartialError } = {
+/**
+ * configErrors is the global variable with all configuration key with their associated error.
+ * It's used in GetConfigError function.
+ */
+const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError } = {
     apiPathPrefix: (value: any) => ({
         details: `[API Path Prefix](${linkify("shared-configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'apiPathPrefix' configuration.`,
@@ -48,8 +62,16 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => PartialErro
     })
 }
 
-export const getConfigError = (option: keyof BackmergeConfig, value?: any): SemanticReleaseError => {
-    const code = `EINVALID${option.toUpperCase()}`
-    const error = configErrors[option](value)
+/**
+ * getConfigError returns the SemanticReleaseError associated to input configuration key.
+ * 
+ * @param key the configuration key to retrieve the associated error.
+ * @param value the bad value associated to key.
+ * 
+ * @returns the SemanticReleaseError.
+ */
+export const getConfigError = (key: keyof BackmergeConfig, value?: any) => {
+    const code = `EINVALID${key.toUpperCase()}`
+    const error = configErrors[key](value)
     return new SemanticReleaseError(error.message, code, error.details)
 }

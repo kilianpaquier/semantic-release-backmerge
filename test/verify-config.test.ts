@@ -1,4 +1,4 @@
-import { Platform, type Target, defaultCommit, defaultTitle } from "../lib/models/config"
+import { Platform, Target, defaultCommit, defaultTitle } from "../lib/models/config"
 import { describe, expect, test } from "bun:test"
 import { ensureDefault, verifyConfig } from "../lib/verify-config"
 
@@ -219,10 +219,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("commit", config.commit)])
+        matcher.toThrowError(getConfigError("commit", config.commit).message)
     })
 
     test("should throw an invalid title with bad format", () => {
@@ -234,10 +234,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("title", config.title)])
+        matcher.toThrowError(getConfigError("title", config.title).message)
     })
 
     test("should throw an invalid debug with bad format", () => {
@@ -249,10 +249,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("debug", config.debug)])
+        matcher.toThrowError(getConfigError("debug", config.debug).message)
     })
 
     test("should throw an invalid dryRun with bad format", () => {
@@ -264,10 +264,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("dryRun", config.dryRun)])
+        matcher.toThrowError(getConfigError("dryRun", config.dryRun).message)
     })
 
     test("should throw an invalid platform with bad format", () => {
@@ -279,10 +279,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("platform", config.platform)])
+        matcher.toThrowError(getConfigError("platform", config.platform).message)
     })
 
     test("should throw an invalid platform with bad value", () => {
@@ -294,10 +294,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("platform", config.platform)])
+        matcher.toThrowError(getConfigError("platform", config.platform).message)
     })
 
     test("should throw an invalid branch with bad format", () => {
@@ -309,10 +309,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("targets", config.targets)])
+        matcher.toThrowError(getConfigError("targets", config.targets).message)
     })
 
     test("should throw an invalid branch error with bad target", () => {
@@ -325,10 +325,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("targets", targets)])
+        matcher.toThrowError(getConfigError("targets", targets).message)
     })
 
     test("should throw an invalid platform with base url", () => {
@@ -338,10 +338,10 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
+        const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        expect(errors).toEqual([getConfigError("platform", "")])
+        matcher.toThrowError(getConfigError("platform", "").message)
     })
 
     test("should be fine with base url", () => {
@@ -357,9 +357,9 @@ describe("verifyConfig", () => {
         }, { GITHUB_TOKEN: "some token" })
 
         // Act
-        const errors = verifyConfig(config)
-
+        const matcher = expect(() => verifyConfig(config))
+        
         // Assert
-        expect(errors).toBeEmpty()
+        matcher.not.toThrowError()
     })
 })

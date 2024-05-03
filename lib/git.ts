@@ -1,153 +1,121 @@
-import { type BackmergeConfig, Platform, interpolate } from "./models/config"
-import { type ExecaReturnValue, type Options, type SyncOptions, execa } from "execa"
+import { Options, execa } from "execa"
 
-import SemanticReleaseError from "@semantic-release/error"
-import fetch from "node-fetch"
+/**
+ * remote is the string representing git remote name.
+ */
+const origin = "origin"
 
-import { type GitUrl } from "git-url-parse"
-import { Octokit } from "octokit"
-import { type VerifyConditionsContext } from "semantic-release"
-import { authModificator } from "./auth-modificator"
-import { getConfigError } from "./error"
+/**
+ * Git is the class for all related git actions.
+ */
+export class Git {
+    readonly cwd?: string
+    readonly env?: Record<string, string>
 
-const remote = "origin"
+    /**
+     * @param cwd is the directory to execute git actions in.
+     * @param env is all the environment variables to allow access during git actions.
+     */
+    constructor(cwd?: string, env?: Record<string, string>) {
+        this.cwd = cwd
+        this.env = env
+    }
 
-export const git = async (args?: string[], options?: Options): Promise<ExecaReturnValue<string>> => {
-    const result = await execa("git", args, options)
-    return result
-}
+    /**
+     * exec runs an execa git command with input args and options.
+     * 
+     * @param args input arguments like with git command to run its options.
+     * @param options cmd options like environment variables, current directory, etc. 
+     * By default cwd and env are already valued with current Git instance.
+     * 
+     * @returns the execa child process execution result.
+     * 
+     * @throws an error if execa command fails.
+     */
+    public async exec(args?: string[], options?: Options) {
+        return await execa("git", args, { 
+            ...options,
+            cwd: this.cwd, 
+            env: this.env,
+        })
+    }
 
-export const gitBranches = async (context: Partial<VerifyConditionsContext>): Promise<string[]> => {
-    const options: SyncOptions = { cwd: context.cwd, env: context.env }
-
-    try {
-        const branches = await git(["ls-remote", "--heads", remote], options)
-        return branches.stdout.toString().
+    /**
+     * ls returns the slice of all branches present in remote origin. 
+     * It removes 'refs/heads/' from the branches name.
+     * 
+     * @returns the slice of branches.
+     * 
+     * @throws an error is the git ls-remote cannot be done.
+     */
+    public async ls() {
+        const response = await this.exec(["ls-remote", "--heads", origin])
+        const branches = response.stdout.toString().
             split("\n").
             map(branch => branch.split("\t")).
             flat().
             filter(branch => branch.startsWith("refs/heads/")).
             map(branch => branch.replace("refs/heads/", ""))
-    } catch (error) {
-        context.logger?.error("Failed to retrieve branches.", error)
-        return []
+        return [...new Set(branches)]
     }
-}
 
-export const createPullRequest = async (config: BackmergeConfig, info: GitUrl, from: string, to: string): Promise<SemanticReleaseError | void> => {
-    const apiUrl = config.baseUrl + config.apiPathPrefix
+    /**
+     * checkout executes a simple checkout of input branch. 
+     * The checkout is strict with remote state, meaning all local changes are removed.
+     * 
+     * @param branch the input branch to checkout.
+     * 
+     * @throws an error if the checkout cannot be done.
+     */
+    public async checkout(branch: string) {
+        await this.exec(["checkout", "-B", branch, `${origin}/${branch}`])
+    }
 
-    const handleFetch = async (url: string, body: any): Promise<SemanticReleaseError | void> => {
+    /**
+     * fetch executes a simple fetch of input remote.
+     * 
+     * @param remote the remote to fetch branches from.
+     * 
+     * @throws an error if the fetch cannot be done.
+     */
+    public async fetch(remote: string) {
+        await this.exec(["fetch", remote])
+    }
+
+    /**
+     * merge executes a checkout of input 'to' branch, and merges input 'from' branch into 'to'.
+     * If a merge commit must be done (by default --ff is used), then the merge commit is the input commit.
+     * 
+     * @param from the branch to merge into 'to'.
+     * @param to the branch to merge changes from 'from'.
+     * @param commit the merge commit message if one is done.
+     * 
+     * @throws an error if the merge fails (in case of conflicts, etc.).
+     */
+    public async merge(from: string, to: string, commit: string) {
+        await this.checkout(to)
+
         try {
-            const response = await fetch(url, {
-                body: JSON.stringify(body),
-                headers: {
-                    Authorization: `Bearer ${config.token}`,
-                    "Content-Type": "application/json",
-                },
-                method: "POST",
-            })
-            if (!response.ok) {
-                throw new Error(await response.text())
-            }
+            await this.exec(["merge", `${origin}/${from}`, "--ff", "-m", commit])
         } catch (error) {
-            return new SemanticReleaseError(`Failed to create pull request from '${remote}/${from}' into '${remote}/${to}'.`, "EPULLREQUEST", String(error))
+            await this.exec(["merge", "--abort"])
+            throw error
         }
-        return Promise.resolve()
     }
 
-    switch (config.platform) {
-        case Platform.BITBUCKET_CLOUD:
-            return handleFetch(`${apiUrl}/repositories/${info.owner}/${info.name}/pullrequests`, {
-                destination: { branch: { name: to } },
-                source: { branch: { name: from } },
-                title: config.title,
-            })
-        case Platform.BITBUCKET:
-            return handleFetch(`${apiUrl}/projects/${info.owner}/repos/${info.name}/pull-requests`, {
-                fromRef: { id: `refs/heads/${from}` },
-                open: true,
-                state: "OPEN",
-                title: config.title,
-                toRef: { id: `refs/heads/${to}` },
-            })
-        case Platform.GITEA:
-            return handleFetch(`${apiUrl}/repos/${info.owner}/${info.name}/pulls`, {
-                base: to,
-                head: from,
-                title: config.title,
-            })
-        case Platform.GITHUB:
-            try {
-                await new Octokit({ auth: config.token, request: { fetch } }).
-                    request("POST /repos/{owner}/{repo}/pulls", {
-                        base: to,
-                        baseUrl: apiUrl,
-                        head: from,
-                        owner: info.owner,
-                        repo: info.name,
-                        title: config.title,
-                    })
-            } catch (error) {
-                return new SemanticReleaseError(`Failed to create pull request from '${remote}/${from}' into '${remote}/${to}'.`, "EPULLREQUEST", String(error))
-            }
-            break
-        case Platform.GITLAB:
-            return handleFetch(`${apiUrl}/projects/${encodeURIComponent(`${info.owner}/${info.name}`)}/merge_requests`, {
-                source_branch: from,
-                target_branch: to,
-                title: config.title,
-            })
-        default:
-            return getConfigError("platform", config.platform) // shouldn't happen since config is validated beforehand
-    }
-    return Promise.resolve()
-}
-
-export const mergeBranch = async (context: Partial<VerifyConditionsContext>, config: BackmergeConfig, info: GitUrl, from: string, to: string): Promise<SemanticReleaseError | void> => {
-    const options: SyncOptions = { cwd: context.cwd, env: context.env }
-
-    try {
-        await git(["checkout", "-B", to, `${remote}/${to}`], options)
-    } catch (error) {
-        return new SemanticReleaseError(`Failed to checkout branch '${to}' from '${remote}/${to}'.`, "ECHECKOUT", String(error))
-    }
-
-    const commit = interpolate(config.commit, { from, to })
-    try {
-        // don't merge with remote part because there's potentiallement a local commit 
-        await git(["merge", `${from}`, "--ff", "-m", commit], options)
-    } catch (mergeError) {
-        context.logger?.error("Merge conflicts detected! Creating a pull request.", mergeError)
-
-        try {
-            await git(["merge", "--abort"], options)
-        } catch (abortError) {
-            return new SemanticReleaseError("Failed to abort merge before creating pull request.", "EMERGEABORT", String(abortError))
+    /**
+     * push executes a simple git push to the input remote with the current checked out branch.
+     * 
+     * @param remote the remote to push changes to.
+     * @param dryRun if the push must only verify if all conditions are fine and not alter the remote state.
+     * 
+     * @throws an error if the push cannot be executed.
+     */
+    public async push(remote: string, branch: string, dryRun?: boolean) {
+        const push = ["push", remote, `HEAD:${branch}`]
+        if (dryRun) {
+            push.push("--dry-run")
         }
-
-        if (config.dryRun) {
-            context.logger?.log(`Running with --dry-run, created pull request would have been from '${from}' into '${to}' with title '${commit}'.`)
-            return Promise.resolve()
-        }
-        return await createPullRequest(config, info, from, to)
+        await this.exec(push)
     }
-
-    const push = ["push", authModificator(info, config.platform, config.token)]
-    if (config.dryRun) {
-        context.logger?.log(`Running with --dry-run, push from '${from}' into '${to}' with commit '${commit}' will not update ${remote}.`)
-        push.push("--dry-run")
-    }
-
-    try {
-        await git(push, options)
-    } catch (pushError) {
-        context.logger?.error(`Failed to backmerge '${from}' into '${to}' with a push, opening pull request.`, pushError)
-        if (config.dryRun) {
-            context.logger?.log(`Running with --dry-run, created pull request would have been from '${from}' into '${to}' with title '${commit}'.`)
-            return Promise.resolve()
-        }
-        return await createPullRequest(config, info, from, to)
-    }
-    return Promise.resolve()
 }

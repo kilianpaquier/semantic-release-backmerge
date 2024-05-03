@@ -1,17 +1,53 @@
-import { type BackmergeConfig, Platform, type Target, defaultCommit, defaultTitle } from "./models/config"
+import { BackmergeConfig, Platform, Target, defaultCommit, defaultTitle } from "./models/config"
 import { isArray, isBoolean, isString } from "lodash"
 
-import type SemanticReleaseError from "@semantic-release/error"
+import AggregateError from "aggregate-error"
+import SemanticReleaseError from "@semantic-release/error"
 
 import { getConfigError } from "./error"
 
-const validateTargets = (targets: Partial<Target>[]): boolean => targets.filter((target) => !target.from || !target.to).length === 0
+/**
+ * stringNotEmpty validates that an input string is not empty.
+ * 
+ * @param value the string to validate.
+ * 
+ * @returns true if the input is not empty.
+ */
+const stringNotEmpty = (value: string) => value !== ""
+
+/**
+ * validateTargets validates an input slice of targets (meaning both from and to fields are present)
+ * 
+ * @param targets the slice of targets to validate
+ * 
+ * @returns true if all targets are valid.
+ */
+const validateTargets = (targets: Partial<Target>[]): boolean => targets.
+    filter(target =>
+        typeof target.from === "string" && stringNotEmpty(target.from)
+        && typeof target.to === "string" && stringNotEmpty(target.to)
+    ).length === targets.length
+
+/**
+ * validatePlatform validates an input string platform.
+ * 
+ * @param stringPlatform the platform to validate.
+ * 
+ * @returns true if the input platform is valid.
+ */
 const validatePlatform = (stringPlatform: string): boolean => Boolean(Object.values(Platform).
     filter(platform => platform !== Platform.NULL).
     find(platform => platform.toString() === stringPlatform))
-const stringNotEmpty = (value: string) => value !== ""
 
-// eslint-disable-next-line complexity
+/**
+ * ensureDefaults takes as input a partial backmerge configuration, alongside environment variables 
+ * and ensure all its fields are valued with the default value or with the input value.
+ * 
+ * @param config the partial input configuration.
+ * @param env the environment variables.
+ * 
+ * @returns the full configuration with default values if necessary.
+ */
 export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<string, string>): BackmergeConfig => {
     const getURLs = (): [Platform, string, string] => { // eslint-disable-line complexity
         if (config.baseUrl) {
@@ -22,7 +58,7 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<str
         if (env?.BITBUCKET_URL) {
             return [Platform.BITBUCKET, env?.BITBUCKET_URL, config.apiPathPrefix ?? "/rest/api/1.0"]
         }
-        
+
         // bitbucket cloud
         if (env?.BITBUCKET_CLOUD_URL) {
             return [Platform.BITBUCKET_CLOUD, env?.BITBUCKET_CLOUD_URL, config.apiPathPrefix ?? "/2.0"]
@@ -63,12 +99,12 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<str
     }
 }
 
-export interface VerifyConfigResult {
-    config: BackmergeConfig
-    errors: SemanticReleaseError[]
-}
-
-export const verifyConfig = (config: BackmergeConfig): SemanticReleaseError[] => {
+/**
+ * verifyConfig validates an input full BackmergeConfig.
+ * 
+ * @param config the configuration to validate.
+ */
+export const verifyConfig = (config: BackmergeConfig) => {
     const validators: { [k in keyof BackmergeConfig]: ((value: any) => boolean)[] } = {
         apiPathPrefix: [isString],
         baseUrl: [isString, stringNotEmpty],
@@ -84,12 +120,14 @@ export const verifyConfig = (config: BackmergeConfig): SemanticReleaseError[] =>
     const errors = Object.entries(config).reduce((agg: SemanticReleaseError[], [option, value]) => {
         // @ts-expect-error option is a keyof BackmergeConfig
         for (const validation of validators[option]) {
-            if (!validation(value)) {
+            if (!validation(value)) { // eslint-disable-line @typescript-eslint/no-unsafe-call
                 // @ts-expect-error option is a keyof BackmergeConfig
                 return [...agg, getConfigError(option, value)]
             }
         }
         return agg
     }, [])
-    return errors
+    if (errors.length > 0) {
+        throw new AggregateError(errors)
+    }
 }

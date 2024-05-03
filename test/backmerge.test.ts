@@ -1,172 +1,359 @@
-// import module for spying / stubbing
-import * as git from "../lib/git"
+import * as pulls from "../lib/pull-request"
 
-import { afterAll, afterEach, describe, expect, spyOn, test } from "bun:test"
+import { Context, executeBackmerge, getBranches } from "../lib/backmerge"
+import { afterAll, afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 
-import SemanticReleaseError from "@semantic-release/error"
-import gitUrlParse from "git-url-parse"
+import parse from "git-url-parse"
 
-import { type BackmergeConfig } from "../lib/models/config"
-import { type VerifyConditionsContext } from "semantic-release"
-import { backmerge } from "../lib/backmerge"
+import { Git } from "../lib/git"
+import { Platform } from "../lib/models/config"
+import { authModificator } from "../lib/auth-modificator"
 import { ensureDefault } from "../lib/verify-config"
+import { getConfigError } from "../lib/error"
 
-describe("backmerge", () => {
-    const mergeSpy = spyOn(git, "mergeBranch")
-    const branchesSpy = spyOn(git, "gitBranches")
+const getContext = (name: string): Context => ({
+        branch: { name },
+        logger: console
+    })
 
+describe("getBranches", () => {
+    const remote = "git@github.com:kilianpaquier/semantic-release-backmerge.git"
+
+    test("should not return any branch", async () => {
+        // Arrange
+        const context = getContext("main")
+
+        // Act
+        const branches = await getBranches(context, remote, [{ from: "staging", to: "develop" }])
+
+        // Assert
+        expect(branches).toBeEmpty()
+    })
+
+    test("should fail to fetch", async () => {
+        // Arrange
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> {
+                    throw new Error("an error message")
+                }
+            }
+        }))
+        const context = getContext("main")
+
+        // Act
+        const matcher = expect(async () => await getBranches(context, remote, [{ from: "main", to: "develop" }]))
+
+        // Assert
+        matcher.toThrowError("an error message")
+    })
+
+    test("should fail to ls branches", async () => {
+        // Arrange
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async ls(): Promise<string[]> {
+                    throw new Error("an error message")
+                }
+            }
+        }))
+        const context = getContext("main")
+
+        // Act
+        const matcher = expect(async () => await getBranches(context, remote, [{ from: "main", to: "develop" }]))
+
+        // Assert
+        matcher.toThrowError("an error message")
+    })
+
+    test("should not retrieve older semver branches", async () => {
+        // Arrange
+        let called = false
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async ls(): Promise<string[]> {
+                    called = true
+                    return ["v1.0", "v1.1", "v1.2"]
+                }
+            }
+        }))
+        const context = getContext("v1.2")
+
+        // Act
+        const branches = await getBranches(context, remote, [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }])
+
+        // Assert
+        expect(called).toBeTrue()
+        expect(branches).toBeEmpty()
+    })
+
+    test("should retrieve some branches", async () => {
+        // Arrange
+        let actual = ""
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(input: string): Promise<void> {
+                    actual = input
+                }
+                public async ls(): Promise<string[]> {
+                    return ["develop", "staging"]
+                }
+            }
+        }))
+        const context = getContext("main")
+
+        // Act
+        const branches = await getBranches(context, remote, [{ from: "main", to: "(develop|staging)" }])
+
+        // Assert
+        expect(actual).toEqual(remote)
+        expect(branches).toEqual(["develop", "staging"])
+    })
+
+    test("should retrieve more recent semver branches but only same major version", async () => {
+        // Arrange
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async ls(): Promise<string[]> {
+                    return ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0", "v2.6"]
+                }
+            }
+        }))
+        const context = getContext("v1.2")
+
+        // Act
+        const branches = await getBranches(context, remote, [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }])
+
+        // Assert
+        expect(branches).toEqual(["v1.3", "v1.4"])
+    })
+
+    test("should retrieve more recent semver branches but only same major version (.x case)", async () => {
+        // Arrange
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async ls(): Promise<string[]> {
+                    return ["v1.0.x", "v1.1.x", "v1.2.x", "v1.3.x", "v1.4.x", "v2.0.x", "v2.6.x"]
+                }
+            }
+        }))
+        const context = getContext("v1.2.x")
+
+        // Act
+        const branches = await getBranches(context, remote, [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }])
+
+        // Assert
+        expect(branches).toEqual(["v1.3.x", "v1.4.x"])
+    })
+
+    test("should retrieve no version since it's the major one", async () => {
+        // Arrange
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async ls(): Promise<string[]> {
+                    return ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0", "v2.6"]
+                }
+            }
+        }))
+        const context = getContext("v1")
+
+        // Act
+        const branches = await getBranches(context, remote, [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }])
+
+        // Assert
+        expect(branches).toBeEmpty()
+    })
+
+    test("should retrieve no version since it's the major one (.x case)", async () => {
+        // Arrange
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async ls(): Promise<string[]> {
+                    return ["v1.0.x", "v1.1.x", "v1.2.x", "v1.3.x", "v1.4.x", "v2.0.x", "v2.6.x"]
+                }
+            }
+        }))
+        const context = getContext("v1.x")
+
+        // Act
+        const branches = await getBranches(context, remote, [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }])
+
+        // Assert
+        expect(branches).toBeEmpty()
+    })
+})
+
+describe("executeBackmerge", () => {
+    const pullsSpy = spyOn(pulls, "createPR")
     afterEach(() => {
-        mergeSpy.mockReset()
-        branchesSpy.mockReset()
+        pullsSpy.mockReset()
     })
-
     afterAll(() => {
-        mergeSpy.mockRestore()
-        branchesSpy.mockRestore()
+        pullsSpy.mockRestore()
     })
 
-    const getContext = (branchName: string): Partial<VerifyConditionsContext> => ({
-        branch: { name: branchName },
-        logger: console,
-    })
+    const url = parse("git@github.com:kilianpaquier/semantic-release-backmerge.git")
 
-    const info = gitUrlParse("https://github.com/kilianpaquier/semantic-release-backmerge.git")
-
-    test("should not do anything since released branch is not in targets", async () => {
+    test("should fail to modify authentication", () => {
         // Arrange
+        const config = ensureDefault({})
         const context = getContext("main")
-        const logSpy = spyOn(context, "logger")
 
-        const config: BackmergeConfig = ensureDefault({})
-        
         // Act
-        const errors = await backmerge(context, config, info)
+        const matcher = expect(async () => await executeBackmerge(context, config, url, []))
 
         // Assert
-        expect(errors).toBeEmpty()
-        expect(branchesSpy).not.toHaveBeenCalled()
-        expect(mergeSpy).not.toHaveBeenCalled()
-        expect(logSpy).toHaveBeenCalledTimes(1)
+        matcher.toThrowError(getConfigError("platform", Platform.NULL).message)
     })
 
-    test("should not do anything since target branches don't exist", async () => {
+    test("should fail to fetch remote", async () => {
         // Arrange
-        branchesSpy.mockImplementation(() => Promise.resolve([]))
-
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> {
+                    throw new Error("an error message")
+                }
+            }
+        }))
+        const config = ensureDefault({ baseUrl: "https://github.com", platform: Platform.GITHUB })
         const context = getContext("main")
-        const logSpy = spyOn(context, "logger")
 
-        const config: BackmergeConfig = ensureDefault({
-            targets: [
-                { from: "main", to: "develop" }
-            ]
-        })
-        
         // Act
-        const errors = await backmerge(context, config, info)
+        const matcher = expect(async () => await executeBackmerge(context, config, url, []))
 
         // Assert
-        expect(errors).toBeEmpty()
-        expect(branchesSpy).toHaveBeenCalledTimes(1)
-        expect(mergeSpy).not.toHaveBeenCalled()
-        expect(logSpy).toHaveBeenCalledTimes(2)
+        matcher.toThrowError("an error message")
     })
 
-    test("should not do anything since target branch exist but is below minor or above major semver", async () => {
+    test("should fail to checkout released branch", async () => {
         // Arrange
-        branchesSpy.mockImplementation(() => Promise.resolve(["v1.0", "v2.0"]))
-
-        const context = getContext("v1.1")
-        const logSpy = spyOn(context, "logger")
-
-        const config: BackmergeConfig = ensureDefault({
-            targets: [
-                { from: "v.*", to: "v.*" }
-            ]
-        })
-        
-        // Act
-        const errors = await backmerge(context, config, info)
-
-        // Assert
-        expect(errors).toBeEmpty()
-        expect(branchesSpy).toHaveBeenCalledTimes(1)
-        expect(mergeSpy).not.toHaveBeenCalled()
-        expect(logSpy).toHaveBeenCalledTimes(4)
-    })
-
-    test("should call merge branch and return error", async () => {
-        // Arrange
-        branchesSpy.mockImplementation(() => Promise.resolve(["develop", "develop_another"]))
-        mergeSpy.mockImplementationOnce(() => Promise.resolve(new SemanticReleaseError("a message", "ECODE")))
-        mergeSpy.mockImplementationOnce(() => Promise.resolve(new SemanticReleaseError("another message", "ECODE")))
-
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async checkout(): Promise<void> {
+                    throw new Error("an error message")
+                }
+            }
+        }))
+        const config = ensureDefault({ baseUrl: "https://github.com", platform: Platform.GITHUB })
         const context = getContext("main")
-        const logSpy = spyOn(context, "logger")
 
-        const config: BackmergeConfig = ensureDefault({
-            targets: [
-                { from: "main", to: "develop*" }
-            ]
-        })
-        
         // Act
-        const errors = await backmerge(context, config, info)
+        const matcher = expect(async () => await executeBackmerge(context, config, url, []))
 
         // Assert
-        expect(errors).toEqual([
-            new SemanticReleaseError("a message", "ECODE"),
-            new SemanticReleaseError("another message", "ECODE"),
-        ])
-        expect(branchesSpy).toHaveBeenCalledTimes(1)
-        expect(mergeSpy).toHaveBeenCalledTimes(2)
-        expect(logSpy).toHaveBeenCalledTimes(2)
+        matcher.toThrowError("an error message")
     })
 
-    test("should call merge branch and return success", async () => {
+    test("should fail to merge branch and create pull request", async () => {
         // Arrange
-        branchesSpy.mockImplementation(() => Promise.resolve(["develop", "staging"]))
-        mergeSpy.mockImplementation(() => Promise.resolve())
-
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async checkout(): Promise<void> { }
+                public async merge(): Promise<void> {
+                    throw new Error("an error message")
+                }
+                public async push(): Promise<void> {
+                    throw new Error("shouldn't be called")
+                }
+            }
+        }))
+        const config = ensureDefault({ baseUrl: "https://github.com", platform: Platform.GITHUB })
         const context = getContext("main")
-        const logSpy = spyOn(context, "logger")
 
-        const config: BackmergeConfig = ensureDefault({
-            targets: [
-                { from: "main", to: "develop" },
-                { from: "main", to: "staging" }
-            ]
-        })
-        
         // Act
-        const errors = await backmerge(context, config, info)
+        await executeBackmerge(context, config, url, ["staging"])
 
         // Assert
-        expect(errors).toBeEmpty()
-        expect(branchesSpy).toHaveBeenCalledTimes(1)
-        expect(mergeSpy).toHaveBeenCalledTimes(2)
-        expect(logSpy).toHaveBeenCalledTimes(2)
+        expect(pullsSpy).toHaveBeenCalledWith(config, url, "main", "staging")
     })
 
-    test("should call merge branch and return success with regexp branches", async () => {
+    test("should fail to merge branch but not create pull request dry run", async () => {
         // Arrange
-        branchesSpy.mockImplementation(() => Promise.resolve(["v1.0", "v1.3", "v1.4", "v1.5", "v2.0", "v2.4"]))
-        mergeSpy.mockImplementation(() => Promise.resolve())
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async checkout(): Promise<void> { }
+                public async merge(): Promise<void> {
+                    throw new Error("an error message")
+                }
+                public async push(): Promise<void> {
+                    throw new Error("shouldn't be called")
+                }
+            }
+        }))
+        const config = ensureDefault({ baseUrl: "https://github.com", dryRun: true, platform: Platform.GITHUB })
+        const context = getContext("main")
 
-        const context = getContext("v1.1")
-        const logSpy = spyOn(context, "logger")
-
-        const config: BackmergeConfig = ensureDefault({
-            targets: [ { from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" } ]
-        })
-        
         // Act
-        const errors = await backmerge(context, config, info)
+        await executeBackmerge(context, config, url, ["staging"])
 
         // Assert
-        expect(errors).toBeEmpty()
-        expect(branchesSpy).toHaveBeenCalledTimes(1)
-        expect(mergeSpy).toHaveBeenCalledTimes(3)
-        expect(logSpy).toHaveBeenCalledTimes(5)
+        expect(pullsSpy).not.toHaveBeenCalled()
+    })
+
+    test("should fail to push branch and fail to create pull request", async () => {
+        // Arrange
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async checkout(): Promise<void> { }
+                public async merge(): Promise<void> { }
+                public async push(): Promise<void> {
+                    throw new Error("an error message")
+                }
+            }
+        }))
+        pullsSpy.mockImplementation(() => { throw new Error("pull request error") })
+        const config = ensureDefault({ baseUrl: "https://github.com", platform: Platform.GITHUB })
+        const context = getContext("main")
+
+        // Act
+        const matcher = expect(async () => await executeBackmerge(context, config, url, ["staging"]))
+
+        // Assert
+        matcher.toThrowError("Failed to create pull request from 'main' to 'staging'.")
+    })
+
+    test("should succeed to merge and push a branch", async () => {
+        // Arrange
+        let actualRemote = ""
+        let actualBranch = ""
+        let merge: { commit?: string, from?: string, to?: string } = {}
+        let push: { branch?: string, dryRun?: boolean, remote?: string } = {}
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(remote: string): Promise<void> {
+                    actualRemote = remote
+                }
+                public async checkout(branch: string): Promise<void> {
+                    actualBranch = branch
+                }
+                public async merge(from: string, to: string, commit: string): Promise<void> {
+                    merge = { commit, from, to }
+                }
+                public async push(remote: string, branch: string, dryRun?: boolean): Promise<void> {
+                    push = { branch, dryRun, remote }
+                }
+            }
+        }))
+        const config = ensureDefault({ baseUrl: "https://github.com", dryRun: true, platform: Platform.GITHUB })
+        const context = getContext("main")
+
+        // Act
+        await executeBackmerge(context, config, url, ["staging"])
+
+        // Assert
+        expect(actualRemote).toEqual(authModificator(url, config.platform, config.token))
+        expect(actualBranch).toEqual("main")
+        expect(merge).toEqual({ commit: "chore(release): merge branch main into staging [skip ci]", from: "main", to: "staging" })
+        expect(push).toEqual({ branch: "staging", dryRun: true, remote: authModificator(url, config.platform, config.token) })
     })
 })

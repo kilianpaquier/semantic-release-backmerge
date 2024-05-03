@@ -1,3 +1,15 @@
+## [1.0.0-beta.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2024-05-03)
+
+
+### Bug Fixes
+
+* **checkout:** try to checkout branch guessing it already exist before checkout with creation mode ([ed0e836](https://github.com/kilianpaquier/semantic-release-backmerge/commit/ed0e83625cdf33cd2f0fdb2b040a1d196902873c))
+
+
+### Reverts
+
+* "fix(merge): remove checkout of released branch" ([9500819](https://github.com/kilianpaquier/semantic-release-backmerge/commit/9500819fed0e5b5c3633d00ed2a743c99cdaf8cb))
+
 ## [1.0.0-beta.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2024-05-03)
 
 

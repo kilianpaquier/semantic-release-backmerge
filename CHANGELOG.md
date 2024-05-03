@@ -1,3 +1,10 @@
+## [1.0.0-beta.6](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2024-05-03)
+
+
+### Bug Fixes
+
+* **fetch:** try to fetch all remotes to confirm missing commit from @esemantic-release/git ([1681f6c](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1681f6c161e4b78284acdc38e4fcde4e97877dda))
+
 ## [1.0.0-beta.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2024-05-03)
 
 

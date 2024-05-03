@@ -47,6 +47,7 @@ export const getBranches = async (context: Context, remote: string, targets: Tar
     context.logger.log(`Current branch '${releaseBranch}' matches following configured backmerge targets: '${JSON.stringify(appropriates)}'. Performing backmerge.`)
 
     const git = new Git(context.cwd, context.env)
+    await git.fetchAllRemotes()
     await git.fetch(remote)
 
     const branches = (await git.ls(remote)).
@@ -117,7 +118,7 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
 
     const commit = template(config.commit)
 
-    const errors = []
+    const errors: SemanticReleaseError[] = []
     for (const branch of branches) { // keep await in loop since git actions aren't thread safe
         try {
             await git.merge(releaseBranch, branch, commit({ from: releaseBranch, to: branch }))

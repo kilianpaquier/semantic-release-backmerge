@@ -82,6 +82,13 @@ export class Git {
     }
 
     /**
+     * @see https://github.com/saitho/semantic-release-backmerge/blob/master/src/helpers/git.ts#L122
+     */
+    public async fetchAllRemotes() {
+        await this.exec(["config", "remote.origin.fetch", "+refs/heads/*:refs/remotes/origin/*"])
+    }
+
+    /**
      * merge executes a checkout of input 'to' branch, and merges input 'from' branch into 'to'.
      * If a merge commit must be done (by default --ff is used), then the merge commit is the input commit.
      * 

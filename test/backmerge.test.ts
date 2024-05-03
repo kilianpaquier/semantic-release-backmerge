@@ -234,11 +234,32 @@ describe("executeBackmerge", () => {
         matcher.toThrowError("an error message")
     })
 
+    test("should fail to checkout released branch", async () => {
+        // Arrange
+        await mock.module("../lib/git", () => ({
+            Git: class MockGit extends Git {
+                public async fetch(): Promise<void> { }
+                public async checkout(): Promise<void> {
+                    throw new Error("an error message")
+                }
+            }
+        }))
+        const config = ensureDefault({ baseUrl: "https://github.com", platform: Platform.GITHUB })
+        const context = getContext("main")
+
+        // Act
+        const matcher = expect(async () => await executeBackmerge(context, config, url, []))
+
+        // Assert
+        matcher.toThrowError("an error message")
+    })
+
     test("should fail to merge branch and create pull request", async () => {
         // Arrange
         await mock.module("../lib/git", () => ({
             Git: class MockGit extends Git {
                 public async fetch(): Promise<void> { }
+                public async checkout(): Promise<void> { }
                 public async merge(): Promise<void> {
                     throw new Error("an error message")
                 }
@@ -262,6 +283,7 @@ describe("executeBackmerge", () => {
         await mock.module("../lib/git", () => ({
             Git: class MockGit extends Git {
                 public async fetch(): Promise<void> { }
+                public async checkout(): Promise<void> { }
                 public async merge(): Promise<void> {
                     throw new Error("an error message")
                 }
@@ -285,6 +307,7 @@ describe("executeBackmerge", () => {
         await mock.module("../lib/git", () => ({
             Git: class MockGit extends Git {
                 public async fetch(): Promise<void> { }
+                public async checkout(): Promise<void> { }
                 public async merge(): Promise<void> { }
                 public async push(): Promise<void> {
                     throw new Error("an error message")
@@ -305,12 +328,16 @@ describe("executeBackmerge", () => {
     test("should succeed to merge and push a branch", async () => {
         // Arrange
         let actualRemote = ""
+        let actualBranch = ""
         let merge: { commit?: string, from?: string, to?: string } = {}
         let push: { branch?: string, dryRun?: boolean, remote?: string } = {}
         await mock.module("../lib/git", () => ({
             Git: class MockGit extends Git {
                 public async fetch(remote: string): Promise<void> {
                     actualRemote = remote
+                }
+                public async checkout(branch: string): Promise<void> {
+                    actualBranch = branch
                 }
                 public async merge(from: string, to: string, commit: string): Promise<void> {
                     merge = { commit, from, to }
@@ -328,6 +355,7 @@ describe("executeBackmerge", () => {
 
         // Assert
         expect(actualRemote).toEqual(authModificator(url, config.platform, config.token))
+        expect(actualBranch).toEqual("main")
         expect(merge).toEqual({ commit: "chore(release): merge branch main into staging [skip ci]", from: "main", to: "staging" })
         expect(push).toEqual({ branch: "staging", dryRun: true, remote: authModificator(url, config.platform, config.token) })
     })

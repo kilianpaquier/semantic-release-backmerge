@@ -113,6 +113,7 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
     const remote = authModificator(info, config.platform, config.token)
 
     await git.fetch(remote)
+    await git.checkout(releaseBranch)
 
     const commit = template(config.commit)
 

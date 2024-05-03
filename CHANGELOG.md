@@ -1,3 +1,10 @@
+## [1.0.0-beta.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2024-05-03)
+
+
+### Bug Fixes
+
+* **merge:** remove checkout of released branch ([737ba6e](https://github.com/kilianpaquier/semantic-release-backmerge/commit/737ba6eff2b837c3acff15dde8473d5494fea35c))
+
 ## [1.0.0-beta.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2024-05-03)
 
 

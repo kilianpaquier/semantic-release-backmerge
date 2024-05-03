@@ -28,9 +28,9 @@ export class Git {
      * @throws an error if execa command fails.
      */
     public async exec(args?: string[], options?: Options) {
-        return await execa("git", args, { 
+        return await execa("git", args, {
             ...options,
-            cwd: this.cwd, 
+            cwd: this.cwd,
             env: this.env,
         })
     }
@@ -63,7 +63,11 @@ export class Git {
      * @throws an error if the checkout cannot be done.
      */
     public async checkout(branch: string) {
-        await this.exec(["checkout", "-b", branch]) 
+        try {
+            await this.exec(["checkout", branch])
+        } catch (error) {
+            await this.exec(["checkout", "-b", branch])
+        }
     }
 
     /**

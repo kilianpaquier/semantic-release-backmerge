@@ -1,3 +1,10 @@
+## [1.0.0-beta.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2024-05-03)
+
+
+### Bug Fixes
+
+* **merge:** try to find missing commit from @semantic-release/git ([c6415f6](https://github.com/kilianpaquier/semantic-release-backmerge/commit/c6415f6e040c54e8122a9b0a90f1b588e3b55bba))
+
 ## [1.0.0-beta.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2024-05-03)
 
 

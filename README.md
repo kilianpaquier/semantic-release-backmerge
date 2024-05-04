@@ -115,7 +115,7 @@ then backmerge will only allow backmerge into more recent maintenance branches (
 - `v1` cannot be backmerged
 - `v1.6` can be backmerged into `v1.7` (and above) and `v1`
 - `v1.x` cannot be backmerged
-- `v1.5.x` can be backmerged into `v1.6` (and above) and `v1`
+- `v1.5.x` can be backmerged into `v1.6.x` (and above) and `v1.x`
 
 ## Environment variables
 

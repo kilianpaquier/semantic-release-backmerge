@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0...v1.0.1) (2024-05-04)
+
+
+### Documentation
+
+* **readme:** small update on installation and main section name ([57ee05b](https://github.com/kilianpaquier/semantic-release-backmerge/commit/57ee05b09464b5d68ac7211faedcec90eef2710f))
+* **readme:** typo fix on maintenance branches ([5f67684](https://github.com/kilianpaquier/semantic-release-backmerge/commit/5f67684f806562336d2e9d79db69fd567bef456c))
+
 ## 1.0.0 (2024-05-04)
 
 

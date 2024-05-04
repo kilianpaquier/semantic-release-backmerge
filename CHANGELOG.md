@@ -1,3 +1,74 @@
+## 1.0.0 (2024-05-04)
+
+
+### Features
+
+* add backmerge feature ([d3ad15c](https://github.com/kilianpaquier/semantic-release-backmerge/commit/d3ad15c52b0b9af75f75dd985f593c26d21b7827))
+
+
+### Bug Fixes
+
+* **auth modificator:** add test around port and add replacer in case an user is already in parsed url ([4738dfa](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4738dfa5863bfa6d95877615dacdc2d13ede3704))
+* **branches:** bad split when multiple branches are returned by ls-remote ([2e5ad78](https://github.com/kilianpaquier/semantic-release-backmerge/commit/2e5ad789db55b357055541bff0010ee9d639668f))
+* **checkout:** try to checkout branch guessing it already exist before checkout with creation mode ([a76d768](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a76d768d2d9d6b3b678bc834c491694ea398cde3))
+* **ci:** add artifact upload after node-build on release workflow ([b691b62](https://github.com/kilianpaquier/semantic-release-backmerge/commit/b691b62a8513f3de7e38dd138aee106e337aeb29))
+* **ci:** ensure index.js' path is define in package.json ([7119b71](https://github.com/kilianpaquier/semantic-release-backmerge/commit/7119b71bababdb2836d4cdb0ffe21e746e8b239f))
+* **config:** add env to ensure default function ([10cc9c2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/10cc9c2c67014db2c3894e3bf0152a5bf7939d2e))
+* **fetch:** try to fetch all remotes to confirm missing commit from @esemantic-release/git ([b20c8de](https://github.com/kilianpaquier/semantic-release-backmerge/commit/b20c8de3730e67a1610ed8660051340ec104758c))
+* **merge:** execute merge with local version fo 'from' branch in case @semantic-release/git is used ([581c17c](https://github.com/kilianpaquier/semantic-release-backmerge/commit/581c17c2fdb2e0fef16c009b495fea8fb4bb6330))
+* **merge:** remove checkout of released branch ([4cef176](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4cef176bbb3827373cbcd19dc433cfff481ddac7))
+* **merge:** try to find missing commit from @semantic-release/git ([0a6bb80](https://github.com/kilianpaquier/semantic-release-backmerge/commit/0a6bb808bfecb8f5eb0114572fa0665a76a69b77))
+* **pr:** add content type to post pull request ([1c54139](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1c541392e3f4e63c786984a1823ad1a3f7f87687))
+* **pr:** handle response from API as error when it's not ok by fetch ([553fd1c](https://github.com/kilianpaquier/semantic-release-backmerge/commit/553fd1ca33a49a7ef43b78625885e79e70a81dde))
+* **push:** push to repository url and not just push ([8a0b16a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/8a0b16a413719ea0869dc117c90e3ed79f36264c))
+
+
+### Reverts
+
+* "fix(merge): remove checkout of released branch" ([7627264](https://github.com/kilianpaquier/semantic-release-backmerge/commit/7627264762938b08310e91f98c812ad3d5cf2ce4))
+
+
+### Documentation
+
+* **readme:** initialize readme ([8664f24](https://github.com/kilianpaquier/semantic-release-backmerge/commit/8664f2467dba327e136eabb5c607307a22f51139))
+* **readme:** setup all documentation with configuration, features and specificities per git platform ([806982d](https://github.com/kilianpaquier/semantic-release-backmerge/commit/806982d96b5fb60d676f9d03b246a1d5da319625))
+
+
+### Chores
+
+* **backmerge:** remove commented code ([a8da0f8](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a8da0f89a0ae4cc84e413da275288a9ac485d396))
+* **config:** remove useless ci field ([f698d5b](https://github.com/kilianpaquier/semantic-release-backmerge/commit/f698d5beabc8f22f6de8752dff78fa08a2a3426d))
+* **deps:** update lockb ([033376c](https://github.com/kilianpaquier/semantic-release-backmerge/commit/033376ca7d69080a985a50efca09f8adbc6e698d))
+* **deps:** upgrade to bun 1.1.7 ([a501ed2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a501ed26ed2d1972fdce6421c7d1bf7e2f086445))
+* **e2e:** remove specific test ([d92f0f6](https://github.com/kilianpaquier/semantic-release-backmerge/commit/d92f0f647f621b6e47a3dc08020836bea6976ebd))
+* init project with README ([49eeddf](https://github.com/kilianpaquier/semantic-release-backmerge/commit/49eeddf7abb83571dd9c8ed71bec5a765929da56))
+* **merge:** remove useless reset hard before opening pull request ([912e1e7](https://github.com/kilianpaquier/semantic-release-backmerge/commit/912e1e7863cdad62156a692288e06d0164eade5f))
+* **release:** v1.0.0-alpha.1 [skip ci] ([668f6fc](https://github.com/kilianpaquier/semantic-release-backmerge/commit/668f6fc8dd53d149484cc40999dbb33724551950))
+* **release:** v1.0.0-alpha.10 [skip ci] ([01c52d6](https://github.com/kilianpaquier/semantic-release-backmerge/commit/01c52d649129901d75d4069b1ff915994ea6a3b6))
+* **release:** v1.0.0-alpha.2 [skip ci] ([37b1f95](https://github.com/kilianpaquier/semantic-release-backmerge/commit/37b1f95eed878bd95e07807a7f71eaef9c3d1f9d))
+* **release:** v1.0.0-alpha.3 [skip ci] ([c50714a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/c50714a3d9aadeabfdf1ef142c84382f6f06d7e2))
+* **release:** v1.0.0-alpha.4 [skip ci] ([66aa1b5](https://github.com/kilianpaquier/semantic-release-backmerge/commit/66aa1b5dd58728e00d1680e5aeb547a7264abe3d))
+* **release:** v1.0.0-alpha.5 [skip ci] ([0b3bfe7](https://github.com/kilianpaquier/semantic-release-backmerge/commit/0b3bfe79b3bdc210d24fb235e4901c7b8adac199))
+* **release:** v1.0.0-alpha.6 [skip ci] ([a46b333](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a46b333d2c2e2d67f586fb20c55d52ff5daf8eb2))
+* **release:** v1.0.0-alpha.7 [skip ci] ([bb3483e](https://github.com/kilianpaquier/semantic-release-backmerge/commit/bb3483ec78cfdcc237082eafe830020828a81541))
+* **release:** v1.0.0-alpha.8 [skip ci] ([5532fb8](https://github.com/kilianpaquier/semantic-release-backmerge/commit/5532fb87f69e501f56a0bcc8c62b5a8d55951e39))
+* **release:** v1.0.0-alpha.9 [skip ci] ([c338ed8](https://github.com/kilianpaquier/semantic-release-backmerge/commit/c338ed86d07de1771f6e2dbcef1eb83000f95284))
+* **release:** v1.0.0-beta.1 [skip ci] ([3320d7d](https://github.com/kilianpaquier/semantic-release-backmerge/commit/3320d7d43695f787a2016cd53a9ffc55e2fb37f5))
+* **release:** v1.0.0-beta.2 [skip ci] ([9c685ce](https://github.com/kilianpaquier/semantic-release-backmerge/commit/9c685ce457cf9766e8f547424544dac964efc75b))
+* **release:** v1.0.0-beta.3 [skip ci] ([36b9a59](https://github.com/kilianpaquier/semantic-release-backmerge/commit/36b9a598e6308d2041ca7b8ed7bb38a2274de33b))
+* **release:** v1.0.0-beta.4 [skip ci] ([a7f9079](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a7f90797cc2d74efc4c62e7538be7ba4f34d38af))
+* **release:** v1.0.0-beta.5 [skip ci] ([a4bab21](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a4bab213c763d50702addc631121f69b24d5da69))
+* **release:** v1.0.0-beta.6 [skip ci] ([b594c41](https://github.com/kilianpaquier/semantic-release-backmerge/commit/b594c41d8081eecbccd752095b5ca2e60d0ad8b0))
+* **release:** v1.0.0-beta.7 [skip ci] ([218ec54](https://github.com/kilianpaquier/semantic-release-backmerge/commit/218ec540aee533df1983be305258b28ab051e1b4))
+
+
+### Code Refactoring
+
+* **backmerge:** try endlessly to retrieve the missing commit from @semantic-release/git ([f5e8a35](https://github.com/kilianpaquier/semantic-release-backmerge/commit/f5e8a35e3ad3fab01269a08219805ae858fe4214))
+* **env:** load env values directly in config verification to guess platform and allow some overrides via config ([a245976](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a2459768f7bdcfbfb635c712671891dd95a11d8d))
+* **repository url:** rework parsing and add auth modificator to ensure git push works ([5de5227](https://github.com/kilianpaquier/semantic-release-backmerge/commit/5de522706ec556470d1700f9e1d363236d81b74b))
+* rework the whole plugin with separated functions, jsdoc, etc. ([eb9d437](https://github.com/kilianpaquier/semantic-release-backmerge/commit/eb9d437401326deb1374ce8e534df13b5e2a4c3b))
+
 ## [1.0.0-beta.7](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2024-05-04)
 
 

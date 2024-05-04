@@ -125,4 +125,17 @@ describe("getConfigError", () => {
         expect(error.message).toContain("'dryRun'")
         expect(error.details).toBeEmpty()
     })
+
+    test("should have a valid repositoryUrl error", () => {
+        // Arrange
+        const code = "EINVALIDREPOSITORYURL"
+
+        // Act
+        const error = getConfigError("repositoryUrl", "some invalid repository url")
+
+        // Assert
+        expect(error.code).toEqual(code)
+        expect(error.message).toContain("'repositoryUrl'")
+        expect(error.details).toBeEmpty()
+    })
 })

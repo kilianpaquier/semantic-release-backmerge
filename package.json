@@ -22,18 +22,19 @@
   ],
   "scripts": {
     "build": "bun build ./index.ts --outdir dist --target node",
+    "clean": "git clean -Xf ./*",
     "lint": "eslint",
     "test": "bun test --coverage"
   },
   "devDependencies": {
-    "@eslint/js": "^9.1.1",
+    "@eslint/js": "^9.2.0",
     "@types/bun": "latest",
     "@types/eslint__js": "^8.42.3",
     "@types/git-url-parse": "^9.0.3",
-    "@types/lodash": "^4.17.0",
+    "@types/lodash": "^4.17.1",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
-    "eslint": "^9.1.1",
+    "eslint": "^9.2.0",
     "globals": "^15.1.0",
     "npm-check-updates": "^16.14.20",
     "typescript-eslint": "^7.8.0"
@@ -50,7 +51,7 @@
     "git-url-parse": "^14.0.0",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
-    "octokit": "^3.2.0",
+    "octokit": "^3.2.1",
     "parse-url": "^9.2.0",
     "semantic-release": "^23.0.8",
     "semver": "^7.6.0"

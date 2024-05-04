@@ -28,6 +28,7 @@ export interface BackmergeConfig {
     debug: boolean // comes from semantic-release config
     dryRun: boolean // comes from semantic-release config
     platform: Platform
+    repositoryUrl: string // comes from semantic-release config
     targets: Target[]
     title: string
     token: string

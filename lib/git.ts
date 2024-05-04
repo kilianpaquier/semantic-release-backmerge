@@ -63,11 +63,7 @@ export class Git {
      * @throws an error if the checkout cannot be done.
      */
     public async checkout(branch: string) {
-        try {
-            await this.exec(["checkout", branch])
-        } catch (error) {
-            await this.exec(["checkout", "-b", branch])
-        }
+        await this.exec(["checkout", "-B", branch])
     }
 
     /**

@@ -92,6 +92,7 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<str
         debug: config.debug ?? false, // shouldn't happen since it comes from semantic-release config
         dryRun: config.dryRun ?? false, // shouldn't happen since it comes from semantic-release config
         platform: config.platform ?? platform,
+        repositoryUrl: config.repositoryUrl ?? "",
         targets: config.targets ?? [],
         title: config.title ?? defaultTitle,
         // checking all environment variables since it doesn't matter which is valued whatever the platform could be
@@ -112,6 +113,7 @@ export const verifyConfig = (config: BackmergeConfig) => {
         debug: [isBoolean], // shouldn't happen since it comes from semantic-release config
         dryRun: [isBoolean], // shouldn't happen since it comes from semantic-release config
         platform: [isString, validatePlatform],
+        repositoryUrl: [isString, stringNotEmpty], // shouldn't happen since it comes from semantic-release config
         targets: [isArray, validateTargets],
         title: [isString, stringNotEmpty],
         token: [isString, stringNotEmpty]

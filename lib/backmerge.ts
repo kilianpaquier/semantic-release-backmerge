@@ -1,11 +1,11 @@
-import { BackmergeConfig, Target } from "./models/config"
+import { BackmergeConfig } from "./models/config"
 
 import AggregateError from "aggregate-error"
 import SemanticReleaseError from "@semantic-release/error"
+import parse from "git-url-parse"
 import semver from "semver"
 
 import { Git } from "./git"
-import { GitUrl } from "git-url-parse"
 import { authModificator } from "./auth-modificator"
 import { createPR } from "./pull-request"
 import { template } from "lodash"
@@ -29,17 +29,16 @@ export interface Context {
  * and their semver version value related to the appropriate target (for instance, a branch v1.0 won't be returned if target.from is v1.1).
  * 
  * @param context with logger, released branch, current directory and environment.
- * @param remote to fetch all the branches from.
- * @param targets the configuration of which branches are to be backmerged into the others.
+ * @param config the semantic-release-backmerge plugin configuration.
  * 
  * @throws an error in case the input remote can't be fetched or the branches can be retrieved with git.
  * 
  * @returns the slice of branches where the context.branch.name must be backmerged into.
  */
-export const getBranches = async (context: Context, remote: string, targets: Target[]) => {
+export const getBranches = async (context: Context, config: BackmergeConfig) => {
     const releaseBranch = context.branch.name
 
-    const appropriates = targets.filter(branch => releaseBranch.match(branch.from))
+    const appropriates = config.targets.filter(branch => releaseBranch.match(branch.from))
     if (appropriates.length === 0) {
         context.logger.log(`Current branch '${releaseBranch}' doesn't match any configured backmerge targets.`)
         return []
@@ -48,9 +47,9 @@ export const getBranches = async (context: Context, remote: string, targets: Tar
 
     const git = new Git(context.cwd, context.env)
     await git.fetchAllRemotes()
-    await git.fetch(remote)
+    await git.fetch(config.repositoryUrl)
 
-    const branches = (await git.ls(remote)).
+    const branches = (await git.ls(config.repositoryUrl)).
         // don't keep the released branch
         filter(branch => releaseBranch !== branch).
 
@@ -103,17 +102,20 @@ export const getBranches = async (context: Context, remote: string, targets: Tar
  * If a merge fails, it tries to create a pull request.
  * 
  * @param context input context with the logger, released branch, etc.
- * @param remote url to fetch and push merged branches.
+ * @param config the semantic-release-backmerge plugin configuration.
  * @param branches slice of branches to be backmerged with released branch commits.
  * 
  * @throws AggregateError of SemanticReleaseError(s) for each branch that couldn't be backmerged.
  */
-export const executeBackmerge = async (context: Context, config: BackmergeConfig, info: GitUrl, branches: string[]) => {
+export const executeBackmerge = async (context: Context, config: BackmergeConfig, branches: string[]) => {
     const releaseBranch = context.branch.name
-    const git = new Git(context.cwd, context.env)
-    const remote = authModificator(info, config.platform, config.token)
 
-    await git.fetch(remote)
+    const url = parse(config.repositoryUrl)
+    const authRemote = authModificator(url, config.platform, config.token)
+    
+    const git = new Git(context.cwd, context.env)
+    // await git.fetchAllRemotes()
+    await git.fetch(config.repositoryUrl)
     await git.checkout(releaseBranch)
 
     const commit = template(config.commit)
@@ -126,7 +128,7 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
             if (config.dryRun) {
                 context.logger.log(`Running with --dry-run, push to '${branch}' will not update remote state.`)
             }
-            await git.push(remote, branch, config.dryRun)
+            await git.push(authRemote, branch, config.dryRun)
         } catch (error) {
             context.logger.error(`Failed to backmerge '${releaseBranch}' into '${branch}', opening pull request.`, error)
 
@@ -136,7 +138,7 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
             }
 
             try {
-                await createPR(config, info, releaseBranch, branch)
+                await createPR(config, url, releaseBranch, branch)
             } catch (prError) {
                 errors.push(new SemanticReleaseError(`Failed to create pull request from '${releaseBranch}' to '${branch}'.`, "EPULLREQUEST", String(prError)))
             }

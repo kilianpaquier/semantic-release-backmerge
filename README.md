@@ -1,6 +1,6 @@
 <!-- This file is safe to edit. Once it exists it will not be overwritten. -->
 
-# @kilianpaquier/semantic-release-backmerge <!-- omit in toc -->
+# semantic-release-backmerge <!-- omit in toc -->
 
 <p align="center">
   <img alt="GitHub Actions" src="https://img.shields.io/github/actions/workflow/status/kilianpaquier/semantic-release-backmerge/integration.yml?branch=main&style=for-the-badge">
@@ -31,10 +31,27 @@ A [semantic-release](https://github.com/semantic-release/semantic-release) plugi
 
 ## How to ?
 
+**bun**
+
 ```sh
 bun install -D @kilianpaquier/semantic-release-backmerge
+```
+
+**npm**
+
+```sh
 npm install -D @kilianpaquier/semantic-release-backmerge
+```
+
+**pnpm**
+
+```sh
 pnpm install -D @kilianpaquier/semantic-release-backmerge
+```
+
+**yarn**
+
+```sh
 yarn install -D @kilianpaquier/semantic-release-backmerge
 ```
 

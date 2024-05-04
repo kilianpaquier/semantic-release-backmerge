@@ -1,3 +1,10 @@
+## [1.0.0-beta.7](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2024-05-04)
+
+
+### Code Refactoring
+
+* **backmerge:** try endlessly to retrieve the missing commit from @semantic-release/git ([f38d42a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/f38d42a3cd0b0aa3b2e669b841e7daa9a32f7838))
+
 ## [1.0.0-beta.6](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2024-05-03)
 
 

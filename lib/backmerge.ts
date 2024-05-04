@@ -46,7 +46,10 @@ export const getBranches = async (context: Context, config: BackmergeConfig) => 
     context.logger.log(`Current branch '${releaseBranch}' matches following configured backmerge targets: '${JSON.stringify(appropriates)}'. Performing backmerge.`)
 
     const git = new Git(context.cwd, context.env)
-    await git.fetchAllRemotes()
+
+    // ensure at any time and any moment that the fetch'ed remote url is the same as there
+    // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
+    // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
     await git.fetch(config.repositoryUrl)
 
     const branches = (await git.ls(config.repositoryUrl)).
@@ -114,8 +117,13 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
     const authRemote = authModificator(url, config.platform, config.token)
     
     const git = new Git(context.cwd, context.env)
-    // await git.fetchAllRemotes()
+
+    // ensure at any time and any moment that the fetch'ed remote url is the same as there
+    // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
+    // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
     await git.fetch(config.repositoryUrl)
+
+    // checkout to ensure released branch is up to date with last fetch'ed remote url
     await git.checkout(releaseBranch)
 
     const commit = template(config.commit)

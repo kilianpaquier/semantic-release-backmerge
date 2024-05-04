@@ -45,7 +45,7 @@ jobs:
             @semantic-release/github
             @semantic-release/npm
             @semantic-release/release-notes-generator
-            conventional-changelog-conventionalcommits
+            conventional-changelog-conventionalcommits@7
             semantic-release-license
           dry_run: true
           tag_format: v${version}
@@ -126,7 +126,7 @@ jobs:
             @semantic-release/github
             @semantic-release/npm
             @semantic-release/release-notes-generator
-            conventional-changelog-conventionalcommits
+            conventional-changelog-conventionalcommits@7
             semantic-release-license
           dry_run: ${{ inputs.dry_run }}
           tag_format: v${version}

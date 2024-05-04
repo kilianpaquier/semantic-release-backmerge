@@ -25,15 +25,15 @@ interface ConfigError {
  */
 const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError } = {
     apiPathPrefix: (value: any) => ({
-        details: `[API Path Prefix](${linkify("shared-configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
+        details: `[API Path Prefix](${linkify("configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'apiPathPrefix' configuration.`,
     }),
     baseUrl: (value: any) => ({
-        details: `[Base URL](${linkify("shared-configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
+        details: `[Base URL](${linkify("configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'baseUrl' configuration.`,
     }),
     commit: (value: any) => ({
-        details: `[Commit](${linkify("shared-configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
+        details: `[Commit](${linkify("configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'commit' configuration.`,
     }),
     // shouldn't happen since it comes from semantic-release config
@@ -45,7 +45,7 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
         message: "Invalid 'dryRun' configuration (coming from semantic-release options).",
     }),
     platform: (value: any) => ({
-        details: `[Platform](${linkify("shared-configuration")}) must be one of 'bitbucket', 'bitbucket-cloud', 'gitea', 'github', 'gitlab'. Provided value is ${JSON.stringify(value)}.`,
+        details: `[Platform](${linkify("configuration")}) must be one of 'bitbucket', 'bitbucket-cloud', 'gitea', 'github', 'gitlab'. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'platform' configuration.`,
     }),
     // shouldn't happen since it comes from semantic-release config
@@ -53,15 +53,15 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
         message: "Invalid 'repositoryUrl' configuration (coming from semantic-release options).",
     }),
     targets: (value: any) => ({
-        details: `[Targets](${linkify("shared-configuration")}) must be a valid array of targets ({ from: "...", to: "..." }). Provided value is ${JSON.stringify(value)}.`,
+        details: `[Targets](${linkify("configuration")}) must be a valid array of targets ({ from: "...", to: "..." }). Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'targets' configuration.`,
     }),
     title: (value: any) => ({
-        details: `[Title](${linkify("shared-configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
+        details: `[Title](${linkify("configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'title' configuration.`,
     }),
     token: () => ({
-        details: `[Token](${linkify("shared-configuration")}) must be a non empty string.`,
+        details: `[Token](${linkify("configuration")}) must be a non empty string.`,
         message: "Invalid 'token' configuration.",
     })
 }

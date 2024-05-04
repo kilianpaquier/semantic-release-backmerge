@@ -23,7 +23,7 @@
   "scripts": {
     "build": "bun build ./index.ts --outdir dist --target node",
     "clean": "git clean -Xf ./*",
-    "lint": "eslint",
+    "lint": "eslint --ignore-pattern 'dist/*'",
     "test": "bun test --coverage"
   },
   "devDependencies": {

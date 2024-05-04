@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "type": "module",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "packageManager": "bun@1.1.7",
   "files": [
     "CHANGELOG.md",

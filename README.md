@@ -21,6 +21,7 @@ A [semantic-release](https://github.com/semantic-release/semantic-release) plugi
 - [How does it work ?](#how-does-it-work-)
 - [Usage](#usage)
 - [Configuration](#configuration)
+  - [Templating](#templating)
   - [Maintenance branches](#maintenance-branches)
 - [Environment variables](#environment-variables)
   - [Bitbucket (data center/server)](#bitbucket-data-centerserver)
@@ -99,11 +100,22 @@ This plugin can be configured through the semantic-release [configuration file](
 | --------------- | -------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `apiPathPrefix` | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | API Prefix for your platform (i.e. `/api/v4` for gitlab).                                                                                               |
 | `baseUrl`       | Yes      | Guessed in [environment variables](#environment-variables)                                                 | Platform base URL (i.e. `https://gitlab.com` for gitlab).                                                                                               |
-| `commit`        | No       | `chore(release): merge branch ${ from } into ${ to } [skip ci]`                                            | Merge commit in case the `fast-forward` mode couldn't be done. Value is templatized by `lodash` with only `from` and `to` as input data.                |
+| `commit`        | No       | `chore(release): merge branch ${ from } into ${ to } [skip ci]`                                            | Merge commit in case the `fast-forward` mode couldn't be done.                                                                                          |
 | `dryRun`        | No       | `--dry-run` option from semantic-release                                                                   | Whether to really push and create pull requests or only log the actions.                                                                                |
 | `platform`      | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | Platform name. Either `bitbucket`, `bitbucket-cloud`, `gitea`, `github` or `gitlab`.                                                                    |
 | `targets`       | No       | `[]`                                                                                                       | Backmerge targets, a slice / list of `{ from: <from>, to: <to> }`. `from` and `to` can be regexp like `(develop\|staging)` or `v[0-9]+(.[0-9]+)?`, etc. |
 | `title`         | No       | `Automatic merge failure`                                                                                  | Pull request title to set when creating pull requests.                                                                                                  |
+
+### Templating
+
+Configuration `commit` is templated with `lodash` during backmerge. The following data are available:
+
+| name        | type   | description                                                                                     |
+| ----------- | ------ | ----------------------------------------------------------------------------------------------- |
+| from        | string | Backmerge source branch.                                                                        |
+| to          | string | Backmerge target branch.                                                                        |
+| lastRelease | object | Last release with `version`, `gitTag`, `gitHead`, `name`, and `channels fields.                 |
+| nextRelease | object | Last release with `version`, `gitTag`, `gitHead`, `name`, `type`, `channel` and `notes` fields. |
 
 ### Maintenance branches
 

@@ -9,6 +9,7 @@ import { Git } from "./git"
 import { authModificator } from "./auth-modificator"
 import { createPR } from "./pull-request"
 import { template } from "lodash"
+import { LastRelease, NextRelease } from "semantic-release"
 
 /**
  * Context is a subinterface of semantic-release Context (specifically VerifyConditionContext)
@@ -17,10 +18,12 @@ export interface Context {
     branch: { name: string }
     cwd?: string
     env?: Record<string, string>
+    lastRelease: LastRelease
     logger: {
         error(...data: any[]): void
         log(...data: any[]): void
     }
+    nextRelease: NextRelease
 }
 
 /**
@@ -115,7 +118,7 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
 
     const url = parse(config.repositoryUrl)
     const authRemote = authModificator(url, config.platform, config.token)
-    
+
     const git = new Git(context.cwd, context.env)
 
     // ensure at any time and any moment that the fetch'ed remote url is the same as there
@@ -126,12 +129,15 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
     // checkout to ensure released branch is up to date with last fetch'ed remote url
     await git.checkout(releaseBranch)
 
-    const commit = template(config.commit)
-
     const errors: SemanticReleaseError[] = []
     for (const branch of branches) { // keep await in loop since git actions aren't thread safe
         try {
-            await git.merge(releaseBranch, branch, commit({ from: releaseBranch, to: branch }))
+            await git.merge(releaseBranch, branch, template(config.commit)({
+                from: releaseBranch,
+                lastRelease: context.lastRelease,
+                nextRelease: context.nextRelease,
+                to: branch,
+            }))
 
             if (config.dryRun) {
                 context.logger.log(`Running with --dry-run, push to '${branch}' will not update remote state.`)

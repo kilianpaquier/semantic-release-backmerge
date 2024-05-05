@@ -108,7 +108,7 @@ This plugin can be configured through the semantic-release [configuration file](
 
 ### Templating
 
-Configuration `commit` is templated with `lodash` during backmerge. The following data are available:
+Configuration `commit` and `title` are templated with `lodash` during backmerge or pull request creation. The following data are available:
 
 | name        | type   | description                                                                                     |
 | ----------- | ------ | ----------------------------------------------------------------------------------------------- |

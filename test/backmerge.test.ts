@@ -14,20 +14,20 @@ import { getConfigError } from "../lib/error"
 const getContext = (name: string): Context => ({
     branch: { name },
     lastRelease: {
-        version: "v0.0.0",
-        gitTag: "v0.0.0",
         channels: [],
         gitHead: "",
-        name: "last_release"
+        gitTag: "v0.0.0",
+        name: "last_release",
+        version: "v0.0.0",
     },
     logger: console,
     nextRelease: {
-        type: "major",
         channel: "",
-        version: "v0.0.0",
-        gitTag: "v0.0.0",
         gitHead: "",
-        name: "next_release"
+        gitTag: "v0.0.0",
+        name: "next_release",
+        type: "major",
+        version: "v0.0.0",
     }
 })
 

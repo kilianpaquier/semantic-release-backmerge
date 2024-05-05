@@ -1,15 +1,15 @@
-import { BackmergeConfig } from "./models/config"
+import { LastRelease, NextRelease } from "semantic-release"
+import { Metadata, createPR } from "./pull-request"
 
 import AggregateError from "aggregate-error"
 import SemanticReleaseError from "@semantic-release/error"
 import parse from "git-url-parse"
 import semver from "semver"
 
+import { BackmergeConfig } from "./models/config"
 import { Git } from "./git"
 import { authModificator } from "./auth-modificator"
-import { createPR } from "./pull-request"
 import { template } from "lodash"
-import { LastRelease, NextRelease } from "semantic-release"
 
 /**
  * Context is a subinterface of semantic-release Context (specifically VerifyConditionContext)
@@ -131,13 +131,15 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
 
     const errors: SemanticReleaseError[] = []
     for (const branch of branches) { // keep await in loop since git actions aren't thread safe
+        const templateData = {
+            from: releaseBranch,
+            lastRelease: context.lastRelease,
+            nextRelease: context.nextRelease,
+            to: branch,
+        }
+
         try {
-            await git.merge(releaseBranch, branch, template(config.commit)({
-                from: releaseBranch,
-                lastRelease: context.lastRelease,
-                nextRelease: context.nextRelease,
-                to: branch,
-            }))
+            await git.merge(releaseBranch, branch, template(config.commit)(templateData))
 
             if (config.dryRun) {
                 context.logger.log(`Running with --dry-run, push to '${branch}' will not update remote state.`)
@@ -152,7 +154,15 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
             }
 
             try {
-                await createPR(config, url, releaseBranch, branch)
+                const title = template(config.title)(templateData)
+                const body: Metadata = {
+                    from: releaseBranch,
+                    name: url.name,
+                    owner: url.owner,
+                    title,
+                    to: branch,
+                }
+                await createPR(config.baseUrl + config.apiPathPrefix, config.platform, config.token, body)
             } catch (prError) {
                 errors.push(new SemanticReleaseError(`Failed to create pull request from '${releaseBranch}' to '${branch}'.`, "EPULLREQUEST", String(prError)))
             }

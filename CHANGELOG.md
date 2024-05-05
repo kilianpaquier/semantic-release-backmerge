@@ -1,3 +1,15 @@
+## [1.1.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.1...v1.1.0) (2024-05-05)
+
+
+### Features
+
+* **title:** template string like commit configuration with lodash and the same data as commit ([6968482](https://github.com/kilianpaquier/semantic-release-backmerge/commit/69684827056aa55fa49ed2461602f4c01c290d30))
+
+
+### Chores
+
+* **commit:** add lastRelease and nextRelease to templating ([7e0b6d2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/7e0b6d2b591485f71d6912bcd47715c65cbc17bf))
+
 ## [1.0.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.0...v1.0.1) (2024-05-04)
 
 

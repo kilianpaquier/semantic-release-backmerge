@@ -10,7 +10,7 @@
 
 ---
 
-A [semantic-release](https://github.com/semantic-release/semantic-release) plugin to handle backmerge between branches (works on github, gitlab and bitbucket).
+A [**semantic-release**](https://github.com/semantic-release/semantic-release) plugin to handle backmerge between branches (works on github, gitlab and bitbucket).
 
 | Step               | Description                                                                                   |
 | ------------------ | --------------------------------------------------------------------------------------------- |
@@ -25,7 +25,7 @@ A [semantic-release](https://github.com/semantic-release/semantic-release) plugi
   - [Maintenance branches](#maintenance-branches)
 - [Environment variables](#environment-variables)
   - [Bitbucket (data center/server)](#bitbucket-data-centerserver)
-  - [Bitbucket cloud](#bitbucket-cloud)
+  - [Bitbucket (cloud)](#bitbucket-cloud)
   - [Gitea](#gitea)
   - [Github](#github)
   - [Gitlab](#gitlab)
@@ -58,7 +58,7 @@ yarn install -D @kilianpaquier/semantic-release-backmerge
 
 ## How does it work ?
 
-When configured in [targets](#configuration), a provided branch (i.e `main`) can be backmerged in one or multiple others (i.e. `develop`) when a released in made with `semantic-release`.
+When configured in [targets](#configuration), a provided branch (i.e `main`) can be backmerged in one or multiple others (i.e. `develop`) when a released in made with **semantic-release**.
 
 With the instance of `main` and `develop`, `develop` branch will be check'ed out locally and merged with `git merge <branch> --ff -m <commit_message>`. 
 It means that if git can avoid a merge commit, it will avoid it.
@@ -98,8 +98,8 @@ This plugin can be configured through the semantic-release [configuration file](
 
 | name            | required | default                                                                                                    | description                                                                                                                                             |
 | --------------- | -------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `apiPathPrefix` | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | API Prefix for your platform (i.e. `/api/v4` for gitlab).                                                                                               |
-| `baseUrl`       | Yes      | Guessed in [environment variables](#environment-variables)                                                 | Platform base URL (i.e. `https://gitlab.com` for gitlab).                                                                                               |
+| `apiPathPrefix` | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | API Prefix for your platform (i.e. `/api/v4` for **gitlab**).                                                                                               |
+| `baseUrl`       | Yes      | Guessed in [environment variables](#environment-variables)                                                 | Platform base URL (i.e. `https://gitlab.com` for **gitlab**).                                                                                               |
 | `commit`        | No       | `chore(release): merge branch ${ from } into ${ to } [skip ci]`                                            | Merge commit in case the `fast-forward` mode couldn't be done.                                                                                          |
 | `dryRun`        | No       | `--dry-run` option from semantic-release                                                                   | Whether to really push and create pull requests or only log the actions.                                                                                |
 | `platform`      | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | Platform name. Either `bitbucket`, `bitbucket-cloud`, `gitea`, `github` or `gitlab`.                                                                    |
@@ -121,7 +121,7 @@ Configuration `commit` and `title` are templated with `lodash` during backmerge 
 
 In some cases, you may want to maintain multiple maintenance branches associated to the same major version.
 
-In that case, `semantic-release-backmerge` is covering for you. When providing a `from` branch matching a maintenance branch, 
+In that case, **semantic-release-backmerge** is covering for you. When providing a `from` branch matching a maintenance branch, 
 then backmerge will only allow backmerge into more recent maintenance branches (of the same major version):
 
 - `v1` cannot be backmerged
@@ -133,7 +133,7 @@ then backmerge will only allow backmerge into more recent maintenance branches (
 
 When working with specifics git platforms, and as such sometimes with associated CI functionalities, environment variable are by default provided.
 
-For `semantic-release-backmerge` to work flawlessly with your platform, you may provide in the next sections the right environment variables.
+For **semantic-release-backmerge** to work flawlessly with your platform, you may provide in the next sections the right environment variables.
 
 To avoid painful configurations, you may use the environments variables to automatically guess `baseUrl`, `apiPathPrefix` and `platform` instead of given them in your configuration file.
 
@@ -147,16 +147,16 @@ To avoid painful configurations, you may use the environments variables to autom
 
 **Notes:** 
 
-- The Base URL name differs from [bitbucket cloud](#bitbucket-cloud) because the API endpoints to create pull request aren't the same.
+- The Base URL name differs from [bitbucket (cloud)](#bitbucket-cloud) because the API endpoints to create pull request aren't the same.
 - When `BITBUCKET_URL` is provided, you may omit the following configuration variables:
   - `baseUrl` is given this URL
   - `apiPathPrefix` is given by default `/rest/api/1.0`
   - `platform` is set to `bitbucket`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/projects/{owner}/repos/{name}/pull-requests`
-  - i.e. `POST https://stash.company.com/rest/api/1.0/projects/kilianpaquier/repos/semantic-release-backmerge/pull-requests`
-  - see [API Documentation](https://developer.atlassian.com/server/bitbucket/rest/v819/intro/#about)
+  - Example: `POST https://stash.company.com/rest/api/1.0/projects/kilianpaquier/repos/semantic-release-backmerge/pull-requests`
+  - See [documentation](https://developer.atlassian.com/server/bitbucket/rest/v819/intro/#about)
 
-### Bitbucket cloud
+### Bitbucket (cloud)
 
 | variable name         | description                                                         |
 | --------------------- | ------------------------------------------------------------------- |
@@ -166,14 +166,14 @@ To avoid painful configurations, you may use the environments variables to autom
 
 **Notes:** 
 
-- The Base URL name differs from [bitbucket data center / server](#bitbucket-data-centerserver) because the API endpoints to create pull request aren't the same.
+- The Base URL name differs from [bitbucket (data center/server)](#bitbucket-data-centerserver) because the API endpoints to create pull request aren't the same.
 - When `BITBUCKET_CLOUD_URL` is provided, you may omit the following configuration variables:
   - `baseUrl` is given this URL
   - `apiPathPrefix` is given by default `/2.0`
   - `platform` is set to `bitbucket-cloud`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repositories/{owner}/{name}/pullrequests`
-  - i.e. `POST https://company.bitbucket.org/2.0/repositories/kilianpaquier/semantic-release-backmerge/pullrequests`
-  - see [API Documentation](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/#api-group-pullrequests)
+  - Example: `POST https://company.bitbucket.org/2.0/repositories/kilianpaquier/semantic-release-backmerge/pullrequests`
+  - See [documentation](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/#api-group-pullrequests)
 
 ### Gitea
 
@@ -189,8 +189,8 @@ To avoid painful configurations, you may use the environments variables to autom
   - `apiPathPrefix` is given by default `/api/v1`
   - `platform` is set to `gitea`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repos/{owner}/{name}/pulls`
-  - i.e. `POST https://company.gitea.com/api/v1/repos/kilianpaquier/semantic-release-backmerge/pulls`
-  - see [API Documentation](https://docs.gitea.com/api/1.20/#tag/repository/operation/repoCreatePullRequest)
+  - Example: `POST https://company.gitea.com/api/v1/repos/kilianpaquier/semantic-release-backmerge/pulls`
+  - See [documentation](https://docs.gitea.com/api/1.20/#tag/repository/operation/repoCreatePullRequest)
 
 ### Github
 
@@ -209,8 +209,8 @@ To avoid painful configurations, you may use the environments variables to autom
   - `apiPathPrefix` is given by default `""`
   - `platform` is set to `github`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repos/{owner}/{repo}/pulls`
-  - i.e. `POST https://api.github.com/repos/kilianpaquier/semantic-release-backmerge/pulls`
-  - see [API Documentation](https://docs.github.com/fr/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request--code-samples)
+  - Example: `POST https://api.github.com/repos/kilianpaquier/semantic-release-backmerge/pulls`
+  - See [documentation](https://docs.github.com/fr/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request--code-samples)
 
 ### Gitlab
 
@@ -229,6 +229,6 @@ To avoid painful configurations, you may use the environments variables to autom
   - `apiPathPrefix` is given by default `/api/v4`
   - `platform` is set to `gitlab`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/projects/{uri_encoded({owner}/{repo})}/merge_requests`
-  - i.e. `POST https://gitlab.company.com/api/v4/projects/kilianpaquier%2Fsemantic-release-backmerge/merge_requests`
-  - i.e. `POST https://gitlab.company.com/api/v4/projects/kilianpaquier%2Fsubgroup%2Fsemantic-release-backmerge/merge_requests`
-  - see [API Documentation](https://docs.gitlab.com/ee/api/merge_requests.html#create-mr)
+  - Example: `POST https://gitlab.company.com/api/v4/projects/kilianpaquier%2Fsemantic-release-backmerge/merge_requests`
+  - Example: `POST https://gitlab.company.com/api/v4/projects/kilianpaquier%2Fsubgroup%2Fsemantic-release-backmerge/merge_requests`
+  - See [documentation](https://docs.gitlab.com/ee/api/merge_requests.html#create-mr)

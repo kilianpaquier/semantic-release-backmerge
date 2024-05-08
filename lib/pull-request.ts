@@ -3,7 +3,7 @@ import { Platform } from "./models/config"
 import SemanticReleaseError from "@semantic-release/error"
 import fetch from "node-fetch"
 
-import { Octokit } from "octokit"
+import { Octokit } from "@octokit/core"
 import { getConfigError } from "./error"
 
 /**

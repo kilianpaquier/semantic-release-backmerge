@@ -1,3 +1,15 @@
+## [1.1.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.0...v1.1.1) (2024-05-08)
+
+
+### Documentation
+
+* **readme:** update some typo ([8a49d3b](https://github.com/kilianpaquier/semantic-release-backmerge/commit/8a49d3b437e4f12c6ee5ab8797a0089e3922283a))
+
+
+### Chores
+
+* **deps:** migrate octokit dependency to @octokit/core for a smaller dependency ([749de38](https://github.com/kilianpaquier/semantic-release-backmerge/commit/749de3800728011492b11da697f3a497c4ebb7bd))
+
 ## [1.1.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.0.1...v1.1.0) (2024-05-05)
 
 

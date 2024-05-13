@@ -44,8 +44,8 @@ export class Git {
      * @throws an error is the git ls-remote cannot be done.
      */
     public async ls(remote: string) {
-        const response = await this.exec(["ls-remote", "--heads", remote])
-        const branches = response.stdout.toString().
+        const { stdout } = await this.exec(["ls-remote", "--heads", remote])
+        const branches = stdout.
             split("\n").
             map(branch => branch.split("\t")).
             flat().

@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.1...v1.1.2) (2024-05-13)
+
+
+### Chores
+
+* **deps:** upgrade bun and semver (path) dependencies and remove unnecessary dependencies ([7e62ccf](https://github.com/kilianpaquier/semantic-release-backmerge/commit/7e62ccf17c7f5ca61bb4d19ba637e9419b78ee70))
+* **deps:** upgrade semantic-release dependency (minor) ([fca5462](https://github.com/kilianpaquier/semantic-release-backmerge/commit/fca546289a24816f2b735fe3c32da645b86782d7))
+
 ## [1.1.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.0...v1.1.1) (2024-05-08)
 
 

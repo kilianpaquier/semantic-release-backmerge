@@ -48,7 +48,7 @@
     "aggregate-error": "^5.0.0",
     "bun": "^1.1.7",
     "escape-string-regexp": "^5.0.0",
-    "execa": "^8.0.1",
+    "execa": "^9.0.2",
     "git-url-parse": "^14.0.0",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",

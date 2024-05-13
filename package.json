@@ -36,9 +36,8 @@
     "@types/semver": "^7.5.8",
     "bun": "^1.1.8",
     "eslint": "^9.2.0",
-    "globals": "^15.1.0",
     "npm-check-updates": "^16.14.20",
-    "typescript-eslint": "^7.8.0"
+    "typescript-eslint": "^7.9.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -51,7 +50,7 @@
     "git-url-parse": "^14.0.0",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
-    "semantic-release": "^23.0.8",
+    "semantic-release": "^23.1.1",
     "semver": "^7.6.2"
   }
 }

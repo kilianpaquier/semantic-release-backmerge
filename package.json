@@ -31,10 +31,10 @@
     "@types/bun": "latest",
     "@types/eslint__js": "^8.42.3",
     "@types/git-url-parse": "^9.0.3",
-    "@types/lodash": "^4.17.1",
+    "@types/lodash": "^4.17.4",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
-    "bun": "^1.1.8",
+    "bun": "^1.1.12",
     "eslint": "^9.2.0",
     "npm-check-updates": "^16.14.20",
     "typescript-eslint": "^7.9.0"

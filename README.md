@@ -98,8 +98,8 @@ This plugin can be configured through the semantic-release [configuration file](
 
 | name            | required | default                                                                                                    | description                                                                                                                                             |
 | --------------- | -------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `apiPathPrefix` | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | API Prefix for your platform (i.e. `/api/v4` for **gitlab**).                                                                                               |
-| `baseUrl`       | Yes      | Guessed in [environment variables](#environment-variables)                                                 | Platform base URL (i.e. `https://gitlab.com` for **gitlab**).                                                                                               |
+| `apiPathPrefix` | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | API Prefix for your platform (i.e. `/api/v4` for **gitlab**).                                                                                           |
+| `baseUrl`       | Yes      | Guessed in [environment variables](#environment-variables)                                                 | Platform base URL (i.e. `https://gitlab.com` for **gitlab**).                                                                                           |
 | `commit`        | No       | `chore(release): merge branch ${ from } into ${ to } [skip ci]`                                            | Merge commit in case the `fast-forward` mode couldn't be done.                                                                                          |
 | `dryRun`        | No       | `--dry-run` option from semantic-release                                                                   | Whether to really push and create pull requests or only log the actions.                                                                                |
 | `platform`      | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | Platform name. Either `bitbucket`, `bitbucket-cloud`, `gitea`, `github` or `gitlab`.                                                                    |
@@ -114,7 +114,7 @@ Configuration `commit` and `title` are templated with `lodash` during backmerge 
 | ----------- | ------ | ----------------------------------------------------------------------------------------------- |
 | from        | string | Backmerge source branch.                                                                        |
 | to          | string | Backmerge target branch.                                                                        |
-| lastRelease | object | Last release with `version`, `gitTag`, `gitHead`, `name`, and `channels fields.                 |
+| lastRelease | object | Last release with `version`, `gitTag`, `gitHead`, `name`, and `channels` fields.                |
 | nextRelease | object | Last release with `version`, `gitTag`, `gitHead`, `name`, `type`, `channel` and `notes` fields. |
 
 ### Maintenance branches

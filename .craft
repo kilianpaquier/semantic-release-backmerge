@@ -2,13 +2,13 @@
 ---
 ci:
   name: github
+  options:
+    - codeql
+    - dependabot
   release:
     auto: false
     backmerge: false
     mode: github-token
-  options:
-    - codeql
-    - dependabot
 license: mit
 maintainers:
   - name: kilianpaquier

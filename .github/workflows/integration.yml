@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: 1.1.12
+          bun-version: 1.x
       - run: mkdir -p reports/
       - run: bun install --frozen-lockfile
       - run: bun run lint -o reports/node-lint.xslint.json -f json
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: 1.1.12
+          bun-version: 1.x
       - run: mkdir -p reports/
       - run: bun install --frozen-lockfile
       - run: bun run test

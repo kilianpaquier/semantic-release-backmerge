@@ -43,7 +43,7 @@ jobs:
     needs: run-workflow
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.x
       - run: mkdir -p reports/
@@ -65,7 +65,7 @@ jobs:
       OS: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.x
       - run: mkdir -p reports/

@@ -27,17 +27,17 @@
     "test": "bun test --coverage"
   },
   "devDependencies": {
-    "@eslint/js": "^9.4.0",
+    "@eslint/js": "^9.5.0",
     "@types/bun": "latest",
     "@types/eslint__js": "^8.42.3",
     "@types/git-url-parse": "^9.0.3",
-    "@types/lodash": "^4.17.4",
+    "@types/lodash": "^4.17.5",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
     "bun": "^1.1.16",
-    "eslint": "^9.4.0",
+    "eslint": "^9.5.0",
     "npm-check-updates": "^16.14.20",
-    "typescript-eslint": "^7.11.0"
+    "typescript-eslint": "^7.13.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

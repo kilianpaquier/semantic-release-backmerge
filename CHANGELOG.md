@@ -1,3 +1,16 @@
+## [1.1.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.3...v1.1.4) (2024-06-24)
+
+
+### Documentation
+
+* **readme:** fix missing ` on channels field ([e974698](https://github.com/kilianpaquier/semantic-release-backmerge/commit/e974698d9f964b67465d41c8b53b77fc0882505a))
+
+
+### Chores
+
+* **deps:** bump minor dependencies ([8a80efe](https://github.com/kilianpaquier/semantic-release-backmerge/commit/8a80efe079aa2a5c4986dbad8d16193594d94737))
+* **deps:** upgrade bun to v1.1.16 ([1c673e2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1c673e20cb8b412cabfd02f3e221d1329f8f84c0))
+
 ## [1.1.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.2...v1.1.3) (2024-06-01)
 
 

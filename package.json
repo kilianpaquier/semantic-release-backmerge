@@ -27,17 +27,17 @@
     "test": "bun test --coverage"
   },
   "devDependencies": {
-    "@eslint/js": "^9.5.0",
+    "@eslint/js": "^9.8.0",
     "@types/bun": "latest",
     "@types/eslint__js": "^8.42.3",
     "@types/git-url-parse": "^9.0.3",
-    "@types/lodash": "^4.17.5",
+    "@types/lodash": "^4.17.7",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
-    "bun": "^1.1.16",
-    "eslint": "^9.5.0",
+    "bun": "^1.1.21",
+    "eslint": "^9.8.0",
     "npm-check-updates": "^16.14.20",
-    "typescript-eslint": "^7.13.1"
+    "typescript-eslint": "^7.18.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -47,10 +47,10 @@
     "@semantic-release/error": "^4.0.0",
     "aggregate-error": "^5.0.0",
     "execa": "^8.0.1",
-    "git-url-parse": "^14.0.0",
+    "git-url-parse": "^14.1.0",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
     "semantic-release": "^24.0.0",
-    "semver": "^7.6.2"
+    "semver": "^7.6.3"
   }
 }

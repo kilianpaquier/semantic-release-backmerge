@@ -36,7 +36,7 @@
     "@types/semver": "^7.5.8",
     "bun": "^1.1.21",
     "eslint": "^9.8.0",
-    "npm-check-updates": "^16.14.20",
+    "npm-check-updates": "^17.0.0",
     "typescript-eslint": "^7.18.0"
   },
   "peerDependencies": {

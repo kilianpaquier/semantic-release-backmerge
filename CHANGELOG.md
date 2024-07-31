@@ -1,3 +1,12 @@
+## [1.1.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.4...v1.1.5) (2024-07-31)
+
+
+### Chores
+
+* **deps:** upgrade deps at minor and patch levels ([6b4a2de](https://github.com/kilianpaquier/semantic-release-backmerge/commit/6b4a2dea1a854c82a407403118f505d3fe191076))
+* **deps:** upgrade npm-check-updates major version ([d7a1aaf](https://github.com/kilianpaquier/semantic-release-backmerge/commit/d7a1aaf7fb002ee1650f208271d204cad3ccfe99))
+* **deps:** upgrade typescript-eslint major version ([df884b2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/df884b2507a48b43f905fc96888287c1a19366e3))
+
 ## [1.1.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.3...v1.1.4) (2024-06-24)
 
 

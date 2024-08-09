@@ -7,7 +7,7 @@ ci:
     - dependabot
     - codecov
   release:
-    auto: false
+    auto: true
     backmerge: false
     mode: github-token
 license: mit

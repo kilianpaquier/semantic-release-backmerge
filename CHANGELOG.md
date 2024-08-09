@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.5...v1.2.0) (2024-08-09)
+
+
+### Code Refactoring
+
+* **execa:** migrate to execa 9 ([669677d](https://github.com/kilianpaquier/semantic-release-backmerge/commit/669677d177dc39fa8b6fa91c6037107f10c2a2cb))
+
 ## [1.1.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.4...v1.1.5) (2024-07-31)
 
 

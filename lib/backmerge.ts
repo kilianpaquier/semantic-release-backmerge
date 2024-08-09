@@ -1,5 +1,6 @@
 import { LastRelease, NextRelease } from "semantic-release"
 import { Metadata, createPR } from "./pull-request"
+import { checkout, fetch, ls, merge, push } from "./git"
 
 import AggregateError from "aggregate-error"
 import SemanticReleaseError from "@semantic-release/error"
@@ -7,7 +8,6 @@ import parse from "git-url-parse"
 import semver from "semver"
 
 import { BackmergeConfig } from "./models/config"
-import { Git } from "./git"
 import { authModificator } from "./auth-modificator"
 import { template } from "lodash"
 
@@ -38,7 +38,7 @@ export interface Context {
  * 
  * @returns the slice of branches where the context.branch.name must be backmerged into.
  */
-export const getBranches = async (context: Context, config: BackmergeConfig) => {
+export const getBranches = (context: Context, config: BackmergeConfig) => {
     const releaseBranch = context.branch.name
 
     const appropriates = config.targets.filter(branch => releaseBranch.match(branch.from))
@@ -48,14 +48,12 @@ export const getBranches = async (context: Context, config: BackmergeConfig) => 
     }
     context.logger.log(`Current branch '${releaseBranch}' matches following configured backmerge targets: '${JSON.stringify(appropriates)}'. Performing backmerge.`)
 
-    const git = new Git(context.cwd, context.env)
-
     // ensure at any time and any moment that the fetch'ed remote url is the same as there
     // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
     // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
-    await git.fetch(config.repositoryUrl)
+    fetch(config.repositoryUrl, context.cwd, context.env)
 
-    const branches = (await git.ls(config.repositoryUrl)).
+    const branches = ls(config.repositoryUrl, context.cwd, context.env).
         // don't keep the released branch
         filter(branch => releaseBranch !== branch).
 
@@ -119,15 +117,13 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
     const url = parse(config.repositoryUrl)
     const authRemote = authModificator(url, config.platform, config.token)
 
-    const git = new Git(context.cwd, context.env)
-
     // ensure at any time and any moment that the fetch'ed remote url is the same as there
     // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
     // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
-    await git.fetch(config.repositoryUrl)
+    fetch(config.repositoryUrl, context.cwd, context.env)
 
     // checkout to ensure released branch is up to date with last fetch'ed remote url
-    await git.checkout(releaseBranch)
+    checkout(releaseBranch, context.cwd, context.env)
 
     const errors: SemanticReleaseError[] = []
     for (const branch of branches) { // keep await in loop since git actions aren't thread safe
@@ -139,12 +135,12 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
         }
 
         try {
-            await git.merge(releaseBranch, branch, template(config.commit)(templateData))
+            merge(releaseBranch, branch, template(config.commit)(templateData), context.cwd, context.env)
 
             if (config.dryRun) {
                 context.logger.log(`Running with --dry-run, push to '${branch}' will not update remote state.`)
             }
-            await git.push(authRemote, branch, config.dryRun)
+            push(authRemote, branch, config.dryRun, context.cwd, context.env)
         } catch (error) {
             context.logger.error(`Failed to backmerge '${releaseBranch}' into '${branch}', opening pull request.`, error)
 

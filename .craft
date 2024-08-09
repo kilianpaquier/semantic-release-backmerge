@@ -5,6 +5,7 @@ ci:
   options:
     - codeql
     - dependabot
+    - codecov
   release:
     auto: false
     backmerge: false

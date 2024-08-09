@@ -12,7 +12,7 @@
 
 ---
 
-A [**semantic-release**](https://github.com/semantic-release/semantic-release) plugin to handle backmerge between branches (works on github, gitlab and bitbucket).
+A [**semantic-release**](https://github.com/semantic-release/semantic-release) plugin to handle backmerge between branches.
 
 | Step               | Description                                                                                   |
 | ------------------ | --------------------------------------------------------------------------------------------- |

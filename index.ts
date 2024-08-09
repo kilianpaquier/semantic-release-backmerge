@@ -32,7 +32,7 @@ export const success = async (globalConfig: BackmergeConfig, context: SuccessCon
     const config = verifyConditions(globalConfig, context)
     
     try {
-        const branches = await getBranches(context, config)
+        const branches = getBranches(context, config)
         await executeBackmerge(context, config, branches)
     } catch (error) {
         throw new SemanticReleaseError("Failed to backmerge branches.", "EBACKMERGE", String(error))

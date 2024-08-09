@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.2.0...v1.2.1) (2024-08-09)
+
+
+### Documentation
+
+* **readme:** remove platform handling note since table of content takes care of it ([fe9f788](https://github.com/kilianpaquier/semantic-release-backmerge/commit/fe9f788992880061ab455d69c42a96d25801a615))
+
 ## [1.2.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.1.5...v1.2.0) (2024-08-09)
 
 

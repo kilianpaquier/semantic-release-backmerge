@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.2.2...v1.2.3) (2024-08-23)
+
+
+### Bug Fixes
+
+* **package:** add repository URL for npmjs.org provenance validation ([32748f1](https://github.com/kilianpaquier/semantic-release-backmerge/commit/32748f157d782b181e3b75a2e4f4c87a21b6ea26))
+
 ## [1.2.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.2.1...v1.2.2) (2024-08-23)
 
 

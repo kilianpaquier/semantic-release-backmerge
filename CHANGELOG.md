@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.2.1...v1.2.2) (2024-08-23)
+
+
+### Chores
+
+* **deps:** bump git-url-parse from 14.1.0 to 15.0.0 ([fe58bf0](https://github.com/kilianpaquier/semantic-release-backmerge/commit/fe58bf040cd11f24aaf7fcb3e685fb0e90320cbc))
+
 ## [1.2.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.2.0...v1.2.1) (2024-08-09)
 
 

@@ -17,6 +17,9 @@
     "access": "public",
     "provenance": true
   },
+  "repository": {
+    "url": "https://github.com/kilianpaquier/semantic-release-backmerge"
+  },
   "keywords": [
     "semantic-release-plugin",
     "backmerge"

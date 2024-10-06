@@ -17,6 +17,9 @@ import { BackmergeConfig } from "./lib/models/config"
  */
 export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyConditionsContext) => {
     const config = ensureDefault(globalConfig, context.env)
+
+    // verifyConfig throws an exception in case the configuration is invalid
+    // which will make semantic-release fail at verifyConditions step
     verifyConfig(config)
     return config
 }

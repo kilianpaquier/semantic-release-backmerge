@@ -36,6 +36,7 @@ export interface BackmergeConfig {
 
 /**
  * defaultTitle is the default title for a pull request.
+ * It's interpolated by lodash before being used.
  */
 export const defaultTitle = "Automatic merge failure"
 

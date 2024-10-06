@@ -1,3 +1,13 @@
+## [1.3.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.2.5...v1.3.0) (2024-10-06)
+
+### Features
+
+* **pull requests:** add release notes to backmerge body in case a pull request is created ([9a94ac2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/9a94ac2895fffff7e951358e3eec1b66d0af0ad7))
+
+### Documentation
+
+* **readme:** add the rights doc url for bitbuckets ([3344c16](https://github.com/kilianpaquier/semantic-release-backmerge/commit/3344c16b94f074687c182fc180462fbb6fd8ee64))
+
 ## [1.2.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.2.4...v1.2.5) (2024-10-05)
 
 ### Chores

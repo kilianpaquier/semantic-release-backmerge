@@ -152,6 +152,7 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
             try {
                 const title = template(config.title)(templateData)
                 const body: Metadata = {
+                    body: context.nextRelease.notes ?? "",
                     from: releaseBranch,
                     name: url.name,
                     owner: url.owner,

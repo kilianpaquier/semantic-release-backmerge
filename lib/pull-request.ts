@@ -10,6 +10,7 @@ import { getConfigError } from "./error"
  * Metadata contains all related information to the body sent during createPR call.
  */
 export interface Metadata {
+    body: string
     from: string
     name: string
     owner: string
@@ -51,6 +52,7 @@ export const createPR = async (apiUrl: string, platform: Platform, token: string
     switch (platform) {
         case Platform.BITBUCKET_CLOUD:
             await handleFetch(`${apiUrl}/repositories/${metadata.owner}/${metadata.name}/pullrequests`, {
+                description: metadata.body,
                 destination: { branch: { name: metadata.to } },
                 source: { branch: { name: metadata.from } },
                 title: metadata.title,
@@ -58,6 +60,7 @@ export const createPR = async (apiUrl: string, platform: Platform, token: string
             break
         case Platform.BITBUCKET:
             await handleFetch(`${apiUrl}/projects/${metadata.owner}/repos/${metadata.name}/pull-requests`, {
+                description: metadata.body,
                 fromRef: { id: `refs/heads/${metadata.from}` },
                 open: true,
                 state: "OPEN",
@@ -68,6 +71,7 @@ export const createPR = async (apiUrl: string, platform: Platform, token: string
         case Platform.GITEA:
             await handleFetch(`${apiUrl}/repos/${metadata.owner}/${metadata.name}/pulls`, {
                 base: metadata.to,
+                body: metadata.body,
                 head: metadata.from,
                 title: metadata.title,
             })
@@ -78,6 +82,7 @@ export const createPR = async (apiUrl: string, platform: Platform, token: string
                     request("POST /repos/{owner}/{repo}/pulls", {
                         base: metadata.to,
                         baseUrl: apiUrl,
+                        body: metadata.body,
                         head: metadata.from,
                         owner: metadata.owner,
                         repo: metadata.name,
@@ -89,6 +94,7 @@ export const createPR = async (apiUrl: string, platform: Platform, token: string
             break
         case Platform.GITLAB:
             await handleFetch(`${apiUrl}/projects/${encodeURIComponent(`${metadata.owner}/${metadata.name}`)}/merge_requests`, {
+                description: metadata.body,
                 source_branch: metadata.from,
                 target_branch: metadata.to,
                 title: metadata.title,

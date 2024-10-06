@@ -16,26 +16,26 @@ import { getConfigError } from "./error"
 const stringNotEmpty = (value: string) => value !== ""
 
 /**
- * validateTargets validates an input slice of targets (meaning both from and to fields are present)
+ * validTargets validates an input slice of targets (meaning both from and to fields are present)
  * 
  * @param targets the slice of targets to validate
  * 
  * @returns true if all targets are valid.
  */
-const validateTargets = (targets: Partial<Target>[]): boolean => targets.
+const validTargetsArray = (targets: Partial<Target>[]): boolean => targets.
     filter(target =>
         typeof target.from === "string" && stringNotEmpty(target.from)
         && typeof target.to === "string" && stringNotEmpty(target.to)
     ).length === targets.length
 
 /**
- * validatePlatform validates an input string platform.
+ * validPlatform validates an input string platform.
  * 
  * @param stringPlatform the platform to validate.
  * 
  * @returns true if the input platform is valid.
  */
-const validatePlatform = (stringPlatform: string): boolean => Boolean(Object.values(Platform).
+const validPlatform = (stringPlatform: string): boolean => Boolean(Object.values(Platform).
     filter(platform => platform !== Platform.NULL).
     find(platform => platform.toString() === stringPlatform))
 
@@ -112,9 +112,9 @@ export const verifyConfig = (config: BackmergeConfig) => {
         commit: [isString, stringNotEmpty],
         debug: [isBoolean], // shouldn't happen since it comes from semantic-release config
         dryRun: [isBoolean], // shouldn't happen since it comes from semantic-release config
-        platform: [isString, validatePlatform],
+        platform: [isString, validPlatform],
         repositoryUrl: [isString, stringNotEmpty], // shouldn't happen since it comes from semantic-release config
-        targets: [isArray, validateTargets],
+        targets: [isArray, validTargetsArray],
         title: [isString, stringNotEmpty],
         token: [isString, stringNotEmpty]
     }

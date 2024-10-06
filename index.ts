@@ -13,7 +13,7 @@ import { BackmergeConfig } from "./lib/models/config"
  * @param globalConfig the semantic-release-backmerge plugin configuration.
  * @param context the semantic-release context.
  * 
- * @returns both the parsed repository url as GitUrl and validated configuration.
+ * @returns the validated configuration.
  */
 export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyConditionsContext) => {
     const config = ensureDefault(globalConfig, context.env)

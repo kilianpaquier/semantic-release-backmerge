@@ -156,7 +156,7 @@ To avoid painful configurations, you may use the environments variables to autom
   - `platform` is set to `bitbucket`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/projects/{owner}/repos/{name}/pull-requests`
   - Example: `POST https://stash.company.com/rest/api/1.0/projects/kilianpaquier/repos/semantic-release-backmerge/pull-requests`
-  - See [documentation](https://developer.atlassian.com/server/bitbucket/rest/v819/intro/#about)
+  - See [documentation](https://developer.atlassian.com/server/bitbucket/rest/v819/api-group-pull-requests/#api-api-latest-projects-projectkey-repos-repositoryslug-pull-requests-post)
 
 ### Bitbucket (cloud)
 
@@ -175,7 +175,7 @@ To avoid painful configurations, you may use the environments variables to autom
   - `platform` is set to `bitbucket-cloud`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repositories/{owner}/{name}/pullrequests`
   - Example: `POST https://company.bitbucket.org/2.0/repositories/kilianpaquier/semantic-release-backmerge/pullrequests`
-  - See [documentation](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/#api-group-pullrequests)
+  - See [documentation](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/#api-repositories-workspace-repo-slug-pullrequests-post)
 
 ### Gitea
 

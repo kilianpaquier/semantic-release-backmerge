@@ -1,3 +1,9 @@
+## [1.3.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.3.1...v1.3.2) (2024-10-19)
+
+### Bug Fixes
+
+* remove wrapped exception in success step in case thrown exception in an AggregateError or SemanticReleaseError ([999685d](https://github.com/kilianpaquier/semantic-release-backmerge/commit/999685db7bed4d78bfc5a100405b5edd2aa3405e))
+
 ## [1.3.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.3.0...v1.3.1) (2024-10-19)
 
 ### Chores

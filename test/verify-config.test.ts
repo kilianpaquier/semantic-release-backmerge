@@ -327,8 +327,7 @@ describe("verifyConfig", () => {
 
     test("should throw an invalid branch error with bad target", () => {
         // Arrange
-        // @ts-expect-error because we want to check invalid inputs
-        const targets: Target[] = [{ from: "main" }]
+        const targets: Target[] = [{ from: "main", to: "" }]
         const config = ensureDefault({
             ...validConfig,
             targets,
@@ -369,7 +368,7 @@ describe("verifyConfig", () => {
 
         // Act
         const matcher = expect(() => verifyConfig(config))
-        
+
         // Assert
         matcher.not.toThrowError()
     })

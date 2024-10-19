@@ -15,6 +15,9 @@ import { BackmergeConfig } from "./lib/models/config"
  * @param context the semantic-release context.
  * 
  * @returns the validated configuration.
+ * 
+ * @throws an exception in case the input semantic-release-backmerge configuration is invalid 
+ * or missing inputs like tokens or URLs, etc.
  */
 export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyConditionsContext) => {
     const config = ensureDefault(globalConfig, context.env)

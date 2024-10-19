@@ -33,11 +33,14 @@ export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyC
  */
 export const success = async (globalConfig: BackmergeConfig, context: SuccessContext) => {
     const config = verifyConditions(globalConfig, context)
-    
+
     try {
         const branches = getBranches(context, config)
         await executeBackmerge(context, config, branches)
     } catch (error) {
+        if (error instanceof AggregateError || error instanceof SemanticReleaseError) {
+            throw error // don't wrap error in case it's already an acceptable error by semantic-release
+        }
         throw new SemanticReleaseError("Failed to backmerge branches.", "EBACKMERGE", String(error))
     }
 }

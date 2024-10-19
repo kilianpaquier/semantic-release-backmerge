@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.3.0...v1.3.1) (2024-10-19)
+
+### Chores
+
+* **deps:** upgrade minor dependencies ([ad57247](https://github.com/kilianpaquier/semantic-release-backmerge/commit/ad57247ef3b16b8d58b22fb098f885b13aed54e0))
+* **deps:** upgrade patch dependencies ([4bf4754](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4bf4754c9057952178a436806331de4e7d2d37bb))
+
 ## [1.3.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.2.5...v1.3.0) (2024-10-06)
 
 ### Features

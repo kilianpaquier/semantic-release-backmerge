@@ -31,7 +31,7 @@
     "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports"
   },
   "devDependencies": {
-    "@eslint/js": "^9.12.0",
+    "@eslint/js": "^9.13.0",
     "@types/bun": "latest",
     "@types/eslint__js": "^8.42.3",
     "@types/git-url-parse": "^9.0.3",
@@ -39,9 +39,9 @@
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
     "bun": "^1.1.31",
-    "eslint": "^9.12.0",
+    "eslint": "^9.13.0",
     "npm-check-updates": "^17.1.4",
-    "typescript-eslint": "^8.8.1"
+    "typescript-eslint": "^8.10.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

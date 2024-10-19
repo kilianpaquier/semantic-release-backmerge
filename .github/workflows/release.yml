@@ -25,7 +25,7 @@ jobs:
   version:
     name: Version
     runs-on: ubuntu-latest
-    if: ${{ github.ref_protected }} # skip all jobs since they depend on version job
+    if: ${{ github.ref_protected }}
     environment: release
     permissions:
       contents: write

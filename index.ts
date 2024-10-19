@@ -8,6 +8,7 @@ import { BackmergeConfig } from "./lib/models/config"
 
 /**
  * verifyConditions is the exported function for semantic-release for verifyConditions lifecycle.
+ * 
  * It verifies the input plugin configuration and throws an error if it's not valid.
  * 
  * @param globalConfig the semantic-release-backmerge plugin configuration.
@@ -26,6 +27,7 @@ export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyC
 
 /**
  * success is the function for semantic-release success lifecycle.
+ * 
  * It executes the backmerge to all appropriate branches as the release was successfull.
  * 
  * @param globalConfig the semantic-release-backmerge plugin configuration.

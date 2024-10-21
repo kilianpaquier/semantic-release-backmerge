@@ -72,6 +72,17 @@ describe("authModificator", () => {
         expect(url).toEqual("https://x-access-token:token@github.com/kilianpaquier/semantic-release-backmerge.git")
     })
 
+    test("should return a valid authenticated git https url with gitlab and already present user/token", () => {
+        // Arrange
+        const info = parse("https://gitlab-ci-token:glpat-RKuRfmL9gfDnw@gitlab.example.com/my-group/my-project.git")
+
+        // Act
+        const url = authModificator(info, Platform.GITLAB, "token")
+
+        // Assert
+        expect(url).toEqual("https://gitlab-ci-token:token@gitlab.example.com/my-group/my-project.git")
+    })
+
     test("should return a valid authenticated git http url with github", () => {
         // Arrange
         const info = parse("http://github.com/kilianpaquier/semantic-release-backmerge.git")

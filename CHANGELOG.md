@@ -1,3 +1,9 @@
+## [1.3.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.3.2...v1.3.3) (2024-10-22)
+
+### Bug Fixes
+
+* **git:** ensure fetch command is made with modified authenticated URL with config token - [#17](https://github.com/kilianpaquier/semantic-release-backmerge/issues/17) ([29c7f75](https://github.com/kilianpaquier/semantic-release-backmerge/commit/29c7f75d7b8b8e7e1d4df3adbae54f73461cc7fa))
+
 ## [1.3.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.3.1...v1.3.2) (2024-10-19)
 
 ### Bug Fixes

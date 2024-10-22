@@ -55,6 +55,7 @@ describe("getBranches", () => {
 
         const context = getContext("main")
         const config = ensureDefault({
+            platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "main", to: "staging" }],
         })
@@ -73,6 +74,7 @@ describe("getBranches", () => {
 
         const context = getContext("main")
         const config = ensureDefault({
+            platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "main", to: "staging" }],
         })
@@ -91,6 +93,7 @@ describe("getBranches", () => {
 
         const context = getContext("v1.2")
         const config = ensureDefault({
+            platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
         })
@@ -115,15 +118,16 @@ describe("getBranches", () => {
         
         const context = getContext("main")
         const config = ensureDefault({
+            platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "main", to: "(develop|staging)" }],
-        })
+        }, { GITHUB_TOKEN: "some-token" })
 
         // Act
         const branches = getBranches(context, config)
 
         // Assert
-        expect(fetchRemote).toEqual(config.repositoryUrl)
+        expect(fetchRemote).toEqual("https://x-access-token:some-token@github.com/kilianpaquier/semantic-release-backmerge.git")
         expect(lsRemote).toEqual(config.repositoryUrl)
         expect(branches).toEqual(["develop", "staging"])
     })
@@ -135,6 +139,7 @@ describe("getBranches", () => {
 
         const context = getContext("v1.2")
         const config = ensureDefault({
+            platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
         })
@@ -153,6 +158,7 @@ describe("getBranches", () => {
 
         const context = getContext("v1.2.x")
         const config = ensureDefault({
+            platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }],
         })
@@ -171,6 +177,7 @@ describe("getBranches", () => {
 
         const context = getContext("v1")
         const config = ensureDefault({
+            platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
         })
@@ -189,6 +196,7 @@ describe("getBranches", () => {
 
         const context = getContext("v1.x")
         const config = ensureDefault({
+            platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }],
         })
@@ -348,13 +356,13 @@ describe("executeBackmerge", () => {
             dryRun: true,
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        })
+        }, { GITHUB_TOKEN: "some-token" })
 
         // Act
         await executeBackmerge(context, config, ["staging"])
 
         // Assert
-        expect(fetchRemote).toEqual(config.repositoryUrl)
+        expect(fetchRemote).toEqual("https://x-access-token:some-token@github.com/kilianpaquier/semantic-release-backmerge.git")
         expect(checkoutBranch).toEqual("main")
         expect(merge).toEqual({ commit: "chore(release): merge branch main into staging [skip ci]", from: "main", to: "staging" })
         expect(push).toEqual({ branch: "staging", dryRun: true, remote: authModificator(parse(config.repositoryUrl), config.platform, config.token) })

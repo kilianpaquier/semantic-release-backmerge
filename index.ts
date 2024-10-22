@@ -1,6 +1,7 @@
+import { Context, executeBackmerge, getBranches } from "./lib/backmerge"
+import { PlatformHandler, newPlatformHandler } from "./lib/platform-handler"
 import { SuccessContext, VerifyConditionsContext } from 'semantic-release'
 import { ensureDefault, verifyConfig } from "./lib/verify-config"
-import { executeBackmerge, getBranches } from "./lib/backmerge"
 
 import SemanticReleaseError from "@semantic-release/error"
 
@@ -19,13 +20,16 @@ import { BackmergeConfig } from "./lib/models/config"
  * @throws an exception in case the input semantic-release-backmerge configuration is invalid 
  * or missing inputs like tokens or URLs, etc.
  */
-export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyConditionsContext) => {
+export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyConditionsContext): [BackmergeConfig, PlatformHandler] => {
     const config = ensureDefault(globalConfig, context.env)
 
     // verifyConfig throws an exception in case the configuration is invalid
     // which will make semantic-release fail at verifyConditions step
     verifyConfig(config)
-    return config
+
+    // newPlatformHandler will throw an exception in case the appropriate platform implementation cannot be found
+    // which will make semantic-release fail at verifyConditions step
+    return [config, newPlatformHandler(config.platform, config.baseUrl, config.apiPathPrefix, config.token, context.env)]
 }
 
 /**
@@ -37,18 +41,18 @@ export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyC
  * @param context the semantic-release context.
  */
 export const success = async (globalConfig: BackmergeConfig, context: SuccessContext) => {
-    const config = verifyConditions(globalConfig, context)
+    const [config, platformHandler] = verifyConditions(globalConfig, context)
 
     try {
-        const branches = await getBranches(context, config)
-        await executeBackmerge(context, config, branches)
+        const branches = await getBranches(context, config, platformHandler)
+        await executeBackmerge(context, config, platformHandler, branches)
     } catch (error) {
         if (error instanceof AggregateError || error instanceof SemanticReleaseError) {
             throw error // don't wrap error in case it's already an acceptable error by semantic-release
         }
 
-        const msg = "Failed to list or backmerge branches."
-        context.logger.error(msg, error)
+        const msg = "Failed to list or backmerge branches.";
+        (context as Context).logger.error(msg, error)
         throw new SemanticReleaseError(msg, "EBACKMERGE")
     }
 }

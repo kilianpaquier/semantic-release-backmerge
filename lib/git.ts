@@ -1,3 +1,4 @@
+import { GitUrl } from "git-url-parse"
 import { execa } from "execa"
 
 import debug from "debug"
@@ -5,7 +6,28 @@ import debug from "debug"
 const deblog = debug("semantic-release-backmerge:git")
 
 /**
- * ls returns the slice of all branches present in remote origin.
+ * authModificator takes as input a GitUrl (from git-url-parse) 
+ * and generates an http or https git url with replaced authentication (with the input token).
+ * 
+ * @param url with all related information to the git repository.
+ * @param user being the oauth prefix to use (specific depending on the current git platform).
+ * @param token to use instead of present token in url.
+ * 
+ * @throws SemanticReleaseError in case the platform isn't an implemented platform or is not a platform at all.
+ * 
+ * @returns the computed remote url with all modifications' done.
+ */
+export const authModificator = (url: GitUrl, user: string, token: string): string => {
+    const proto = url.protocol === "http" ? "http" : "https"
+
+    const origin = url.toString(proto)
+    // simple replace to add the authentication after toString
+    return origin.replace(`${proto}://${url.user}@`, `${proto}://`).
+        replace(`${proto}://`, `${proto}://${user}:${token}@`)
+}
+
+/**
+ * ls returns the slice of all branches present in remote origin. 
  * It removes 'refs/heads/' from the branches name.
  * 
  * @returns the slice of branches.

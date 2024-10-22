@@ -1,6 +1,5 @@
 import { LastRelease, NextRelease } from "semantic-release"
-import { Metadata, createPR } from "./pull-request"
-import { checkout, fetch, ls, merge, push } from "./git"
+import { authModificator, checkout, fetch, ls, merge, push } from "./git"
 
 import AggregateError from "aggregate-error"
 import SemanticReleaseError from "@semantic-release/error"
@@ -9,7 +8,7 @@ import parse from "git-url-parse"
 import semver from "semver"
 
 import { BackmergeConfig } from "./models/config"
-import { authModificator } from "./auth-modificator"
+import { PlatformHandler } from "./platform-handler"
 import { template } from "lodash"
 
 const deblog = debug("semantic-release-backmerge:git")
@@ -20,12 +19,11 @@ const deblog = debug("semantic-release-backmerge:git")
 export interface Context {
     branch: { name: string }
     cwd?: string
-    env?: Record<string, string>
+    env: Record<string, string>
     lastRelease: LastRelease
     logger: {
         error(...data: any[]): void
         log(...data: any[]): void
-        success(...data: any[]): void
         warn(...data: any[]): void
     }
     nextRelease: NextRelease
@@ -39,12 +37,13 @@ export interface Context {
  * 
  * @param context with logger, released branch, current directory and environment.
  * @param config the semantic-release-backmerge plugin configuration.
+ * @param platformHandler the interface to handle current git platform API calls.
  * 
  * @throws an error in case the input remote can't be fetched or the branches can be retrieved with git.
  * 
  * @returns the slice of branches where the context.branch.name must be backmerged into.
  */
-export const getBranches = async (context: Context, config: BackmergeConfig) => {
+export const getBranches = async (context: Context, config: BackmergeConfig, platformHandler: PlatformHandler) => {
     const releaseBranch = context.branch.name
 
     const appropriates = config.targets.filter(branch => releaseBranch.match(branch.from))
@@ -55,7 +54,7 @@ export const getBranches = async (context: Context, config: BackmergeConfig) => 
     context.logger.log(`Current branch '${releaseBranch}' matches following configured backmerge targets: '${JSON.stringify(appropriates)}'. Performing backmerge.`)
 
     const url = parse(config.repositoryUrl)
-    const authRemote = authModificator(url, config.platform, config.token)
+    const authRemote = authModificator(url, platformHandler.gitUser(), config.token)
 
     let branches: string[] = [] // eslint-disable-line no-useless-assignment
     try {
@@ -126,15 +125,16 @@ export const getBranches = async (context: Context, config: BackmergeConfig) => 
  * 
  * @param context input context with the logger, released branch, etc.
  * @param config the semantic-release-backmerge plugin configuration.
+ * @param platformHandler the interface to handle current git platform API calls.
  * @param branches slice of branches to be backmerged with released branch commits.
  * 
  * @throws AggregateError of SemanticReleaseError(s) for each branch that couldn't be backmerged.
  */
-export const executeBackmerge = async (context: Context, config: BackmergeConfig, branches: string[]) => {
+export const executeBackmerge = async (context: Context, config: BackmergeConfig, platformHandler: PlatformHandler, branches: string[]) => {
     const releaseBranch = context.branch.name
 
     const url = parse(config.repositoryUrl)
-    const authRemote = authModificator(url, config.platform, config.token)
+    const authRemote = authModificator(url, platformHandler.gitUser(), config.token)
 
     try {
         // ensure at any time and any moment that the fetch'ed remote url is the same as there
@@ -174,16 +174,19 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
             }
 
             try {
+                const exists = await platformHandler.hasPull(url.owner, url.name, releaseBranch, branch)
+                if (exists) {
+                    context.logger.log(`A pull request already exists between '${releaseBranch}' and '${branch}'. Not creating another.`)
+                    continue
+                }
+
                 const title = template(config.title)(templateData)
-                const body: Metadata = {
+                await platformHandler.createPull(url.owner, url.name, {
                     body: context.nextRelease.notes ?? "",
                     from: releaseBranch,
-                    name: url.name,
-                    owner: url.owner,
                     title,
-                    to: branch,
-                }
-                await createPR(config.baseUrl + config.apiPathPrefix, config.platform, config.token, body)
+                    to: branch
+                })
             } catch (prError) {
                 const msg = `Failed to create pull request from '${releaseBranch}' to '${branch}'.`
                 context.logger.error(msg, prError)

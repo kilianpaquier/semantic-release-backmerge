@@ -20,8 +20,11 @@ export default tseslint.config(
             "@typescript-eslint/no-unsafe-member-access": "warn",
             "camelcase": "off",
             "capitalized-comments": "off",
+            "class-methods-use-this": "off",
             "complexity": ["error", 25],
             "line-comment-position": "off",
+            "max-classes-per-file": "warn",
+            "max-lines": "warn",
             "max-lines-per-function": ["error", 100],
             "max-params": ["error", 6],
             "max-statements": ["error", 30],
@@ -34,6 +37,7 @@ export default tseslint.config(
             "no-sparse-arrays": "off",
             "no-ternary": "warn",
             "one-var": "off",
+            "prefer-destructuring": "warn",
             "require-unicode-regexp": "off",
             "sort-imports": ["error", {
                 allowSeparatedGroups: true

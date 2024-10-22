@@ -29,7 +29,7 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
         message: `Invalid 'apiPathPrefix' configuration.`,
     }),
     baseUrl: (value: any) => ({
-        details: `[Base URL](${linkify("configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
+        details: `[Base URL](${linkify("configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'baseUrl' configuration.`,
     }),
     commit: (value: any) => ({
@@ -74,7 +74,7 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
  * 
  * @returns the SemanticReleaseError.
  */
-export const getConfigError = (key: keyof BackmergeConfig, value?: any) => {
+export const getConfigError = (key: keyof BackmergeConfig, value?: any): SemanticReleaseError => {
     const code = `EINVALID${key.toUpperCase()}`
     const error = configErrors[key](value)
     return new SemanticReleaseError(error.message, code, error.details)

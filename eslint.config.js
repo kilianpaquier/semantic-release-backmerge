@@ -16,15 +16,19 @@ export default tseslint.config(
         rules: {
             // Implicit any is prohibited because a developer must know if it's an any or a specific type
             "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-unsafe-assignment": "off",
             "@typescript-eslint/no-unsafe-call": "warn",
             "@typescript-eslint/no-unsafe-member-access": "warn",
             "camelcase": "off",
             "capitalized-comments": "off",
+            "class-methods-use-this": "off",
             "complexity": ["error", 25],
             "line-comment-position": "off",
+            "max-classes-per-file": "warn",
+            "max-lines": "warn",
             "max-lines-per-function": ["error", 100],
             "max-params": ["error", 6],
-            "max-statements": ["error", 30],
+            "max-statements": ["error", 35],
             "multiline-comment-style": "off",
             "no-await-in-loop": "off",
             "no-case-declarations": "off",
@@ -32,8 +36,9 @@ export default tseslint.config(
             "no-inline-comments": "off",
             "no-magic-numbers": "off",
             "no-sparse-arrays": "off",
-            "no-ternary": "warn",
+            "no-ternary": "off",
             "one-var": "off",
+            "prefer-destructuring": "warn",
             "require-unicode-regexp": "off",
             "sort-imports": ["error", {
                 allowSeparatedGroups: true

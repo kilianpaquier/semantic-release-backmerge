@@ -27,7 +27,7 @@ describe("getConfigError", () => {
         // Assert
         expect(error.code).toEqual(code)
         expect(error.message).toContain("'baseUrl'")
-        expect(error.details).toContain("must be a non empty string")
+        expect(error.details).toContain("must be a string")
     })
 
     test("should have a valid token error", () => {

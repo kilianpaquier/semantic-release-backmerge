@@ -1,18 +1,15 @@
 import * as git from "../lib/git"
-import * as pulls from "../lib/pull-request"
 
 import { Context, executeBackmerge, getBranches } from "../lib/backmerge"
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 
-import parse from "git-url-parse"
-
 import { Platform } from "../lib/models/config"
-import { authModificator } from "../lib/auth-modificator"
+import { TestPlatformHandler } from "./platform-handler.test"
 import { ensureDefault } from "../lib/verify-config"
-import { getConfigError } from "../lib/error"
 
 const getContext = (name: string): Context => ({
     branch: { name },
+    env: {},
     lastRelease: {
         channels: [],
         gitHead: "",
@@ -40,10 +37,10 @@ describe("getBranches", () => {
         const config = ensureDefault({
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "staging", to: "develop" }],
-        })
+        }, {})
 
         // Act
-        const branches = await getBranches(context, config)
+        const branches = await getBranches(context, config, new TestPlatformHandler())
 
         // Assert
         expect(branches).toBeEmpty()
@@ -58,10 +55,10 @@ describe("getBranches", () => {
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "main", to: "staging" }],
-        })
+        }, {})
 
         // Act
-        const matcher = expect(async () => await getBranches(context, config))
+        const matcher = expect(async () => await getBranches(context, config, new TestPlatformHandler()))
 
         // Assert
         matcher.toThrowError("Failed to fetch git remote or list all branches.")
@@ -77,10 +74,10 @@ describe("getBranches", () => {
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "main", to: "staging" }],
-        })
+        }, {})
 
         // Act
-        const matcher = expect(async () => await getBranches(context, config))
+        const matcher = expect(async () => await getBranches(context, config, new TestPlatformHandler()))
 
         // Assert
         matcher.toThrowError("Failed to fetch git remote or list all branches.")
@@ -96,10 +93,10 @@ describe("getBranches", () => {
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
-        })
+        }, {})
 
         // Act
-        const branches = await getBranches(context, config)
+        const branches = await getBranches(context, config, new TestPlatformHandler())
 
         // Assert
         expect(spy).toHaveBeenCalled()
@@ -108,6 +105,8 @@ describe("getBranches", () => {
 
     test("should retrieve some branches", async () => {
         // Arrange
+        const expectedURL = "https://test-user:some-token@github.com/kilianpaquier/semantic-release-backmerge.git"
+
         let fetchRemote = ""
         let lsRemote = ""
         spyOn(git, "fetch").mockImplementation(async (remote) => { fetchRemote = remote })
@@ -115,7 +114,7 @@ describe("getBranches", () => {
             lsRemote = remote
             return ["develop", "staging"] 
         })
-        
+
         const context = getContext("main")
         const config = ensureDefault({
             platform: Platform.GITHUB,
@@ -124,10 +123,10 @@ describe("getBranches", () => {
         }, { GITHUB_TOKEN: "some-token" })
 
         // Act
-        const branches = await getBranches(context, config)
+        const branches = await getBranches(context, config, new TestPlatformHandler())
 
         // Assert
-        expect(fetchRemote).toEqual("https://x-access-token:some-token@github.com/kilianpaquier/semantic-release-backmerge.git")
+        expect(fetchRemote).toEqual(expectedURL)
         expect(lsRemote).toEqual(config.repositoryUrl)
         expect(branches).toEqual(["develop", "staging"])
     })
@@ -142,10 +141,10 @@ describe("getBranches", () => {
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
-        })
+        }, {})
 
         // Act
-        const branches = await getBranches(context, config)
+        const branches = await getBranches(context, config, new TestPlatformHandler())
 
         // Assert
         expect(branches).toEqual(["v1.3", "v1.4"])
@@ -161,10 +160,10 @@ describe("getBranches", () => {
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }],
-        })
+        }, {})
 
         // Act
-        const branches = await getBranches(context, config)
+        const branches = await getBranches(context, config, new TestPlatformHandler())
 
         // Assert
         expect(branches).toEqual(["v1.3.x", "v1.4.x"])
@@ -180,10 +179,10 @@ describe("getBranches", () => {
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
-        })
+        }, {})
 
         // Act
-        const branches = await getBranches(context, config)
+        const branches = await getBranches(context, config, new TestPlatformHandler())
 
         // Assert
         expect(branches).toBeEmpty()
@@ -199,10 +198,10 @@ describe("getBranches", () => {
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
             targets: [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }],
-        })
+        }, {})
 
         // Act
-        const branches = await getBranches(context, config)
+        const branches = await getBranches(context, config, new TestPlatformHandler())
 
         // Assert
         expect(branches).toBeEmpty()
@@ -211,20 +210,6 @@ describe("getBranches", () => {
 
 describe("executeBackmerge", () => {
     afterEach(() => mock.restore())
-
-    test("should fail to modify authentication", () => {
-        // Arrange
-        const context = getContext("main")
-        const config = ensureDefault({
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        })
-
-        // Act
-        const matcher = expect(async () => await executeBackmerge(context, config, []))
-
-        // Assert
-        matcher.toThrowError(getConfigError("platform", Platform.NULL).message)
-    })
 
     test("should fail to fetch remote", () => {
         // Arrange
@@ -235,10 +220,10 @@ describe("executeBackmerge", () => {
             baseUrl: "https://example.com",
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        })
+        }, {})
 
         // Act
-        const matcher = expect(async () => await executeBackmerge(context, config, []))
+        const matcher = expect(async () => await executeBackmerge(context, config, new TestPlatformHandler(), []))
 
         // Assert
         matcher.toThrowError("Failed to fetch or checkout released branch 'main'.")
@@ -254,10 +239,10 @@ describe("executeBackmerge", () => {
             baseUrl: "https://example.com",
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        })
+        }, {})
 
         // Act
-        const matcher = expect(async () => await executeBackmerge(context, config, []))
+        const matcher = expect(async () => await executeBackmerge(context, config, new TestPlatformHandler(), []))
 
         // Assert
         matcher.toThrowError("Failed to fetch or checkout released branch 'main'.")
@@ -265,7 +250,10 @@ describe("executeBackmerge", () => {
 
     test("should fail to merge branch and create pull request", async () => {
         // Arrange
-        const spy = spyOn(pulls, "createPR").mockImplementation(() => Promise.resolve())
+        const has = async (): Promise<boolean> => false
+        let called = false
+        const create = async (): Promise<void> => { called = true }
+
         spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
@@ -276,18 +264,46 @@ describe("executeBackmerge", () => {
             baseUrl: "https://example.com",
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        })
+        }, {})
 
         // Act
-        await executeBackmerge(context, config, ["staging"])
+        await executeBackmerge(context, config, new TestPlatformHandler(create, has), ["staging"])
 
         // Assert
-        expect(spy).toHaveBeenCalledTimes(1)
+        expect(called).toBeTrue()
+    })
+
+    test("should fail to merge branch and not create a pull request since it exists", async () => {
+        // Arrange
+        const has = async (): Promise<boolean> => true
+        let called = false
+        const create = async (): Promise<void> => { called = true }
+
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        spyOn(git, "checkout").mockImplementation(async () => {})
+        spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
+        spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
+
+        const context = getContext("main")
+        const config = ensureDefault({
+            baseUrl: "https://example.com",
+            platform: Platform.GITHUB,
+            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
+        }, {})
+
+        // Act
+        await executeBackmerge(context, config, new TestPlatformHandler(create, has), ["staging"])
+
+        // Assert
+        expect(called).toBeFalse()
     })
 
     test("should fail to merge branch but not create pull request dry run", async () => {
         // Arrange
-        const spy = spyOn(pulls, "createPR").mockImplementation(() => Promise.resolve())
+        const has = async (): Promise<boolean> => false
+        let called = false
+        const create = async (): Promise<void> => { called = true }
+
         spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
@@ -299,19 +315,20 @@ describe("executeBackmerge", () => {
             dryRun: true,
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        })
+        }, {})
 
         // Act
-        await executeBackmerge(context, config, ["staging"])
+        await executeBackmerge(context, config, new TestPlatformHandler(create, has), ["staging"])
 
         // Assert
-        expect(spy).not.toHaveBeenCalled()
+        expect(called).toBeFalse()
     })
 
     test("should fail to push branch and fail to create pull request", () => {
         // Arrange
-        spyOn(pulls, "createPR").
-            mockImplementation(() => { throw new Error("pull request error") })
+        const has = async (): Promise<boolean> => false
+        const create = async (): Promise<void> => { throw new Error("pull request error") }
+
         spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(async () => {})
@@ -322,10 +339,10 @@ describe("executeBackmerge", () => {
             baseUrl: "https://example.com",
             platform: Platform.GITHUB,
             repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        })
+        }, {})
 
         // Act
-        const matcher = expect(async () => await executeBackmerge(context, config, ["staging"]))
+        const matcher = expect(async () => await executeBackmerge(context, config, new TestPlatformHandler(create, has), ["staging"]))
 
         // Assert
         matcher.toThrowError("Failed to create pull request from 'main' to 'staging'.")
@@ -333,6 +350,8 @@ describe("executeBackmerge", () => {
 
     test("should succeed to merge and push a branch", async () => {
         // Arrange
+        const expectedURL = "https://test-user:some-token@github.com/kilianpaquier/semantic-release-backmerge.git"
+
         let fetchRemote = ""
         let checkoutBranch = ""
         let merge: { commit?: string, from?: string, to?: string } = {}
@@ -359,12 +378,12 @@ describe("executeBackmerge", () => {
         }, { GITHUB_TOKEN: "some-token" })
 
         // Act
-        await executeBackmerge(context, config, ["staging"])
+        await executeBackmerge(context, config, new TestPlatformHandler(), ["staging"])
 
         // Assert
-        expect(fetchRemote).toEqual("https://x-access-token:some-token@github.com/kilianpaquier/semantic-release-backmerge.git")
+        expect(fetchRemote).toEqual(expectedURL)
         expect(checkoutBranch).toEqual("main")
         expect(merge).toEqual({ commit: "chore(release): merge branch main into staging [skip ci]", from: "main", to: "staging" })
-        expect(push).toEqual({ branch: "staging", dryRun: true, remote: authModificator(parse(config.repositoryUrl), config.platform, config.token) })
+        expect(push).toEqual({ branch: "staging", dryRun: true, remote: expectedURL })
     })
 })

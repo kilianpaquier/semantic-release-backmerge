@@ -5,6 +5,7 @@ import AggregateError from "aggregate-error"
 import SemanticReleaseError from "@semantic-release/error"
 
 import { getConfigError } from "./error"
+import { token } from "./platform-handler"
 
 /**
  * stringNotEmpty validates that an input string is not empty.
@@ -36,7 +37,6 @@ const validTargetsArray = (targets: Partial<Target>[]): boolean => targets.
  * @returns true if the input platform is valid.
  */
 const validPlatform = (stringPlatform: string): boolean => Boolean(Object.values(Platform).
-    filter(platform => platform !== Platform.NULL).
     find(platform => platform.toString() === stringPlatform))
 
 /**
@@ -48,67 +48,28 @@ const validPlatform = (stringPlatform: string): boolean => Boolean(Object.values
  * 
  * @returns the full configuration with default values if necessary.
  */
-export const ensureDefault = (config: Partial<BackmergeConfig>, env?: Record<string, string>): BackmergeConfig => {
-    const getURLs = (): [Platform, string, string] => { // eslint-disable-line complexity
-        if (config.baseUrl) {
-            return [Platform.NULL, config.baseUrl, config.apiPathPrefix ?? ""]
-        }
-
-        // bitbucket
-        if (env?.BITBUCKET_URL) {
-            return [Platform.BITBUCKET, env?.BITBUCKET_URL, config.apiPathPrefix ?? "/rest/api/1.0"]
-        }
-
-        // bitbucket cloud
-        if (env?.BITBUCKET_CLOUD_URL) {
-            return [Platform.BITBUCKET_CLOUD, env?.BITBUCKET_CLOUD_URL, config.apiPathPrefix ?? "/2.0"]
-        }
-
-        // gitea
-        if (env?.GITEA_URL) {
-            return [Platform.GITEA, env?.GITEA_URL, config.apiPathPrefix ?? "/api/v1"]
-        }
-
-        // github
-        const githubUrl = env?.GH_URL ?? env?.GITHUB_URL ?? env?.GITHUB_API_URL
-        if (githubUrl) {
-            return [Platform.GITHUB, githubUrl, config.apiPathPrefix ?? ""]
-        }
-
-        // gitlab
-        const gitlabUrl = env?.GL_URL ?? env?.GITLAB_URL ?? env?.CI_SERVER_URL
-        if (gitlabUrl) {
-            return [Platform.GITLAB, gitlabUrl, config.apiPathPrefix ?? "/api/v4"]
-        }
-
-        return [Platform.NULL, "", ""]
-    }
-
-    const [platform, baseUrl, apiPathPrefix] = getURLs()
-    return {
-        apiPathPrefix,
-        baseUrl,
-        commit: config.commit ?? defaultCommit,
-        debug: config.debug ?? false, // shouldn't happen since it comes from semantic-release config
-        dryRun: config.dryRun ?? false, // shouldn't happen since it comes from semantic-release config
-        platform: config.platform ?? platform,
-        repositoryUrl: config.repositoryUrl ?? "",
-        targets: config.targets ?? [],
-        title: config.title ?? defaultTitle,
-        // checking all environment variables since it doesn't matter which is valued whatever the platform could be
-        token: env?.BB_TOKEN ?? env?.BITBUCKET_TOKEN ?? env?.GITEA_TOKEN ?? env?.GH_TOKEN ?? env?.GITHUB_TOKEN ?? env?.GL_TOKEN ?? env?.GITLAB_TOKEN ?? "",
-    }
-}
+export const ensureDefault = (config: Partial<BackmergeConfig>, env: Record<string, string>): BackmergeConfig => ({
+    apiPathPrefix: config.apiPathPrefix ?? "",
+    baseUrl: config.baseUrl ?? "",
+    commit: config.commit ?? defaultCommit,
+    debug: config.debug ?? false, // shouldn't happen since it comes from semantic-release config
+    dryRun: config.dryRun ?? false, // shouldn't happen since it comes from semantic-release config
+    platform: config.platform ?? Platform.NULL,
+    repositoryUrl: config.repositoryUrl ?? "",
+    targets: config.targets ?? [],
+    title: config.title ?? defaultTitle,
+    token: token(env),
+})
 
 /**
  * verifyConfig validates an input full BackmergeConfig.
  * 
  * @param config the configuration to validate.
  */
-export const verifyConfig = (config: BackmergeConfig) => {
+export const verifyConfig = (config: BackmergeConfig): void => {
     const validators: { [k in keyof BackmergeConfig]: ((value: any) => boolean)[] } = {
         apiPathPrefix: [isString],
-        baseUrl: [isString, stringNotEmpty],
+        baseUrl: [isString],
         commit: [isString, stringNotEmpty],
         debug: [isBoolean], // shouldn't happen since it comes from semantic-release config
         dryRun: [isBoolean], // shouldn't happen since it comes from semantic-release config

@@ -16,5 +16,7 @@ coverage:
 ignore:
   - "dist"
   - "node_modules"
+  - "**/*.spec.js"
   - "**/*.spec.ts"
   - "**/*.test.js"
+  - "**/*.test.ts"

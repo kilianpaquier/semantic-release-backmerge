@@ -7,7 +7,7 @@ import { getConfigError } from "../lib/error"
 describe("ensureDefault", () => {
     test("should be fine without inputs", () => {
         // Act
-        const actual = ensureDefault({})
+        const actual = ensureDefault({}, {})
 
         // Assert
         expect(actual).toEqual({
@@ -17,160 +17,6 @@ describe("ensureDefault", () => {
             debug: false,
             dryRun: false,
             platform: Platform.NULL,
-            repositoryUrl: "",
-            targets: [],
-            title: defaultTitle,
-            token: ""
-        })
-    })
-
-    test("should be fine with bitbucket", () => {
-        // Arrange
-        const env = { BITBUCKET_URL: "some value" }
-
-        // Act
-        const actual = ensureDefault({}, env)
-
-        // Assert
-        expect(actual).toEqual({
-            apiPathPrefix: "/rest/api/1.0",
-            baseUrl: "some value",
-            commit: defaultCommit,
-            debug: false,
-            dryRun: false,
-            platform: Platform.BITBUCKET,
-            repositoryUrl: "",
-            targets: [],
-            title: defaultTitle,
-            token: ""
-        })
-    })
-
-    test("should be fine with bitbucket cloud", () => {
-        // Arrange
-        const env = { BITBUCKET_CLOUD_URL: "some value" }
-
-        // Act
-        const actual = ensureDefault({}, env)
-
-        // Assert
-        expect(actual).toEqual({
-            apiPathPrefix: "/2.0",
-            baseUrl: "some value",
-            commit: defaultCommit,
-            debug: false,
-            dryRun: false,
-            platform: Platform.BITBUCKET_CLOUD,
-            repositoryUrl: "",
-            targets: [],
-            title: defaultTitle,
-            token: ""
-        })
-    })
-
-    test("should be fine with gitea", () => {
-        // Arrange
-        const env = { GITEA_URL: "some value" }
-
-        // Act
-        const actual = ensureDefault({}, env)
-
-        // Assert
-        expect(actual).toEqual({
-            apiPathPrefix: "/api/v1",
-            baseUrl: "some value",
-            commit: defaultCommit,
-            debug: false,
-            dryRun: false,
-            platform: Platform.GITEA,
-            repositoryUrl: "",
-            targets: [],
-            title: defaultTitle,
-            token: ""
-        })
-    })
-
-    test("should be fine with github url", () => {
-        // Arrange
-        const env = { GITHUB_URL: "some value" }
-
-        // Act
-        const actual = ensureDefault({}, env)
-
-        // Assert
-        expect(actual).toEqual({
-            apiPathPrefix: "",
-            baseUrl: "some value",
-            commit: defaultCommit,
-            debug: false,
-            dryRun: false,
-            platform: Platform.GITHUB,
-            repositoryUrl: "",
-            targets: [],
-            title: defaultTitle,
-            token: ""
-        })
-    })
-
-    test("should be fine with github api url", () => {
-        // Arrange
-        const env = { GITHUB_API_URL: "some value" }
-
-        // Act
-        const actual = ensureDefault({}, env)
-
-        // Assert
-        expect(actual).toEqual({
-            apiPathPrefix: "",
-            baseUrl: "some value",
-            commit: defaultCommit,
-            debug: false,
-            dryRun: false,
-            platform: Platform.GITHUB,
-            repositoryUrl: "",
-            targets: [],
-            title: defaultTitle,
-            token: ""
-        })
-    })
-
-    test("should be fine with gitlab url", () => {
-        // Arrange
-        const env = { GITLAB_URL: "some value" }
-
-        // Act
-        const actual = ensureDefault({}, env)
-
-        // Assert
-        expect(actual).toEqual({
-            apiPathPrefix: "/api/v4",
-            baseUrl: "some value",
-            commit: defaultCommit,
-            debug: false,
-            dryRun: false,
-            platform: Platform.GITLAB,
-            repositoryUrl: "",
-            targets: [],
-            title: defaultTitle,
-            token: ""
-        })
-    })
-
-    test("should be fine with gitlab ci server url", () => {
-        // Arrange
-        const env = { CI_SERVER_URL: "some value" }
-
-        // Act
-        const actual = ensureDefault({ apiPathPrefix: "/api/v3" }, env)
-
-        // Assert
-        expect(actual).toEqual({
-            apiPathPrefix: "/api/v3",
-            baseUrl: "some value",
-            commit: defaultCommit,
-            debug: false,
-            dryRun: false,
-            platform: Platform.GITLAB,
             repositoryUrl: "",
             targets: [],
             title: defaultTitle,
@@ -196,7 +42,7 @@ describe("ensureDefault", () => {
             targets,
             title: "Some title",
             token: "some token" // ensure it's not taken
-        })
+        }, {})
 
         // Assert
         expect(actual).toEqual({

@@ -192,7 +192,7 @@ To avoid painful configurations, you may use the environments variables to autom
   - `platform` is set to `gitea`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repos/{owner}/{name}/pulls`
   - Example: `POST https://company.gitea.com/api/v1/repos/kilianpaquier/semantic-release-backmerge/pulls`
-  - See [documentation](https://docs.gitea.com/api/1.20/#tag/repository/operation/repoCreatePullRequest)
+  - See [documentation](https://docs.gitea.com/api/1.22/#tag/repository/operation/repoCreatePullRequest)
 
 ### Github
 
@@ -212,7 +212,7 @@ To avoid painful configurations, you may use the environments variables to autom
   - `platform` is set to `github`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repos/{owner}/{repo}/pulls`
   - Example: `POST https://api.github.com/repos/kilianpaquier/semantic-release-backmerge/pulls`
-  - See [documentation](https://docs.github.com/fr/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request--code-samples)
+  - See [documentation](https://docs.github.com/fr/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request)
 
 ### Gitlab
 

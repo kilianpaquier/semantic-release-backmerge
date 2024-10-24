@@ -1,3 +1,13 @@
+## [1.4.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.3.3...v1.4.0) (2024-10-24)
+
+### Features
+
+* add multiple debug logs - fixes [#20](https://github.com/kilianpaquier/semantic-release-backmerge/issues/20) ([512cf18](https://github.com/kilianpaquier/semantic-release-backmerge/commit/512cf18ddddcb2f1a36cd4b8786a5bf6b8c9a296))
+
+### Bug Fixes
+
+* **execa:** use `await execa` instead of `execaSync` since it produces unexpected errors when spawning git commands - fixes [#17](https://github.com/kilianpaquier/semantic-release-backmerge/issues/17) ([f564bff](https://github.com/kilianpaquier/semantic-release-backmerge/commit/f564bff03c0b6edcd0ca9bb2a4e38971bf72e67d))
+
 ## [1.3.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.3.2...v1.3.3) (2024-10-22)
 
 ### Bug Fixes

@@ -1,9 +1,11 @@
-import SemanticReleaseError from "@semantic-release/error"
+import debug from "debug"
 import fetch from "node-fetch"
 
 import { Octokit } from "@octokit/core"
 import { Platform } from "./models/config"
 import { getConfigError } from "./error"
+
+const deblog = debug("semantic-release-backmerge:verify-config")
 
 /**
  * Metadata contains all related information to the body sent during createPR call.
@@ -31,20 +33,17 @@ export interface Metadata {
  */
 export const createPR = async (apiUrl: string, platform: Platform, token: string, metadata: Metadata) => {
     const handleFetch = async (url: string, body: any) => {
-        try {
-            const response = await fetch(url, {
-                body: JSON.stringify(body),
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-                method: "POST",
-            })
-            if (!response.ok) {
-                throw new Error(await response.text())
-            }
-        } catch (error) {
-            throw new SemanticReleaseError(`Failed to create pull request from '${metadata.from}' into '${metadata.to}'.`, "EPULLREQUEST", String(error))
+        deblog("calling URL '%s' with body %o", url, body)
+        const response = await fetch(url, {
+            body: JSON.stringify(body),
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+        })
+        if (!response.ok) {
+            throw new Error(await response.text())
         }
     }
 
@@ -76,20 +75,18 @@ export const createPR = async (apiUrl: string, platform: Platform, token: string
             })
             break
         case Platform.GITHUB:
-            try {
-                await new Octokit({ auth: token, request: { fetch } }).
-                    request("POST /repos/{owner}/{repo}/pulls", {
-                        base: metadata.to,
-                        baseUrl: apiUrl,
-                        body: metadata.body,
-                        head: metadata.from,
-                        owner: metadata.owner,
-                        repo: metadata.name,
-                        title: metadata.title,
-                    })
-            } catch (error) {
-                throw new SemanticReleaseError(`Failed to create pull request from '${metadata.from}' into '${metadata.to}'.`, "EPULLREQUEST", String(error))
+            const body = {
+                base: metadata.to,
+                baseUrl: apiUrl,
+                body: metadata.body,
+                head: metadata.from,
+                owner: metadata.owner,
+                repo: metadata.name,
+                title: metadata.title,
             }
+
+            deblog("calling URL '%s' with body %o", `${apiUrl}/repos/${metadata.owner}/${metadata.name}/pulls`, body)
+            await new Octokit({ auth: token, request: { fetch } }).request("POST /repos/{owner}/{repo}/pulls", body)
             break
         case Platform.GITLAB:
             await handleFetch(`${apiUrl}/projects/${encodeURIComponent(`${metadata.owner}/${metadata.name}`)}/merge_requests`, {

@@ -4,12 +4,15 @@ import { checkout, fetch, ls, merge, push } from "./git"
 
 import AggregateError from "aggregate-error"
 import SemanticReleaseError from "@semantic-release/error"
+import debug from "debug"
 import parse from "git-url-parse"
 import semver from "semver"
 
 import { BackmergeConfig } from "./models/config"
 import { authModificator } from "./auth-modificator"
 import { template } from "lodash"
+
+const deblog = debug("semantic-release-backmerge:git")
 
 /**
  * Context is a subinterface of semantic-release Context (specifically VerifyConditionContext).
@@ -22,6 +25,8 @@ export interface Context {
     logger: {
         error(...data: any[]): void
         log(...data: any[]): void
+        success(...data: any[]): void
+        warn(...data: any[]): void
     }
     nextRelease: NextRelease
 }
@@ -61,9 +66,12 @@ export const getBranches = async (context: Context, config: BackmergeConfig) => 
 
         branches = await ls(config.repositoryUrl, context.cwd, context.env)
     } catch (error) {
-        throw new SemanticReleaseError("Failed to fetch git remote or list all branches.", "ELSREMOTE", String(error))
+        const msg = "Failed to fetch git remote or list all branches."
+        context.logger.error(msg, error)
+        throw new SemanticReleaseError(msg, "EFECTHLIST")
     }
 
+    deblog("filtering branch to backmerge from '%j'", branches)
     const filteredBranches = branches.
         // don't keep the released branch
         filter(branch => releaseBranch !== branch).
@@ -90,13 +98,13 @@ export const getBranches = async (context: Context, config: BackmergeConfig) => 
 
                 // don't merge into older versions
                 if (semver.lt(branchMaintenance, releaseMaintenance)) {
-                    context.logger.log(`Not backmerging into '${branch}' since semver version is before '${releaseBranch}'.`)
+                    deblog(`not backmerging into '${branch}' since semver version is before '${releaseBranch}'`)
                     return false
                 }
 
                 // don't merge minor versions into next majors versions
                 if (semver.gte(branchMaintenance, nextMajor!)) {
-                    context.logger.log(`Not backmerging into '${branch}' since semver major version is after '${releaseBranch}'.`)
+                    deblog(`not backmerging into '${branch}' since semver major version is after '${releaseBranch}'`)
                     return false
                 }
             }
@@ -106,7 +114,7 @@ export const getBranches = async (context: Context, config: BackmergeConfig) => 
         context.logger.log("No configured target is present in remote origin, no backmerge to be done.")
         return []
     }
-    context.logger.log(`Retrieved branches present in remote origin: '${JSON.stringify(filteredBranches)}'`)
+    deblog(`retrieved branches present in remote origin: '${JSON.stringify(filteredBranches)}'`)
     return filteredBranches
 }
 
@@ -137,7 +145,9 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
         // checkout to ensure released branch is up to date with last fetch'ed remote url
         await checkout(releaseBranch, context.cwd, context.env)
     } catch (error) {
-        throw new SemanticReleaseError(`Failed to fetch or checkout released branch '${releaseBranch}'.`, "ECHECKOUT", String(error))
+        const msg = `Failed to fetch or checkout released branch '${releaseBranch}'.`
+        context.logger.error(msg, error)
+        throw new SemanticReleaseError(msg, "EFETCHCHECKOUT")
     }
 
     const errors: SemanticReleaseError[] = []
@@ -175,7 +185,9 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
                 }
                 await createPR(config.baseUrl + config.apiPathPrefix, config.platform, config.token, body)
             } catch (prError) {
-                errors.push(new SemanticReleaseError(`Failed to create pull request from '${releaseBranch}' to '${branch}'.`, "EPULLREQUEST", String(prError)))
+                const msg = `Failed to create pull request from '${releaseBranch}' to '${branch}'.`
+                context.logger.error(msg, prError)
+                errors.push(new SemanticReleaseError(msg, "EPULLREQUEST"))
             }
         }
     }

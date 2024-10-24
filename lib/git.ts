@@ -1,5 +1,9 @@
 import { execa } from "execa"
 
+import debug from "debug"
+
+const deblog = debug("semantic-release-backmerge:git")
+
 /**
  * ls returns the slice of all branches present in remote origin.
  * It removes 'refs/heads/' from the branches name.
@@ -9,7 +13,13 @@ import { execa } from "execa"
  * @throws an error if the git ls-remote cannot be done.
  */
 export const ls = async (remote: string, cwd?: string, env?: Record<string, string>) => {
-    const { stdout } = await execa("git", ["ls-remote", "--heads", remote], { cwd, env })
+    deblog("executing git ls-remote")
+    const { stdout, stderr } = await execa("git", ["ls-remote", "--heads", remote], { cwd, env })
+    if (stderr !== "") {
+        deblog("received stderr text from git ls-remote: %s", stderr)
+    }
+    deblog("received stdout text from git ls-remote: %s", stdout)
+
     const branches = stdout.
         split("\n").
         map(branch => branch.split("\t")).
@@ -29,7 +39,11 @@ export const ls = async (remote: string, cwd?: string, env?: Record<string, stri
  * @throws an error if the checkout cannot be done.
  */
 export const checkout = async (branch: string, cwd?: string, env?: Record<string, string>) => {
-    await execa("git", ["checkout", "-B", branch], { cwd, env })
+    deblog("executing git checkout command")
+    const { stderr } = await execa("git", ["checkout", "-B", branch], { cwd, env })
+    if (stderr !== "") {
+        deblog("received stderr text from git ls-remote: %s", stderr)
+    }
 }
 
 /**
@@ -40,7 +54,11 @@ export const checkout = async (branch: string, cwd?: string, env?: Record<string
  * @throws an error if the fetch cannot be done.
  */
 export const fetch = async (remote: string, cwd?: string, env?: Record<string, string>) => {
-    await execa("git", ["fetch", remote], { cwd, env })
+    deblog("executing git fetch command")
+    const { stderr } = await execa("git", ["fetch", remote], { cwd, env })
+    if (stderr !== "") {
+        deblog("received stderr text from git ls-remote: %s", stderr)
+    }
 }
 
 /**
@@ -58,9 +76,17 @@ export const merge = async (from: string, to: string, commit: string, cwd?: stri
     await checkout(to)
 
     try {
-        await execa("git", ["merge", `${from}`, "--ff", "-m", commit], { cwd, env })
+        deblog("executing git merge command")
+        const { stderr } = await execa("git", ["merge", `${from}`, "--ff", "-m", commit], { cwd, env })
+        if (stderr !== "") {
+            deblog("received stderr text from git merge --ff with commit name '%s': %s", commit, stderr)
+        }
     } catch (error) {
-        await execa("git", ["merge", "--abort"], { cwd, env })
+        deblog("aborting git merge command: %O", error)
+        const { stderr } = await execa("git", ["merge", "--abort"], { cwd, env })
+        if (stderr !== "") {
+            deblog("received stderr text when aborting git merge: %s", stderr)
+        }
         throw error
     }
 }
@@ -78,5 +104,10 @@ export const push = async (remote: string, branch: string, dryRun?: boolean, cwd
     if (dryRun) {
         args.push("--dry-run")
     }
-    await execa("git", args, { cwd, env })
+
+    deblog("executing git push command with args '%o'", args)
+    const { stderr } = await execa("git", args, { cwd, env })
+    if (stderr !== "") {
+        deblog("received stderr text from git push: %s", stderr)
+    }
 }

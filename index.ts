@@ -46,6 +46,9 @@ export const success = async (globalConfig: BackmergeConfig, context: SuccessCon
         if (error instanceof AggregateError || error instanceof SemanticReleaseError) {
             throw error // don't wrap error in case it's already an acceptable error by semantic-release
         }
-        throw new SemanticReleaseError("Failed to backmerge branches.", "EBACKMERGE", String(error))
+
+        const msg = "Failed to list or backmerge branches."
+        context.logger.error(msg, error)
+        throw new SemanticReleaseError(msg, "EBACKMERGE")
     }
 }

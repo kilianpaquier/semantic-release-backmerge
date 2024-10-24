@@ -27,6 +27,7 @@ export default tseslint.config(
             "max-statements": ["error", 30],
             "multiline-comment-style": "off",
             "no-await-in-loop": "off",
+            "no-case-declarations": "off",
             "no-continue": "off",
             "no-inline-comments": "off",
             "no-magic-numbers": "off",

@@ -8,15 +8,15 @@ import { BackmergeConfig } from "./lib/models/config"
 
 /**
  * verifyConditions is the exported function for semantic-release for verifyConditions lifecycle.
- * 
+ *
  * It verifies the input plugin configuration and throws an error if it's not valid.
- * 
+ *
  * @param globalConfig the semantic-release-backmerge plugin configuration.
  * @param context the semantic-release context.
- * 
+ *
  * @returns the validated configuration.
- * 
- * @throws an exception in case the input semantic-release-backmerge configuration is invalid 
+ *
+ * @throws an exception in case the input semantic-release-backmerge configuration is invalid
  * or missing inputs like tokens or URLs, etc.
  */
 export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyConditionsContext) => {
@@ -30,9 +30,9 @@ export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyC
 
 /**
  * success is the function for semantic-release success lifecycle.
- * 
- * It executes the backmerge to all appropriate branches as the release was successfull.
- * 
+ *
+ * It executes the backmerge to all appropriate branches as the release was successful.
+ *
  * @param globalConfig the semantic-release-backmerge plugin configuration.
  * @param context the semantic-release context.
  */
@@ -40,7 +40,11 @@ export const success = async (globalConfig: BackmergeConfig, context: SuccessCon
     const config = verifyConditions(globalConfig, context)
 
     try {
-        const branches = getBranches(context, config)
+        // Add await since getBranches is asynchronous
+        const branches = await getBranches(context, config)
+
+        console.log(`DEBUG: [success] Raw output from 'ls': ${JSON.stringify(branches)}`);
+
         await executeBackmerge(context, config, branches)
     } catch (error) {
         if (error instanceof AggregateError || error instanceof SemanticReleaseError) {

@@ -1,15 +1,15 @@
-import { execaSync } from "execa"
+import { execa } from "execa"
 
 /**
- * ls returns the slice of all branches present in remote origin. 
+ * ls returns the slice of all branches present in remote origin.
  * It removes 'refs/heads/' from the branches name.
  * 
  * @returns the slice of branches.
  * 
- * @throws an error is the git ls-remote cannot be done.
+ * @throws an error if the git ls-remote cannot be done.
  */
-export const ls = (remote: string, cwd?: string, env?: Record<string, string>) => {
-    const { stdout } = execaSync("git", ["ls-remote", "--heads", remote], { cwd, env })
+export const ls = async (remote: string, cwd?: string, env?: Record<string, string>) => {
+    const { stdout } = await execa("git", ["ls-remote", "--heads", remote], { cwd, env })
     const branches = stdout.
         split("\n").
         map(branch => branch.split("\t")).
@@ -20,15 +20,16 @@ export const ls = (remote: string, cwd?: string, env?: Record<string, string>) =
 }
 
 /**
- * checkout executes a simple checkout of input branch. 
+ * checkout executes a simple checkout of input branch.
+ * 
  * The checkout is strict with remote state, meaning all local changes are removed.
  * 
  * @param branch the input branch to checkout.
  * 
  * @throws an error if the checkout cannot be done.
  */
-export const checkout = (branch: string, cwd?: string, env?: Record<string, string>) => {
-    execaSync("git", ["checkout", "-B", branch], { cwd, env })
+export const checkout = async (branch: string, cwd?: string, env?: Record<string, string>) => {
+    await execa("git", ["checkout", "-B", branch], { cwd, env })
 }
 
 /**
@@ -38,12 +39,13 @@ export const checkout = (branch: string, cwd?: string, env?: Record<string, stri
  * 
  * @throws an error if the fetch cannot be done.
  */
-export const fetch = (remote: string, cwd?: string, env?: Record<string, string>) => {
-    execaSync("git", ["fetch", remote], { cwd, env })
+export const fetch = async (remote: string, cwd?: string, env?: Record<string, string>) => {
+    await execa("git", ["fetch", remote], { cwd, env })
 }
 
 /**
  * merge executes a checkout of input 'to' branch, and merges input 'from' branch into 'to'.
+ * 
  * If a merge commit must be done (by default --ff is used), then the merge commit is the input commit.
  * 
  * @param from the branch to merge into 'to'.
@@ -52,13 +54,13 @@ export const fetch = (remote: string, cwd?: string, env?: Record<string, string>
  * 
  * @throws an error if the merge fails (in case of conflicts, etc.).
  */
-export const merge = (from: string, to: string, commit: string, cwd?: string, env?: Record<string, string>) => {
-    checkout(to)
+export const merge = async (from: string, to: string, commit: string, cwd?: string, env?: Record<string, string>) => {
+    await checkout(to)
 
     try {
-        execaSync("git", ["merge", `${from}`, "--ff", "-m", commit], { cwd, env })
+        await execa("git", ["merge", `${from}`, "--ff", "-m", commit], { cwd, env })
     } catch (error) {
-        execaSync("git", ["merge", "--abort"], { cwd, env })
+        await execa("git", ["merge", "--abort"], { cwd, env })
         throw error
     }
 }
@@ -71,10 +73,10 @@ export const merge = (from: string, to: string, commit: string, cwd?: string, en
  * 
  * @throws an error if the push cannot be executed.
  */
-export const push = (remote: string, branch: string, dryRun?: boolean, cwd?: string, env?: Record<string, string>) => {
+export const push = async (remote: string, branch: string, dryRun?: boolean, cwd?: string, env?: Record<string, string>) => {
     const args = ["push", remote, `HEAD:${branch}`]
     if (dryRun) {
         args.push("--dry-run")
     }
-    execaSync("git", args, { cwd, env })
+    await execa("git", args, { cwd, env })
 }

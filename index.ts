@@ -31,7 +31,7 @@ export const verifyConditions = (globalConfig: BackmergeConfig, context: VerifyC
 /**
  * success is the function for semantic-release success lifecycle.
  * 
- * It executes the backmerge to all appropriate branches as the release was successfull.
+ * It executes the backmerge to all appropriate branches as the release was successful.
  * 
  * @param globalConfig the semantic-release-backmerge plugin configuration.
  * @param context the semantic-release context.
@@ -40,7 +40,7 @@ export const success = async (globalConfig: BackmergeConfig, context: SuccessCon
     const config = verifyConditions(globalConfig, context)
 
     try {
-        const branches = getBranches(context, config)
+        const branches = await getBranches(context, config)
         await executeBackmerge(context, config, branches)
     } catch (error) {
         if (error instanceof AggregateError || error instanceof SemanticReleaseError) {

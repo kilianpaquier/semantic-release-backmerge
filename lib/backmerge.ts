@@ -12,7 +12,7 @@ import { authModificator } from "./auth-modificator"
 import { template } from "lodash"
 
 /**
- * Context is a subinterface of semantic-release Context (specifically VerifyConditionContext)
+ * Context is a subinterface of semantic-release Context (specifically VerifyConditionContext).
  */
 export interface Context {
     branch: { name: string }
@@ -27,7 +27,8 @@ export interface Context {
 }
 
 /**
- * getBranches returns the slice of branches that can be backmerged. 
+ * getBranches returns the slice of branches that can be backmerged.
+ * 
  * To retrieve them, it takes into account their existence in remote repository, their presence in input targets, 
  * and their semver version value related to the appropriate target (for instance, a branch v1.0 won't be returned if target.from is v1.1).
  * 
@@ -38,7 +39,7 @@ export interface Context {
  * 
  * @returns the slice of branches where the context.branch.name must be backmerged into.
  */
-export const getBranches = (context: Context, config: BackmergeConfig) => {
+export const getBranches = async (context: Context, config: BackmergeConfig) => {
     const releaseBranch = context.branch.name
 
     const appropriates = config.targets.filter(branch => releaseBranch.match(branch.from))
@@ -51,12 +52,19 @@ export const getBranches = (context: Context, config: BackmergeConfig) => {
     const url = parse(config.repositoryUrl)
     const authRemote = authModificator(url, config.platform, config.token)
 
-    // ensure at any time and any moment that the fetch'ed remote url is the same as there
-    // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
-    // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
-    fetch(authRemote, context.cwd, context.env)
+    let branches: string[] = [] // eslint-disable-line no-useless-assignment
+    try {
+        // ensure at any time and any moment that the fetch'ed remote url is the same as there
+        // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
+        // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
+        await fetch(authRemote, context.cwd, context.env)
 
-    const branches = ls(config.repositoryUrl, context.cwd, context.env).
+        branches = await ls(config.repositoryUrl, context.cwd, context.env)
+    } catch (error) {
+        throw new SemanticReleaseError("Failed to fetch git remote or list all branches.", "ELSREMOTE", String(error))
+    }
+
+    const filteredBranches = branches.
         // don't keep the released branch
         filter(branch => releaseBranch !== branch).
 
@@ -82,24 +90,24 @@ export const getBranches = (context: Context, config: BackmergeConfig) => {
 
                 // don't merge into older versions
                 if (semver.lt(branchMaintenance, releaseMaintenance)) {
-                    context.logger.log(`Not backmerging into '${branch}' since the semver version is before '${releaseBranch}'.`)
+                    context.logger.log(`Not backmerging into '${branch}' since semver version is before '${releaseBranch}'.`)
                     return false
                 }
 
                 // don't merge minor versions into next majors versions
                 if (semver.gte(branchMaintenance, nextMajor!)) {
-                    context.logger.log(`Not backmerging into '${branch}' since the semver major version is after '${releaseBranch}'.`)
+                    context.logger.log(`Not backmerging into '${branch}' since semver major version is after '${releaseBranch}'.`)
                     return false
                 }
             }
             return true
         })
-    if (branches.length === 0) {
+    if (filteredBranches.length === 0) {
         context.logger.log("No configured target is present in remote origin, no backmerge to be done.")
         return []
     }
-    context.logger.log(`Retrieved following branches present in remote origin: '${JSON.stringify(branches)}'`)
-    return branches
+    context.logger.log(`Retrieved branches present in remote origin: '${JSON.stringify(filteredBranches)}'`)
+    return filteredBranches
 }
 
 /**
@@ -120,13 +128,17 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
     const url = parse(config.repositoryUrl)
     const authRemote = authModificator(url, config.platform, config.token)
 
-    // ensure at any time and any moment that the fetch'ed remote url is the same as there
-    // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
-    // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
-    fetch(authRemote, context.cwd, context.env)
+    try {
+        // ensure at any time and any moment that the fetch'ed remote url is the same as there
+        // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
+        // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
+        await fetch(authRemote, context.cwd, context.env)
 
-    // checkout to ensure released branch is up to date with last fetch'ed remote url
-    checkout(releaseBranch, context.cwd, context.env)
+        // checkout to ensure released branch is up to date with last fetch'ed remote url
+        await checkout(releaseBranch, context.cwd, context.env)
+    } catch (error) {
+        throw new SemanticReleaseError(`Failed to fetch or checkout released branch '${releaseBranch}'.`, "ECHECKOUT", String(error))
+    }
 
     const errors: SemanticReleaseError[] = []
     for (const branch of branches) { // keep await in loop since git actions aren't thread safe
@@ -138,12 +150,11 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
         }
 
         try {
-            merge(releaseBranch, branch, template(config.commit)(templateData), context.cwd, context.env)
-
+            await merge(releaseBranch, branch, template(config.commit)(templateData), context.cwd, context.env)
             if (config.dryRun) {
                 context.logger.log(`Running with --dry-run, push to '${branch}' will not update remote state.`)
             }
-            push(authRemote, branch, config.dryRun, context.cwd, context.env)
+            await push(authRemote, branch, config.dryRun, context.cwd, context.env)
         } catch (error) {
             context.logger.error(`Failed to backmerge '${releaseBranch}' into '${branch}', opening pull request.`, error)
 

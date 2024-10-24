@@ -34,7 +34,7 @@ const getContext = (name: string): Context => ({
 describe("getBranches", () => {
     afterEach(() => mock.restore())
 
-    test("should not return any branch", () => {
+    test("should not return any branch", async () => {
         // Arrange
         const context = getContext("main")
         const config = ensureDefault({
@@ -43,7 +43,7 @@ describe("getBranches", () => {
         })
 
         // Act
-        const branches = getBranches(context, config)
+        const branches = await getBranches(context, config)
 
         // Assert
         expect(branches).toBeEmpty()
@@ -61,15 +61,15 @@ describe("getBranches", () => {
         })
 
         // Act
-        const matcher = expect(() => getBranches(context, config))
+        const matcher = expect(async () => await getBranches(context, config))
 
         // Assert
-        matcher.toThrowError("an error message")
+        matcher.toThrowError("Failed to fetch git remote or list all branches.")
     })
 
     test("should fail to ls branches", () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(() => {})
+        spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "ls").mockImplementation(() => { throw new Error("an error message") })
 
         const context = getContext("main")
@@ -80,16 +80,16 @@ describe("getBranches", () => {
         })
 
         // Act
-        const matcher = expect(() => getBranches(context, config))
+        const matcher = expect(async () => await getBranches(context, config))
 
         // Assert
-        matcher.toThrowError("an error message")
+        matcher.toThrowError("Failed to fetch git remote or list all branches.")
     })
 
-    test("should not retrieve older semver branches", () => {
+    test("should not retrieve older semver branches", async () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(() => {})
-        const spy = spyOn(git, "ls").mockImplementation(() => ["v1.0", "v1.1", "v1.2"])
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        const spy = spyOn(git, "ls").mockImplementation(async () => ["v1.0", "v1.1", "v1.2"])
 
         const context = getContext("v1.2")
         const config = ensureDefault({
@@ -99,19 +99,19 @@ describe("getBranches", () => {
         })
 
         // Act
-        const branches = getBranches(context, config)
+        const branches = await getBranches(context, config)
 
         // Assert
         expect(spy).toHaveBeenCalled()
         expect(branches).toBeEmpty()
     })
 
-    test("should retrieve some branches", () => {
+    test("should retrieve some branches", async () => {
         // Arrange
         let fetchRemote = ""
         let lsRemote = ""
-        spyOn(git, "fetch").mockImplementation((remote) => { fetchRemote = remote })
-        spyOn(git, "ls").mockImplementation((remote) => { 
+        spyOn(git, "fetch").mockImplementation(async (remote) => { fetchRemote = remote })
+        spyOn(git, "ls").mockImplementation(async (remote) => { 
             lsRemote = remote
             return ["develop", "staging"] 
         })
@@ -124,7 +124,7 @@ describe("getBranches", () => {
         }, { GITHUB_TOKEN: "some-token" })
 
         // Act
-        const branches = getBranches(context, config)
+        const branches = await getBranches(context, config)
 
         // Assert
         expect(fetchRemote).toEqual("https://x-access-token:some-token@github.com/kilianpaquier/semantic-release-backmerge.git")
@@ -132,10 +132,10 @@ describe("getBranches", () => {
         expect(branches).toEqual(["develop", "staging"])
     })
 
-    test("should retrieve more recent semver branches but only same major version", () => {
+    test("should retrieve more recent semver branches but only same major version", async () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(() => {})
-        spyOn(git, "ls").mockImplementation(() => ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0", "v2.6"])
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        spyOn(git, "ls").mockImplementation(async () => ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0", "v2.6"])
 
         const context = getContext("v1.2")
         const config = ensureDefault({
@@ -145,16 +145,16 @@ describe("getBranches", () => {
         })
 
         // Act
-        const branches = getBranches(context, config)
+        const branches = await getBranches(context, config)
 
         // Assert
         expect(branches).toEqual(["v1.3", "v1.4"])
     })
 
-    test("should retrieve more recent semver branches but only same major version (.x case)", () => {
+    test("should retrieve more recent semver branches but only same major version (.x case)", async () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(() => {})
-        spyOn(git, "ls").mockImplementation(() => ["v1.0.x", "v1.1.x", "v1.2.x", "v1.3.x", "v1.4.x", "v2.0.x", "v2.6.x"])
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        spyOn(git, "ls").mockImplementation(async () => ["v1.0.x", "v1.1.x", "v1.2.x", "v1.3.x", "v1.4.x", "v2.0.x", "v2.6.x"])
 
         const context = getContext("v1.2.x")
         const config = ensureDefault({
@@ -164,16 +164,16 @@ describe("getBranches", () => {
         })
 
         // Act
-        const branches = getBranches(context, config)
+        const branches = await getBranches(context, config)
 
         // Assert
         expect(branches).toEqual(["v1.3.x", "v1.4.x"])
     })
 
-    test("should retrieve no version since it's the major one", () => {
+    test("should retrieve no version since it's the major one", async () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(() => {})
-        spyOn(git, "ls").mockImplementation(() => ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0", "v2.6"])
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        spyOn(git, "ls").mockImplementation(async () => ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0", "v2.6"])
 
         const context = getContext("v1")
         const config = ensureDefault({
@@ -183,16 +183,16 @@ describe("getBranches", () => {
         })
 
         // Act
-        const branches = getBranches(context, config)
+        const branches = await getBranches(context, config)
 
         // Assert
         expect(branches).toBeEmpty()
     })
 
-    test("should retrieve no version since it's the major one (.x case)", () => {
+    test("should retrieve no version since it's the major one (.x case)", async () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(() => {})
-        spyOn(git, "ls").mockImplementation(() => ["v1.0.x", "v1.1.x", "v1.2.x", "v1.3.x", "v1.4.x", "v2.0.x", "v2.6.x"])
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        spyOn(git, "ls").mockImplementation(async () => ["v1.0.x", "v1.1.x", "v1.2.x", "v1.3.x", "v1.4.x", "v2.0.x", "v2.6.x"])
 
         const context = getContext("v1.x")
         const config = ensureDefault({
@@ -202,7 +202,7 @@ describe("getBranches", () => {
         })
 
         // Act
-        const branches = getBranches(context, config)
+        const branches = await getBranches(context, config)
 
         // Assert
         expect(branches).toBeEmpty()
@@ -241,12 +241,12 @@ describe("executeBackmerge", () => {
         const matcher = expect(async () => await executeBackmerge(context, config, []))
 
         // Assert
-        matcher.toThrowError("an error message")
+        matcher.toThrowError("Failed to fetch or checkout released branch 'main'.")
     })
 
     test("should fail to checkout released branch", () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(() => {})
+        spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "checkout").mockImplementation(() => { throw new Error("an error message") })
 
         const context = getContext("main")
@@ -260,14 +260,14 @@ describe("executeBackmerge", () => {
         const matcher = expect(async () => await executeBackmerge(context, config, []))
 
         // Assert
-        matcher.toThrowError("an error message")
+        matcher.toThrowError("Failed to fetch or checkout released branch 'main'.")
     })
 
     test("should fail to merge branch and create pull request", async () => {
         // Arrange
         const spy = spyOn(pulls, "createPR").mockImplementation(() => Promise.resolve())
-        spyOn(git, "fetch").mockImplementation(() => {})
-        spyOn(git, "checkout").mockImplementation(() => {})
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
         spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
 
@@ -288,8 +288,8 @@ describe("executeBackmerge", () => {
     test("should fail to merge branch but not create pull request dry run", async () => {
         // Arrange
         const spy = spyOn(pulls, "createPR").mockImplementation(() => Promise.resolve())
-        spyOn(git, "fetch").mockImplementation(() => {})
-        spyOn(git, "checkout").mockImplementation(() => {})
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
         spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
 
@@ -312,9 +312,9 @@ describe("executeBackmerge", () => {
         // Arrange
         spyOn(pulls, "createPR").
             mockImplementation(() => { throw new Error("pull request error") })
-        spyOn(git, "fetch").mockImplementation(() => {})
-        spyOn(git, "checkout").mockImplementation(() => {})
-        spyOn(git, "merge").mockImplementation(() => {})
+        spyOn(git, "fetch").mockImplementation(async () => {})
+        spyOn(git, "checkout").mockImplementation(async () => {})
+        spyOn(git, "merge").mockImplementation(async () => {})
         spyOn(git, "push").mockImplementation(() => { throw new Error("an error message") })
 
         const context = getContext("main")
@@ -337,16 +337,16 @@ describe("executeBackmerge", () => {
         let checkoutBranch = ""
         let merge: { commit?: string, from?: string, to?: string } = {}
         let push: { branch?: string, dryRun?: boolean, remote?: string } = {}
-        spyOn(git, "fetch").mockImplementation((remote: string) => {
+        spyOn(git, "fetch").mockImplementation(async (remote: string) => {
             fetchRemote = remote
         })
-        spyOn(git, "checkout").mockImplementation((branch: string) => {
+        spyOn(git, "checkout").mockImplementation(async (branch: string) => {
             checkoutBranch = branch
         })
-        spyOn(git, "merge").mockImplementation((from: string, to: string, commit: string) => {
+        spyOn(git, "merge").mockImplementation(async (from: string, to: string, commit: string) => {
             merge = { commit, from, to }
         })
-        spyOn(git, "push").mockImplementation((remote: string, branch: string, dryRun?: boolean) => { 
+        spyOn(git, "push").mockImplementation(async (remote: string, branch: string, dryRun?: boolean) => { 
             push = { branch, dryRun, remote }
         })
 

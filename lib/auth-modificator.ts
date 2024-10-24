@@ -3,7 +3,7 @@ import { Platform } from "./models/config"
 import { getConfigError } from "./error"
 
 /**
- * getUser returns the appropriate string user for the given input platform. 
+ * getUser returns the appropriate string user for the given input platform.
  * It's specifically used in AuthModificator function for the auth user token.
  * 
  * @see https://github.com/semantic-release/semantic-release/blob/master/lib/get-git-auth-url.js#L64

@@ -100,19 +100,6 @@ describe("getConfigError", () => {
         expect(error.details).toContain("true")
     })
 
-    test("should have a valid debug error", () => {
-        // Arrange
-        const code = "EINVALIDDEBUG"
-
-        // Act
-        const error = getConfigError("debug", "some invalid debug")
-
-        // Assert
-        expect(error.code).toEqual(code)
-        expect(error.message).toContain("'debug'")
-        expect(error.details).toBeEmpty()
-    })
-
     test("should have a valid dryRun error", () => {
         // Arrange
         const code = "EINVALIDDRYRUN"

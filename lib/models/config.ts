@@ -25,7 +25,6 @@ export interface BackmergeConfig {
     apiPathPrefix: string
     baseUrl: string
     commit: string
-    debug: boolean // comes from semantic-release config
     dryRun: boolean // comes from semantic-release config
     platform: Platform
     repositoryUrl: string // comes from semantic-release config

@@ -14,7 +14,6 @@ describe("ensureDefault", () => {
             apiPathPrefix: "",
             baseUrl: "",
             commit: defaultCommit,
-            debug: false,
             dryRun: false,
             platform: Platform.NULL,
             repositoryUrl: "",
@@ -35,7 +34,6 @@ describe("ensureDefault", () => {
         // Act
         const actual = ensureDefault({
             commit: "some commit",
-            debug: true,
             dryRun: true,
             platform: Platform.GITLAB,
             repositoryUrl: "some repository url",
@@ -49,7 +47,6 @@ describe("ensureDefault", () => {
             apiPathPrefix: "",
             baseUrl: "",
             commit: "some commit",
-            debug: true,
             dryRun: true,
             platform: Platform.GITLAB,
             repositoryUrl: "some repository url",
@@ -94,21 +91,6 @@ describe("verifyConfig", () => {
 
         // Assert
         matcher.toThrowError(getConfigError("title", config.title).message)
-    })
-
-    test("should throw an invalid debug with bad format", () => {
-        // Arrange
-        const config = ensureDefault({
-            ...validConfig,
-            // @ts-expect-error because we want to check invalid inputs
-            debug: { key: "value" },
-        }, { GITHUB_TOKEN: "some token" })
-
-        // Act
-        const matcher = expect(() => verifyConfig(config))
-
-        // Assert
-        matcher.toThrowError(getConfigError("debug", config.debug).message)
     })
 
     test("should throw an invalid dryRun with bad format", () => {

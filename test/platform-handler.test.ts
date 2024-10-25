@@ -585,10 +585,10 @@ describe("createPull", () => {
             return Promise.resolve({ ok: true })
         })
 
-        const bitbucket = newPlatformHandler(Platform.GITLAB, "baseURL", "prefix", "some-token", {})
+        const handler = newPlatformHandler(Platform.GITLAB, "baseURL", "prefix", "some-token", {})
 
         // Act
-        await bitbucket.createPull("owner", "repository", pull)
+        await handler.createPull("owner", "repository", pull)
 
         // Assert
         expect(url).toEqual(expectedUrl)

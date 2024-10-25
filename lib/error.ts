@@ -37,10 +37,6 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
         message: `Invalid 'commit' configuration.`,
     }),
     // shouldn't happen since it comes from semantic-release config
-    debug: () => ({
-        message: "Invalid 'debug' configuration (coming from semantic-release options).",
-    }),
-    // shouldn't happen since it comes from semantic-release config
     dryRun: () => ({
         message: "Invalid 'dryRun' configuration (coming from semantic-release options).",
     }),

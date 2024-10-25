@@ -51,7 +51,6 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env: Record<stri
     apiPathPrefix: config.apiPathPrefix ?? "",
     baseUrl: config.baseUrl ?? "",
     commit: config.commit ?? defaultCommit,
-    debug: config.debug ?? false, // shouldn't happen since it comes from semantic-release config
     dryRun: config.dryRun ?? false, // shouldn't happen since it comes from semantic-release config
     platform: config.platform ?? Platform.NULL,
     repositoryUrl: config.repositoryUrl ?? "",
@@ -70,7 +69,6 @@ export const verifyConfig = (config: BackmergeConfig): void => {
         apiPathPrefix: [isString],
         baseUrl: [isString],
         commit: [isString, stringNotEmpty],
-        debug: [isBoolean], // shouldn't happen since it comes from semantic-release config
         dryRun: [isBoolean], // shouldn't happen since it comes from semantic-release config
         platform: [validPlatform],
         repositoryUrl: [isString, stringNotEmpty], // shouldn't happen since it comes from semantic-release config

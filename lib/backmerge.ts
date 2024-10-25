@@ -11,7 +11,11 @@ import { BackmergeConfig } from "./models/config"
 import { PlatformHandler } from "./platform-handler"
 import { template } from "lodash"
 
-const deblog = debug("semantic-release-backmerge:git")
+/**
+ * prefix needs to be semantic-release:
+ * @see https://github.com/semantic-release/semantic-release/blob/8940f32ccce455a01a4e32c101bb0f4a809ab00d/cli.js#L52
+ */
+const deblog = debug("semantic-release:backmerge")
 
 /**
  * Context is a subinterface of semantic-release Context (specifically VerifyConditionContext).

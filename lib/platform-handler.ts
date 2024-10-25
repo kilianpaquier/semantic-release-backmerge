@@ -6,7 +6,11 @@ import SemanticReleaseError from "@semantic-release/error"
 import debug from "debug"
 import urlJoin from "url-join"
 
-const deblog = debug("semantic-release-backmerge:platform-handler")
+/**
+ * prefix needs to be semantic-release:
+ * @see https://github.com/semantic-release/semantic-release/blob/8940f32ccce455a01a4e32c101bb0f4a809ab00d/cli.js#L52
+ */
+const deblog = debug("semantic-release:backmerge")
 
 /**
  * isT checks whether input value is really a T or not.

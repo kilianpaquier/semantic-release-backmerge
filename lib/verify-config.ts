@@ -36,8 +36,7 @@ const validTargetsArray = (targets: Partial<Target>[]): boolean => targets.
  * 
  * @returns true if the input platform is valid.
  */
-const validPlatform = (input: Platform): boolean => Boolean(Object.values(Platform).
-    find(platform => input === platform))
+const validPlatform = (input: Platform): boolean => Boolean(Object.values(Platform).find(platform => input === platform))
 
 /**
  * ensureDefaults takes as input a partial backmerge configuration, alongside environment variables 

@@ -1,3 +1,9 @@
+## [1.5.0-next.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.4.0...v1.5.0-next.1) (2024-10-25)
+
+### Features
+
+* avoid trying to create pull requests when one already exists between two branches to be backmerge'd - [#19](https://github.com/kilianpaquier/semantic-release-backmerge/issues/19) ([a4ea1a8](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a4ea1a8ff4c33358bd75fbe57e345b30cbfcbe31))
+
 ## [1.4.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.3.3...v1.4.0) (2024-10-24)
 
 ### Features

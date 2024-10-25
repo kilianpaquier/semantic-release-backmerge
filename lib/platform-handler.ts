@@ -82,8 +82,8 @@ class Bitbucket implements PlatformHandler {
     private apiUrl: string
     private token: string
 
-    constructor(baseUrl: string, token: string, basePath?: string) {
-        this.apiUrl = urlJoin(baseUrl, basePath ?? "/rest/api/1.0")
+    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+        this.apiUrl = urlJoin(baseUrl, apiPathPrefix === "" ? "/rest/api/1.0" : apiPathPrefix)
         this.token = token
         deblog("initialized bitbucket platform handler with URL '%s'", this.apiUrl)
     }
@@ -159,8 +159,8 @@ class BitbucketCloud implements PlatformHandler {
     private apiUrl: string
     private token: string
 
-    constructor(baseUrl: string, token: string, basePath?: string) {
-        this.apiUrl = urlJoin(baseUrl, basePath ?? "/2.0")
+    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+        this.apiUrl = urlJoin(baseUrl, apiPathPrefix === "" ? "/2.0" : apiPathPrefix)
         this.token = token
         deblog("initialized bitbucket cloud platform handler with URL '%s'", this.apiUrl)
     }
@@ -229,8 +229,8 @@ class Gitea implements PlatformHandler {
     private apiUrl: string
     private token: string
 
-    constructor(baseUrl: string, token: string, basePath?: string) {
-        this.apiUrl = urlJoin(baseUrl, basePath ?? "/api/v1")
+    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+        this.apiUrl = urlJoin(baseUrl, apiPathPrefix === "" ? "/api/v1" : apiPathPrefix)
         this.token = token
         deblog("initialized gitea platform handler with URL '%s'", this.apiUrl)
     }
@@ -275,8 +275,8 @@ class Github implements PlatformHandler {
 
     private octokit: Octokit
 
-    constructor(baseUrl: string, token: string, basePath?: string) {
-        this.apiUrl = urlJoin(baseUrl, basePath ?? "")
+    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+        this.apiUrl = urlJoin(baseUrl, apiPathPrefix)
         this.token = token
 
         // https://octokit.github.io/rest.js/v21/#pulls
@@ -320,8 +320,8 @@ class Gitlab implements PlatformHandler {
     private apiUrl: string
     private token: string
 
-    constructor(baseUrl: string, token: string, basePath?: string) {
-        this.apiUrl = urlJoin(baseUrl, basePath ?? "/api/v4")
+    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+        this.apiUrl = urlJoin(baseUrl, apiPathPrefix === "" ? "/api/v4" : apiPathPrefix)
         this.token = token
         deblog("initialized gitlab platform handler with URL '%s'", this.apiUrl)
     }

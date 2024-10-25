@@ -1,3 +1,9 @@
+## [1.5.0-next.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.0-next.3...v1.5.0-next.4) (2024-10-25)
+
+### Bug Fixes
+
+* **platforms:** invalid check on api path prefix during platform handler initialization ([d3d97de](https://github.com/kilianpaquier/semantic-release-backmerge/commit/d3d97de8a3decf11f1ab9938dea2c948ceecf9f5))
+
 ## [1.5.0-next.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.0-next.2...v1.5.0-next.3) (2024-10-25)
 
 ### Bug Fixes

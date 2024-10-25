@@ -1,3 +1,9 @@
+## [1.5.0-next.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.0-next.2...v1.5.0-next.3) (2024-10-25)
+
+### Bug Fixes
+
+* **debug:** invalid prefix with debug namespace ([a1816ae](https://github.com/kilianpaquier/semantic-release-backmerge/commit/a1816aeee0830bf90849d0384ee87df771c6a3cd))
+
 ## [1.5.0-next.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.0-next.1...v1.5.0-next.2) (2024-10-25)
 
 ### Bug Fixes

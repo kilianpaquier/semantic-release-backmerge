@@ -186,20 +186,18 @@ describe("verifyConfig", () => {
         matcher.toThrowError(getConfigError("targets", targets).message)
     })
 
-    test("should throw an invalid platform with base url", () => {
+    test("should be fine with minimal inputs", () => {
         // Arrange
-        const config = ensureDefault({
-            baseUrl: "https://example.com",
-        }, { GITHUB_TOKEN: "some token" })
+        const config = ensureDefault({ repositoryUrl: "some repository url" }, { GITHUB_TOKEN: "some token" })
 
         // Act
         const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        matcher.toThrowError(getConfigError("platform", "").message)
+        matcher.not.toThrowError()
     })
 
-    test("should be fine with base url", () => {
+    test("should be fine with some inputs", () => {
         // Arrange
         const config = ensureDefault({
             baseUrl: "https://example.com",

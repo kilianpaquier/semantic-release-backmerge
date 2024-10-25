@@ -7,7 +7,7 @@ export enum Platform {
     GITEA = "gitea",
     GITHUB = "github",
     GITLAB = "gitlab",
-    NULL = "",
+    NULL = "null",
 }
 
 /**

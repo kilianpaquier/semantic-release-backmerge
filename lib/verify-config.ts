@@ -32,12 +32,12 @@ const validTargetsArray = (targets: Partial<Target>[]): boolean => targets.
 /**
  * validPlatform validates an input string platform.
  * 
- * @param stringPlatform the platform to validate.
+ * @param input the platform to validate.
  * 
  * @returns true if the input platform is valid.
  */
-const validPlatform = (stringPlatform: string): boolean => Boolean(Object.values(Platform).
-    find(platform => platform.toString() === stringPlatform))
+const validPlatform = (input: Platform): boolean => Boolean(Object.values(Platform).
+    find(platform => input === platform))
 
 /**
  * ensureDefaults takes as input a partial backmerge configuration, alongside environment variables 
@@ -73,7 +73,7 @@ export const verifyConfig = (config: BackmergeConfig): void => {
         commit: [isString, stringNotEmpty],
         debug: [isBoolean], // shouldn't happen since it comes from semantic-release config
         dryRun: [isBoolean], // shouldn't happen since it comes from semantic-release config
-        platform: [isString, validPlatform],
+        platform: [validPlatform],
         repositoryUrl: [isString, stringNotEmpty], // shouldn't happen since it comes from semantic-release config
         targets: [isArray, validTargetsArray],
         title: [isString, stringNotEmpty],

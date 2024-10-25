@@ -1,3 +1,9 @@
+## [1.5.0-next.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.0-next.1...v1.5.0-next.2) (2024-10-25)
+
+### Bug Fixes
+
+* **config:** allow no platform as input ([4370d3a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4370d3abf8287354653155d5aaf11489c7f7bd41))
+
 ## [1.5.0-next.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.4.0...v1.5.0-next.1) (2024-10-25)
 
 ### Features

@@ -130,32 +130,36 @@ export const backmerge = async (context: Context, config: BackmergeConfig, handl
                 context.logger.log(`Running with --dry-run, push to '${branch.name}' will not update remote state.`)
             }
             await push(authRemote, branch.name, config.dryRun, context.cwd, context.env)
+            continue // backmerge with git successful, skip backmerge with pull request
         } catch (error) {
             context.logger.error(`Failed to backmerge '${release.name}' into '${branch.name}', opening pull request.`, error)
+        }
 
-            if (config.dryRun) {
-                context.logger.log(`Running with --dry-run, created pull request would have been from '${release.name}' into '${branch.name}'.`)
-                continue
-            }
+        // in case of merge error with git and dry run, skip pull request check or creation
+        if (config.dryRun) {
+            context.logger.log(`Running with --dry-run, created pull request would have been from '${release.name}' into '${branch.name}'.`)
+            continue
+        }
 
-            // in case of merge error with git, create a pull request with the platform handler
-            try {
+        // in case of merge error with git, create a pull request with the platform handler
+        try {
+            if (config.checkHasPull) { // don't check if a pull request already exists if disabled
                 const exists = await handler.hasPull(url.owner, url.name, release.name, branch.name)
                 if (exists) {
                     context.logger.log(`A pull request already exists between '${release.name}' and '${branch.name}'. Not creating another.`)
                     continue
                 }
-
-                const title = template(config.title)(templateData)
-                await handler.createPull(url.owner, url.name, {
-                    body: context.nextRelease.notes ?? "",
-                    from: release.name,
-                    title,
-                    to: branch.name
-                })
-            } catch (prerror) {
-                errors.push(new SemanticReleaseError(`Failed to create pull request from '${release.name}' to '${branch.name}'.`, "EPULLREQUEST", String(prerror)))
             }
+
+            const title = template(config.title)(templateData)
+            await handler.createPull(url.owner, url.name, {
+                body: context.nextRelease.notes ?? "",
+                from: release.name,
+                title,
+                to: branch.name
+            })
+        } catch (error) {
+            errors.push(new SemanticReleaseError(`Failed to create pull request from '${release.name}' to '${branch.name}'.`, "EPULLREQUEST", String(error)))
         }
     }
     if (errors.length > 0) {

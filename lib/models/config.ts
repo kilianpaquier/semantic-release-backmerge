@@ -24,6 +24,7 @@ export interface Target {
 export interface BackmergeConfig {
     apiPathPrefix: string
     baseUrl: string
+    checkHasPull: boolean
     commit: string
     dryRun: boolean // comes from semantic-release config
     platform: Platform

@@ -18,6 +18,15 @@ import { template } from "lodash"
 const deblog = debug("semantic-release:backmerge")
 
 /**
+ * Logger is a simple interface to ensure eslint doesn't show invalid errors with semantic-release context logger.
+ */
+export interface Logger {
+    error(...data: any[]): void
+    log(...data: any[]): void
+    warn(...data: any[]): void
+}
+
+/**
  * Context is a subinterface of semantic-release Context (specifically VerifyConditionContext).
  */
 export interface Context {
@@ -25,11 +34,7 @@ export interface Context {
     cwd?: string
     env: Record<string, string>
     lastRelease: LastRelease
-    logger: {
-        error(...data: any[]): void
-        log(...data: any[]): void
-        warn(...data: any[]): void
-    }
+    logger: Logger
     nextRelease: NextRelease
 }
 
@@ -69,9 +74,7 @@ export const getBranches = async (context: Context, config: BackmergeConfig, pla
 
         branches = await ls(config.repositoryUrl, context.cwd, context.env)
     } catch (error) {
-        const msg = "Failed to fetch git remote or list all branches."
-        context.logger.error(msg, error)
-        throw new SemanticReleaseError(msg, "EFECTHLIST")
+        throw new SemanticReleaseError("Failed to fetch git remote or list all branches.", "EFECTHLIST", String(error))
     }
 
     deblog("filtering branch to backmerge from '%j'", branches)
@@ -149,9 +152,7 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
         // checkout to ensure released branch is up to date with last fetch'ed remote url
         await checkout(releaseBranch, context.cwd, context.env)
     } catch (error) {
-        const msg = `Failed to fetch or checkout released branch '${releaseBranch}'.`
-        context.logger.error(msg, error)
-        throw new SemanticReleaseError(msg, "EFETCHCHECKOUT")
+        throw new SemanticReleaseError(`Failed to fetch or checkout released branch '${releaseBranch}'.`, "EFETCHCHECKOUT", String(error))
     }
 
     const errors: SemanticReleaseError[] = []
@@ -191,10 +192,8 @@ export const executeBackmerge = async (context: Context, config: BackmergeConfig
                     title,
                     to: branch
                 })
-            } catch (prError) {
-                const msg = `Failed to create pull request from '${releaseBranch}' to '${branch}'.`
-                context.logger.error(msg, prError)
-                errors.push(new SemanticReleaseError(msg, "EPULLREQUEST"))
+            } catch (prerror) {
+                errors.push(new SemanticReleaseError(`Failed to create pull request from '${releaseBranch.name}' to '${branch.name}'.`, "EPULLREQUEST", String(prerror)))
             }
         }
     }

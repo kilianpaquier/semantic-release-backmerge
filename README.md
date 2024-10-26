@@ -98,15 +98,16 @@ This plugin can be configured through the semantic-release [configuration file](
 
 ## Configuration
 
-| name            | required | default                                                                                                    | description                                                                                                                                             |
-| --------------- | -------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `apiPathPrefix` | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | API Prefix for your platform (i.e. `/api/v4` for **gitlab**).                                                                                           |
-| `baseUrl`       | Yes      | Guessed in [environment variables](#environment-variables)                                                 | Platform base URL (i.e. `https://gitlab.com` for **gitlab**).                                                                                           |
-| `commit`        | No       | `chore(release): merge branch ${ from } into ${ to } [skip ci]`                                            | Merge commit in case the `fast-forward` mode couldn't be done.                                                                                          |
-| `dryRun`        | No       | `--dry-run` option from semantic-release                                                                   | Whether to really push and create pull requests or only log the actions.                                                                                |
-| `platform`      | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | Platform name. Either `bitbucket`, `bitbucket-cloud`, `gitea`, `github` or `gitlab`.                                                                    |
-| `targets`       | No       | `[]`                                                                                                       | Backmerge targets, a slice / list of `{ from: <from>, to: <to> }`. `from` and `to` can be regexp like `(develop\|staging)` or `v[0-9]+(.[0-9]+)?`, etc. |
-| `title`         | No       | `Automatic merge failure`                                                                                  | Pull request title to set when creating pull requests.                                                                                                  |
+| name            | required | default                                                                                                    | description                                                                                                                                                             |
+| --------------- | -------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apiPathPrefix` | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | API Prefix for your platform (i.e. `/api/v4` for **gitlab**).                                                                                                           |
+| `baseUrl`       | Yes      | Guessed in [environment variables](#environment-variables)                                                 | Platform base URL (i.e. `https://gitlab.com` for **gitlab**).                                                                                                           |
+| `checkHasPull`  | No       | `true`                                                                                                     | Whether to check if a pull request already exists between a backmerged branch and the released branch. This check is only made if backmerge with git wasn't successful. |
+| `commit`        | No       | `chore(release): merge branch ${ from } into ${ to } [skip ci]`                                            | Merge commit in case the `fast-forward` mode couldn't be done.                                                                                                          |
+| `dryRun`        | No       | `--dry-run` option from semantic-release                                                                   | Whether to really push and create pull requests or only log the actions.                                                                                                |
+| `platform`      | Yes      | Guessed in [environment variables](#environment-variables). **Unless `baseUrl`** is specifically provided. | Platform name. Either `bitbucket`, `bitbucket-cloud`, `gitea`, `github` or `gitlab`.                                                                                    |
+| `targets`       | No       | `[]`                                                                                                       | Backmerge targets, a slice / list of `{ from: <from>, to: <to> }`. `from` and `to` can be regexp like `(develop\|staging)` or `v[0-9]+(.[0-9]+)?`, etc.                 |
+| `title`         | No       | `Automatic merge failure`                                                                                  | Pull request title to set when creating pull requests.                                                                                                                  |
 
 ### Templating
 
@@ -221,8 +222,8 @@ To avoid painful configurations, you may use the environments variables to autom
 | `GL_URL`        | Base URL to your gitlab server                                                                                                               |
 | `GITLAB_URL`    | Base URL to your gitlab server                                                                                                               |
 | `CI_SERVER_URL` | Base URL to your gitlab server (this variable already exists with [CICD](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)) |
-| `GL_TOKEN`      | Gitlab token to push backmerged branches or create pull requests                                                                             |
-| `GITLAB_TOKEN`  | Gitlab token to push backmerged branches or create pull requests                                                                             |
+| `GL_TOKEN`      | Gitlab token to push backmerged branches or create pull requests (`api`, `read_repository` and `write_repository` scopes)                    |
+| `GITLAB_TOKEN`  | Gitlab token to push backmerged branches or create pull requests (`api`, `read_repository` and `write_repository` scopes)                    |
 
 **Notes:** 
 

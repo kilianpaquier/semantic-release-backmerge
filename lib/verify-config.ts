@@ -50,6 +50,7 @@ const validPlatform = (input: Platform): boolean => Boolean(Object.values(Platfo
 export const ensureDefault = (config: Partial<BackmergeConfig>, env: Record<string, string>): BackmergeConfig => ({
     apiPathPrefix: config.apiPathPrefix ?? "",
     baseUrl: config.baseUrl ?? "",
+    checkHasPull: config.checkHasPull ?? true,
     commit: config.commit ?? defaultCommit,
     dryRun: config.dryRun ?? false, // shouldn't happen since it comes from semantic-release config
     platform: config.platform ?? Platform.NULL,
@@ -68,13 +69,14 @@ export const verifyConfig = (config: BackmergeConfig): void => {
     const validators: { [k in keyof BackmergeConfig]: ((value: any) => boolean)[] } = {
         apiPathPrefix: [isString],
         baseUrl: [isString],
+        checkHasPull: [isBoolean],
         commit: [isString, stringNotEmpty],
         dryRun: [isBoolean], // shouldn't happen since it comes from semantic-release config
         platform: [validPlatform],
         repositoryUrl: [isString, stringNotEmpty], // shouldn't happen since it comes from semantic-release config
         targets: [isArray, validTargetsArray],
         title: [isString, stringNotEmpty],
-        token: [isString, stringNotEmpty]
+        token: [isString, stringNotEmpty],
     }
 
     const errors = Object.entries(config).reduce((agg: SemanticReleaseError[], [option, value]) => {

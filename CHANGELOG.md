@@ -1,3 +1,26 @@
+## [1.5.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.4.0...v1.5.0) (2024-10-26)
+
+### Features
+
+* avoid trying to create pull requests when one already exists between two branches to be backmerge'd - [#19](https://github.com/kilianpaquier/semantic-release-backmerge/issues/19) ([27a9019](https://github.com/kilianpaquier/semantic-release-backmerge/commit/27a9019671033914d4c1fac217068d5ba2eda05c))
+* **config:** add `checkHasPull` configuration to bypass pull request verification when trying to create one ([e61d12a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/e61d12a2ce05979c7eb928d45cf20cd65df06e93))
+* ensure git is spawnable by backmerge processes and print associated version in semantic-release verifyConditions ([aa8d6ae](https://github.com/kilianpaquier/semantic-release-backmerge/commit/aa8d6ae8e3d0bb25d48de84a82a6e490bd732155))
+
+### Bug Fixes
+
+* **backmerge:** checkout backmerged branches with commit hash to avoid `Updates were rejected because the tip of your current branch is behind` git error on push - fixes [#23](https://github.com/kilianpaquier/semantic-release-backmerge/issues/23) ([5328edb](https://github.com/kilianpaquier/semantic-release-backmerge/commit/5328edba0d5c30e83cfe3510ae6717a4dd78ca4d))
+* **config:** allow no platform as input ([6e2ced6](https://github.com/kilianpaquier/semantic-release-backmerge/commit/6e2ced6bec860d5f6008bd29214da1e07510508b))
+* **debug:** invalid prefix with debug namespace ([4fd3f13](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4fd3f131f754580255abb5bccdc26210edb47512))
+* **platforms:** invalid check on api path prefix during platform handler initialization ([119ba60](https://github.com/kilianpaquier/semantic-release-backmerge/commit/119ba600fc328097d76c760ca148b46b3ee7d7e9))
+
+### Chores
+
+* **release:** v1.5.0-next.1 [skip ci] ([acaa328](https://github.com/kilianpaquier/semantic-release-backmerge/commit/acaa328fe9b8a73e1786f8414d5e7a1ef3571637)), closes [#19](https://github.com/kilianpaquier/semantic-release-backmerge/issues/19)
+* **release:** v1.5.0-next.2 [skip ci] ([f7d6f67](https://github.com/kilianpaquier/semantic-release-backmerge/commit/f7d6f6711c064c7dafe2e5443e8982fa7efb9268))
+* **release:** v1.5.0-next.3 [skip ci] ([3408484](https://github.com/kilianpaquier/semantic-release-backmerge/commit/34084842a852aecfe41cac0bb6056ae786a0aefc))
+* **release:** v1.5.0-next.4 [skip ci] ([474ea41](https://github.com/kilianpaquier/semantic-release-backmerge/commit/474ea41d702aace18d87766945fcd4ab6f09dbf3))
+* **release:** v1.5.0-next.5 [skip ci] ([e94551e](https://github.com/kilianpaquier/semantic-release-backmerge/commit/e94551e5c7887049e196ad76496eb4683b37b41a)), closes [#23](https://github.com/kilianpaquier/semantic-release-backmerge/issues/23)
+
 ## [1.5.0-next.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.0-next.4...v1.5.0-next.5) (2024-10-26)
 
 ### Features

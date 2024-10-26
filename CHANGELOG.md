@@ -1,3 +1,14 @@
+## [1.5.0-next.5](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.0-next.4...v1.5.0-next.5) (2024-10-26)
+
+### Features
+
+* **config:** add `checkHasPull` configuration to bypass pull request verification when trying to create one ([876c819](https://github.com/kilianpaquier/semantic-release-backmerge/commit/876c81961a52cad4ea5fa70ceeeba5adcc6e7b8c))
+* ensure git is spawnable by backmerge processes and print associated version in semantic-release verifyConditions ([ccabb07](https://github.com/kilianpaquier/semantic-release-backmerge/commit/ccabb0719b3b615c602c5dbf4c357925087afa76))
+
+### Bug Fixes
+
+* **backmerge:** checkout backmerged branches with commit hash to avoid `Updates were rejected because the tip of your current branch is behind` git error on push - fixes [#23](https://github.com/kilianpaquier/semantic-release-backmerge/issues/23) ([80c9ced](https://github.com/kilianpaquier/semantic-release-backmerge/commit/80c9ced22a0af94590ab940946ada722d22f3234))
+
 ## [1.5.0-next.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.0-next.3...v1.5.0-next.4) (2024-10-25)
 
 ### Bug Fixes

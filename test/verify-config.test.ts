@@ -176,7 +176,7 @@ describe("verifyConfig", () => {
         const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        matcher.not.toThrowError()
+        matcher.not.toThrow()
     })
 
     test("should be fine with some inputs", () => {
@@ -196,6 +196,6 @@ describe("verifyConfig", () => {
         const matcher = expect(() => verifyConfig(config))
 
         // Assert
-        matcher.not.toThrowError()
+        matcher.not.toThrow()
     })
 })

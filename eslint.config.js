@@ -35,6 +35,7 @@ export default tseslint.config(
             "no-continue": "off",
             "no-inline-comments": "off",
             "no-magic-numbers": "off",
+            "no-plusplus": "off",
             "no-sparse-arrays": "off",
             "no-ternary": "off",
             "one-var": "off",

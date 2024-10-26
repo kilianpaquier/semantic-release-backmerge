@@ -13,6 +13,7 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "",
             baseUrl: "",
+            checkHasPull: true,
             commit: defaultCommit,
             dryRun: false,
             platform: Platform.NULL,
@@ -33,6 +34,7 @@ describe("ensureDefault", () => {
 
         // Act
         const actual = ensureDefault({
+            checkHasPull: false,
             commit: "some commit",
             dryRun: true,
             platform: Platform.GITLAB,
@@ -46,6 +48,7 @@ describe("ensureDefault", () => {
         expect(actual).toEqual({
             apiPathPrefix: "",
             baseUrl: "",
+            checkHasPull: false,
             commit: "some commit",
             dryRun: true,
             platform: Platform.GITLAB,

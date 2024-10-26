@@ -144,26 +144,46 @@ describe("filter", () => {
 describe("backmerge", () => {
     afterEach(() => mock.restore())
 
+    const repositoryUrl = "git@github.com:kilianpaquier/semantic-release-backmerge.git"
+
     const context = getContext("main")
     const release: Branch = { hash: "", name: "main" }
-    const branches: Branch[] = [{ hash: "", name: "staging" }]
+    const branches: Branch[] = [{ hash: "", name: "staging" }, { hash: "", name: "develop" }] // two branches to test backmerge loop in function
 
     test("should fail to merge branch and create pull request", async () => {
         // Arrange
-        let called = false
-        const handler = new TestPlatformHandler(async (): Promise<void> => { called = true }, async (): Promise<boolean> => false)
+        let called = 0
+        const handler = new TestPlatformHandler(async (): Promise<void> => { called++ }, async (): Promise<boolean> => false)
 
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
         spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
 
-        const config = ensureDefault({ repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
+        const config = ensureDefault({ repositoryUrl }, { GITHUB_TOKEN: "some-token" })
 
         // Act
         await backmerge(context, config, handler, release, branches)
 
         // Assert
-        expect(called).toBeTrue()
+        expect(called).toEqual(2)
+    })
+
+    test("should fail to merge branch and create pull request even if it exists", async () => {
+        // Arrange
+        let called = 0
+        const handler = new TestPlatformHandler(async (): Promise<void> => { called++ }, async (): Promise<boolean> => { throw new Error("shouldn't be called") })
+
+        spyOn(git, "checkout").mockImplementation(async () => {})
+        spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
+        spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
+
+        const config = ensureDefault({ checkHasPull: false, repositoryUrl }, { GITHUB_TOKEN: "some-token" })
+
+        // Act
+        await backmerge(context, config, handler, release, branches)
+
+        // Assert
+        expect(called).toEqual(2)
     })
 
     test("should fail to merge branch and not create a pull request since it exists", () => {
@@ -174,7 +194,7 @@ describe("backmerge", () => {
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
         spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
 
-        const config = ensureDefault({ repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
+        const config = ensureDefault({ repositoryUrl }, { GITHUB_TOKEN: "some-token" })
 
         // Act
         const matcher = expect(async () => await backmerge(context, config, handler, release, branches))
@@ -191,7 +211,7 @@ describe("backmerge", () => {
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
         spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
 
-        const config = ensureDefault({ dryRun: true, repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
+        const config = ensureDefault({ dryRun: true, repositoryUrl }, { GITHUB_TOKEN: "some-token" })
 
         // Act
         const matcher = expect(async () => await backmerge(context, config, handler, release, branches))
@@ -208,7 +228,7 @@ describe("backmerge", () => {
         spyOn(git, "merge").mockImplementation(async () => {})
         spyOn(git, "push").mockImplementation(() => { throw new Error("an error message") })
 
-        const config = ensureDefault({ repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
+        const config = ensureDefault({ repositoryUrl }, { GITHUB_TOKEN: "some-token" })
 
         // Act
         const matcher = expect(async () => await backmerge(context, config, handler, release, branches))
@@ -222,20 +242,26 @@ describe("backmerge", () => {
         const expectedUrl = "https://test-user:some-token@github.com/kilianpaquier/semantic-release-backmerge.git"
 
         const checkouts: Branch[] = []
-        let merge: { commit?: string, from?: string } = {}
-        let push: { branch?: string, dryRun?: boolean, remote?: string } = {}
+        const merge: { commit?: string, from?: string }[] = []
+        const push: { branch?: string, dryRun?: boolean, remote?: string }[] = []
         spyOn(git, "checkout").mockImplementation(async (branch: Branch) => { checkouts.push(branch) })
-        spyOn(git, "merge").mockImplementation(async (from: string, commit: string) => { merge = { commit, from } })
-        spyOn(git, "push").mockImplementation(async (remote: string, branch: string, dryRun?: boolean) => { push = { branch, dryRun, remote } })
+        spyOn(git, "merge").mockImplementation(async (from: string, commit: string) => { merge.push({ commit, from }) })
+        spyOn(git, "push").mockImplementation(async (remote: string, branch: string, dryRun?: boolean) => { push.push({ branch, dryRun, remote }) })
 
-        const config = ensureDefault({ repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
+        const config = ensureDefault({ repositoryUrl }, { GITHUB_TOKEN: "some-token" })
 
         // Act
         await backmerge(context, config, new TestPlatformHandler(), release, branches)
 
         // Assert
         expect(checkouts).toEqual(branches)
-        expect(merge).toEqual({ commit: "chore(release): merge branch main into staging [skip ci]", from: "main" })
-        expect(push).toEqual({ branch: "staging", dryRun: false, remote: expectedUrl })
+        expect(merge).toEqual([
+            { commit: "chore(release): merge branch main into staging [skip ci]", from: "main" },
+            { commit: "chore(release): merge branch main into develop [skip ci]", from: "main" }
+        ])
+        expect(push).toEqual([
+            { branch: "staging", dryRun: false, remote: expectedUrl },
+            { branch: "develop", dryRun: false, remote: expectedUrl }
+        ])
     })
 })

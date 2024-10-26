@@ -113,7 +113,7 @@ class Bitbucket implements PlatformHandler {
     async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
         interface resultType {
             isLastPage: boolean
-            values: { 
+            values: {
                 fromRef: { id: string }
                 toRef: { id: string }
             }[]
@@ -349,7 +349,7 @@ class Gitlab implements PlatformHandler {
     async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
         // https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
         const response = await fetch(
-            `${this.apiUrl}/projects/${encodeURIComponent(`${owner}/${repository}`)}/merge_requests?state=opened&target_branch=${to}&source_branch=${from}`, 
+            `${this.apiUrl}/projects/${encodeURIComponent(`${owner}/${repository}`)}/merge_requests?state=opened&target_branch=${to}&source_branch=${from}`,
             {
                 headers: { Authorization: `Bearer ${this.token}` },
                 method: "GET",

@@ -1,7 +1,7 @@
 /**
  * Platform represents the available implemented platforms to backmerge branches with semantic-release-backmerge.
  */
-export enum Platform {  
+export enum Platform {
     BITBUCKET = "bitbucket",
     BITBUCKET_CLOUD = "bitbucket-cloud",
     GITEA = "gitea",

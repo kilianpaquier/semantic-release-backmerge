@@ -1,5 +1,5 @@
 import { PlatformHandler, Pull, newPlatformHandler, token } from "../lib/platform-handler"
-import { describe, expect, spyOn, test } from "bun:test"
+import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 
 import { Platform } from "../lib/models/config"
 import { getConfigError } from "../lib/error"
@@ -183,6 +183,8 @@ describe("token", () => {
 })
 
 describe("hasPull", () => {
+    afterEach(() => mock.restore())
+
     const failure = (platform: Platform) => {
         // Arrange
         const handler = newPlatformHandler(platform, "baseURL", "prefix", "some-token", {})
@@ -376,6 +378,8 @@ describe("hasPull", () => {
 })
 
 describe("createPull", () => {
+    afterEach(() => mock.restore())
+
     const failure = (platform: Platform) => {
         // Arrange
         const pull = {

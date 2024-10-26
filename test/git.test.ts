@@ -78,6 +78,10 @@ describe("ls", () => {
         const branches = await ls("origin") // a small test to ensure execa works
 
         // Assert
+        const main = branches.filter(branch => branch.name === "main")
+        expect(main).not.toBeUndefined()
+    })
+})
 
 describe("version", () => {
     test("should return the current git version", async () => {

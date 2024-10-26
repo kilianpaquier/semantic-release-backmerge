@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test"
 
 import parse from "git-url-parse"
 
-import { authModificator, ls } from "../lib/git"
+import { authModificator, ls, version } from "../lib/git"
 
 describe("authModificator", () => {
     test("should return a valid authenticated git URL from one with a port and ssh", () => {
@@ -78,6 +78,13 @@ describe("ls", () => {
         const branches = await ls("origin") // a small test to ensure execa works
 
         // Assert
-        expect(branches).toContain("main")
+
+describe("version", () => {
+    test("should return the current git version", async () => {
+        // Act
+        const stdout = await version() // a small test to ensure execa works
+
+        // Assert
+        expect(stdout).toContain("git version")
     })
 })

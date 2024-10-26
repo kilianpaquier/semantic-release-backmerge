@@ -31,8 +31,30 @@ export const authModificator = (url: GitUrl, user: string, token: string): strin
 }
 
 /**
- * ls returns the slice of all branches present in remote origin. 
+ * version returns the current git version. It also ensures that git is installed 
+ * and rightly spawned by execa.
+ * 
+ * @param cwd the current directory.
+ * @param env all known environment variables.
+ * 
+ * @returns the output of git --version.
+ */
+export const version = async (cwd?: string, env?: Record<string, string>) => {
+    const { stdout, stderr } = await execa("git", ["--version"], { cwd, env })
+    if (stderr !== "") {
+        deblog("received stderr text from git version: %s", stderr)
+    }
+    return stdout
+}
+
+/**
+ * ls returns the slice of all branches present in remote origin.
+ * 
  * It removes 'refs/heads/' from the branches name.
+ * 
+ * @param remote the remote to list branches from.
+ * @param cwd the current directory.
+ * @param env all known environment variables.
  * 
  * @returns the slice of branches.
  * 
@@ -61,6 +83,8 @@ export const ls = async (remote: string, cwd?: string, env?: Record<string, stri
  * The checkout is strict with remote state, meaning all local changes are removed.
  * 
  * @param branch the input branch to checkout.
+ * @param cwd the current directory.
+ * @param env all known environment variables.
  * 
  * @throws an error if the checkout cannot be done.
  */
@@ -68,14 +92,26 @@ export const checkout = async (branch: string, cwd?: string, env?: Record<string
     deblog("executing git checkout command")
     const { stderr } = await execa("git", ["checkout", "-B", branch], { cwd, env })
     if (stderr !== "") {
-        deblog("received stderr text from git ls-remote: %s", stderr)
+/**
+ * current returns the current commit where the current branch is at.
+ * 
+ * @param cwd the current directory.
+ * @param env all known environment variables.
+ */
+export const current = async(cwd?: string, env?: Record<string, string>) => {
+    const { stdout, stderr } = await execa("git", ["log", "--reverse", "-1", "HEAD", "--stat"], { cwd, env })
+    if (stderr !== "") {
+        deblog("received stderr text from git rev-parse: %s", stderr)
     }
+    deblog("received stdout text from git rev-parse: %s", stdout)
 }
 
 /**
  * fetch executes a simple fetch of input remote.
  * 
  * @param remote the remote to fetch branches from.
+ * @param cwd the current directory.
+ * @param env all known environment variables.
  * 
  * @throws an error if the fetch cannot be done.
  */
@@ -83,7 +119,7 @@ export const fetch = async (remote: string, cwd?: string, env?: Record<string, s
     deblog("executing git fetch command")
     const { stderr } = await execa("git", ["fetch", remote], { cwd, env })
     if (stderr !== "") {
-        deblog("received stderr text from git ls-remote: %s", stderr)
+        deblog("received stderr text from git fetch: %s", stderr)
     }
 }
 
@@ -95,6 +131,8 @@ export const fetch = async (remote: string, cwd?: string, env?: Record<string, s
  * @param from the branch to merge into 'to'.
  * @param to the branch to merge changes from 'from'.
  * @param commit the merge commit message if one is done.
+ * @param cwd the current directory.
+ * @param env all known environment variables.
  * 
  * @throws an error if the merge fails (in case of conflicts, etc.).
  */
@@ -102,16 +140,16 @@ export const merge = async (from: string, to: string, commit: string, cwd?: stri
     await checkout(to)
 
     try {
-        deblog("executing git merge command")
+        deblog("executing git merge command with branch '%s'", from)
         const { stderr } = await execa("git", ["merge", `${from}`, "--ff", "-m", commit], { cwd, env })
         if (stderr !== "") {
-            deblog("received stderr text from git merge --ff with commit name '%s': %s", commit, stderr)
+            deblog("received stderr text from git merge --ff with branch '%s': %s", from, stderr)
         }
     } catch (error) {
-        deblog("aborting git merge command: %O", error)
+        deblog("aborting git merge command with branch '%s': %O", from, error)
         const { stderr } = await execa("git", ["merge", "--abort"], { cwd, env })
         if (stderr !== "") {
-            deblog("received stderr text when aborting git merge: %s", stderr)
+            deblog("received stderr text when aborting git merge with branch '%s': %s", from, stderr)
         }
         throw error
     }
@@ -121,7 +159,10 @@ export const merge = async (from: string, to: string, commit: string, cwd?: stri
  * push executes a simple git push to the input remote with the current checked out branch.
  * 
  * @param remote the remote to push changes to.
+ * @param branch the branch to push local changes to.
  * @param dryRun if the push must only verify if all conditions are fine and not alter the remote state.
+ * @param cwd the current directory.
+ * @param env all known environment variables.
  * 
  * @throws an error if the push cannot be executed.
  */

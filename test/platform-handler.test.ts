@@ -268,7 +268,7 @@ describe("hasPull", () => {
                     isLastPage: false, // ensure paging is stopped when we find the right destination
                     values: [
                         {
-                            fromRef: { id: "refs/heads/main" }, 
+                            fromRef: { id: "refs/heads/main" },
                             toRef: { id: dest }
                         },
                     ],
@@ -356,7 +356,7 @@ describe("hasPull", () => {
         let url = ""
         spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request): Promise<Response> => {
             url = (input as string)
-            const response = { 
+            const response = {
                 json: () => ([{}]),
                 ok: true,
             }

@@ -4,6 +4,15 @@ import { execa } from "execa"
 import debug from "debug"
 
 /**
+ * Branch represents a simplified interface for a branch 
+ * and its remote commit hash.
+ */
+export interface Branch {
+    hash: string
+    name: string
+}
+
+/**
  * prefix needs to be semantic-release:
  * @see https://github.com/semantic-release/semantic-release/blob/8940f32ccce455a01a4e32c101bb0f4a809ab00d/cli.js#L52
  */
@@ -68,12 +77,19 @@ export const ls = async (remote: string, cwd?: string, env?: Record<string, stri
     }
     deblog("received stdout text from git ls-remote: %s", stdout)
 
-    const branches = stdout.
+    const branches: Branch[] = stdout.
         split("\n").
-        map(branch => branch.split("\t")).
-        flat().
-        filter(branch => branch.startsWith("refs/heads/")).
-        map(branch => branch.replace("refs/heads/", ""))
+        filter(branch => branch.includes("refs/heads/")).
+        map(branch => branch.replace("refs/heads/", "")).
+        map(branch => {
+            const parts = branch.split("\t") // ls-remote lists elements with the form "<commit_hash>\t<branch_name>"
+            if (parts.length !== 2) {
+                deblog("retrieved invalid branch in git ls-remote: %s", branch)
+                return { hash: "", name: "" }
+            }
+            return { hash: parts[0], name: parts[1] }
+        }).
+        filter(branch => branch.name !== "" && branch.hash !== "") // filter unparseable branches
     return [...new Set(branches)]
 }
 
@@ -88,10 +104,14 @@ export const ls = async (remote: string, cwd?: string, env?: Record<string, stri
  * 
  * @throws an error if the checkout cannot be done.
  */
-export const checkout = async (branch: string, cwd?: string, env?: Record<string, string>) => {
-    deblog("executing git checkout command")
-    const { stderr } = await execa("git", ["checkout", "-B", branch], { cwd, env })
+export const checkout = async (branch: Branch, cwd?: string, env?: Record<string, string>) => {
+    deblog("executing git checkout command with branch '%j'", branch)
+    const { stderr } = await execa("git", ["checkout", "-B", branch.name, branch.hash], { cwd, env })
     if (stderr !== "") {
+        deblog("received stderr text from git checkout with branch '%j': %s", branch, stderr)
+    }
+}
+
 /**
  * current returns the current commit where the current branch is at.
  * 
@@ -128,17 +148,14 @@ export const fetch = async (remote: string, cwd?: string, env?: Record<string, s
  * 
  * If a merge commit must be done (by default --ff is used), then the merge commit is the input commit.
  * 
- * @param from the branch to merge into 'to'.
- * @param to the branch to merge changes from 'from'.
+ * @param from the branch to merge in the current one.
  * @param commit the merge commit message if one is done.
  * @param cwd the current directory.
  * @param env all known environment variables.
  * 
  * @throws an error if the merge fails (in case of conflicts, etc.).
  */
-export const merge = async (from: string, to: string, commit: string, cwd?: string, env?: Record<string, string>) => {
-    await checkout(to)
-
+export const merge = async (from: string, commit: string, cwd?: string, env?: Record<string, string>) => {
     try {
         deblog("executing git merge command with branch '%s'", from)
         const { stderr } = await execa("git", ["merge", `${from}`, "--ff", "-m", commit], { cwd, env })

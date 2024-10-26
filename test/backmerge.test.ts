@@ -1,9 +1,10 @@
 import * as git from "../lib/git"
 
-import { Context, executeBackmerge, getBranches } from "../lib/backmerge"
+import { Context, backmerge, filter } from "../lib/backmerge"
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 
-import { Platform } from "../lib/models/config"
+import { Branch } from "../lib/git"
+import { Target } from "../lib/models/config"
 import { TestPlatformHandler } from "./platform-handler.test"
 import { ensureDefault } from "../lib/verify-config"
 
@@ -28,321 +29,189 @@ const getContext = (name: string): Context => ({
     }
 })
 
-describe("getBranches", () => {
-    afterEach(() => mock.restore())
-
-    test("should not return any branch", async () => {
+describe("filter", () => {
+    test("should retrieve some branches", () => {
         // Arrange
-        const context = getContext("main")
-        const config = ensureDefault({
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "staging", to: "develop" }],
-        }, {})
+        const release: Branch = { hash: "", name: "main" }
+        const targets: Target[] = [{ from: "main", to: "(develop|staging)" }]
+        const branches: Branch[] = [
+            { hash: "", name: "main" },
+            { hash: "", name: "develop" },
+            { hash: "", name: "staging" },
+        ]
 
         // Act
-        const branches = await getBranches(context, config, new TestPlatformHandler())
+        const mergeables = filter(release, targets, branches)
 
         // Assert
-        expect(branches).toBeEmpty()
+        expect(mergeables).toEqual([
+            { hash: "", name: "develop" },
+            { hash: "", name: "staging" },
+        ])
     })
 
-    test("should fail to fetch", () => {
+    test("should retrieve more recent semver branches but only same major version", () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(() => { throw new Error("an error message") })
-
-        const context = getContext("main")
-        const config = ensureDefault({
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "main", to: "staging" }],
-        }, {})
+        const release: Branch = { hash: "", name: "v1.2" }
+        const targets: Target[] = [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }]
+        const branches: Branch[] = [
+            { hash: "", name: "v1.0" },
+            { hash: "", name: "v1.1" },
+            { hash: "", name: "v1.2" },
+            { hash: "", name: "v1.3" },
+            { hash: "", name: "v1.4" },
+            { hash: "", name: "v2.0" },
+            { hash: "", name: "v2.6" },
+        ]
 
         // Act
-        const matcher = expect(async () => await getBranches(context, config, new TestPlatformHandler()))
+        const mergeables = filter(release, targets, branches)
 
         // Assert
-        matcher.toThrowError("Failed to fetch git remote or list all branches.")
+        expect(mergeables).toEqual([
+            { hash: "", name: "v1.3" },
+            { hash: "", name: "v1.4" },
+        ])
     })
 
-    test("should fail to ls branches", () => {
+    test("should retrieve more recent semver branches but only same major version (.x case)", () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(async () => {})
-        spyOn(git, "ls").mockImplementation(() => { throw new Error("an error message") })
-
-        const context = getContext("main")
-        const config = ensureDefault({
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "main", to: "staging" }],
-        }, {})
+        const release: Branch = { hash: "", name: "v1.2.x" }
+        const targets: Target[] = [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }]
+        const branches: Branch[] = [
+            { hash: "", name: "v1.0.x" },
+            { hash: "", name: "v1.1.x" },
+            { hash: "", name: "v1.2.x" },
+            { hash: "", name: "v1.3.x" },
+            { hash: "", name: "v1.4.x" },
+            { hash: "", name: "v2.0.x" },
+            { hash: "", name: "v2.6.x" }
+        ]
 
         // Act
-        const matcher = expect(async () => await getBranches(context, config, new TestPlatformHandler()))
+        const mergeables = filter(release, targets, branches)
 
         // Assert
-        matcher.toThrowError("Failed to fetch git remote or list all branches.")
+        expect(mergeables).toEqual([
+            { hash: "", name: "v1.3.x" },
+            { hash: "", name: "v1.4.x" },
+        ])
     })
 
-    test("should not retrieve older semver branches", async () => {
+    test("should retrieve no version since it's the major one", () => {
         // Arrange
-        spyOn(git, "fetch").mockImplementation(async () => {})
-        const spy = spyOn(git, "ls").mockImplementation(async () => ["v1.0", "v1.1", "v1.2"])
-
-        const context = getContext("v1.2")
-        const config = ensureDefault({
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
-        }, {})
+        const release: Branch = { hash: "", name: "v1" }
+        const targets: Target[] = [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }]
+        const branches: Branch[] = [
+            { hash: "", name: "v1.0" },
+            { hash: "", name: "v1.1" },
+            { hash: "", name: "v1.2" },
+            { hash: "", name: "v1.3" },
+            { hash: "", name: "v1.4" },
+            { hash: "", name: "v2.0" },
+            { hash: "", name: "v2.6" },
+        ]
 
         // Act
-        const branches = await getBranches(context, config, new TestPlatformHandler())
+        const mergeables = filter(release, targets, branches)
 
         // Assert
-        expect(spy).toHaveBeenCalled()
-        expect(branches).toBeEmpty()
+        expect(mergeables).toBeEmpty()
     })
 
-    test("should retrieve some branches", async () => {
+    test("should retrieve no version since it's the major one (.x case)", () => {
         // Arrange
-        const expectedURL = "https://test-user:some-token@github.com/kilianpaquier/semantic-release-backmerge.git"
-
-        let fetchRemote = ""
-        let lsRemote = ""
-        spyOn(git, "fetch").mockImplementation(async (remote) => { fetchRemote = remote })
-        spyOn(git, "ls").mockImplementation(async (remote) => { 
-            lsRemote = remote
-            return ["develop", "staging"] 
-        })
-
-        const context = getContext("main")
-        const config = ensureDefault({
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "main", to: "(develop|staging)" }],
-        }, { GITHUB_TOKEN: "some-token" })
+        const release: Branch = { hash: "", name: "v1.x" }
+        const targets: Target[] = [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }]
+        const branches: Branch[] = [
+            { hash: "", name: "v1.0.x" },
+            { hash: "", name: "v1.1.x" },
+            { hash: "", name: "v1.2.x" },
+            { hash: "", name: "v1.3.x" },
+            { hash: "", name: "v1.4.x" },
+            { hash: "", name: "v2.0.x" },
+            { hash: "", name: "v2.6.x" }
+        ]
 
         // Act
-        const branches = await getBranches(context, config, new TestPlatformHandler())
+        const mergeables = filter(release, targets, branches)
 
         // Assert
-        expect(fetchRemote).toEqual(expectedURL)
-        expect(lsRemote).toEqual(config.repositoryUrl)
-        expect(branches).toEqual(["develop", "staging"])
-    })
-
-    test("should retrieve more recent semver branches but only same major version", async () => {
-        // Arrange
-        spyOn(git, "fetch").mockImplementation(async () => {})
-        spyOn(git, "ls").mockImplementation(async () => ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0", "v2.6"])
-
-        const context = getContext("v1.2")
-        const config = ensureDefault({
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
-        }, {})
-
-        // Act
-        const branches = await getBranches(context, config, new TestPlatformHandler())
-
-        // Assert
-        expect(branches).toEqual(["v1.3", "v1.4"])
-    })
-
-    test("should retrieve more recent semver branches but only same major version (.x case)", async () => {
-        // Arrange
-        spyOn(git, "fetch").mockImplementation(async () => {})
-        spyOn(git, "ls").mockImplementation(async () => ["v1.0.x", "v1.1.x", "v1.2.x", "v1.3.x", "v1.4.x", "v2.0.x", "v2.6.x"])
-
-        const context = getContext("v1.2.x")
-        const config = ensureDefault({
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }],
-        }, {})
-
-        // Act
-        const branches = await getBranches(context, config, new TestPlatformHandler())
-
-        // Assert
-        expect(branches).toEqual(["v1.3.x", "v1.4.x"])
-    })
-
-    test("should retrieve no version since it's the major one", async () => {
-        // Arrange
-        spyOn(git, "fetch").mockImplementation(async () => {})
-        spyOn(git, "ls").mockImplementation(async () => ["v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v2.0", "v2.6"])
-
-        const context = getContext("v1")
-        const config = ensureDefault({
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "v[0-9]+(.[0-9]+)?", to: "v[0-9]+(.[0-9]+)?" }],
-        }, {})
-
-        // Act
-        const branches = await getBranches(context, config, new TestPlatformHandler())
-
-        // Assert
-        expect(branches).toBeEmpty()
-    })
-
-    test("should retrieve no version since it's the major one (.x case)", async () => {
-        // Arrange
-        spyOn(git, "fetch").mockImplementation(async () => {})
-        spyOn(git, "ls").mockImplementation(async () => ["v1.0.x", "v1.1.x", "v1.2.x", "v1.3.x", "v1.4.x", "v2.0.x", "v2.6.x"])
-
-        const context = getContext("v1.x")
-        const config = ensureDefault({
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-            targets: [{ from: "v[0-9]+(.{[0-9]+,x})?", to: "v[0-9]+(.{[0-9]+,x})?" }],
-        }, {})
-
-        // Act
-        const branches = await getBranches(context, config, new TestPlatformHandler())
-
-        // Assert
-        expect(branches).toBeEmpty()
+        expect(mergeables).toBeEmpty()
     })
 })
 
-describe("executeBackmerge", () => {
+describe("backmerge", () => {
     afterEach(() => mock.restore())
 
-    test("should fail to fetch remote", () => {
-        // Arrange
-        spyOn(git, "fetch").mockImplementation(() => { throw new Error("an error message") })
-
-        const context = getContext("main")
-        const config = ensureDefault({
-            baseUrl: "https://example.com",
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        }, {})
-
-        // Act
-        const matcher = expect(async () => await executeBackmerge(context, config, new TestPlatformHandler(), []))
-
-        // Assert
-        matcher.toThrowError("Failed to fetch or checkout released branch 'main'.")
-    })
-
-    test("should fail to checkout released branch", () => {
-        // Arrange
-        spyOn(git, "fetch").mockImplementation(async () => {})
-        spyOn(git, "checkout").mockImplementation(() => { throw new Error("an error message") })
-
-        const context = getContext("main")
-        const config = ensureDefault({
-            baseUrl: "https://example.com",
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        }, {})
-
-        // Act
-        const matcher = expect(async () => await executeBackmerge(context, config, new TestPlatformHandler(), []))
-
-        // Assert
-        matcher.toThrowError("Failed to fetch or checkout released branch 'main'.")
-    })
+    const context = getContext("main")
+    const release: Branch = { hash: "", name: "main" }
+    const branches: Branch[] = [{ hash: "", name: "staging" }]
 
     test("should fail to merge branch and create pull request", async () => {
         // Arrange
-        const has = async (): Promise<boolean> => false
         let called = false
-        const create = async (): Promise<void> => { called = true }
+        const handler = new TestPlatformHandler(async (): Promise<void> => { called = true }, async (): Promise<boolean> => false)
 
-        spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
         spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
 
-        const context = getContext("main")
-        const config = ensureDefault({
-            baseUrl: "https://example.com",
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        }, {})
+        const config = ensureDefault({ repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
 
         // Act
-        await executeBackmerge(context, config, new TestPlatformHandler(create, has), ["staging"])
+        await backmerge(context, config, handler, release, branches)
 
         // Assert
         expect(called).toBeTrue()
     })
 
-    test("should fail to merge branch and not create a pull request since it exists", async () => {
+    test("should fail to merge branch and not create a pull request since it exists", () => {
         // Arrange
-        const has = async (): Promise<boolean> => true
-        let called = false
-        const create = async (): Promise<void> => { called = true }
+        const handler = new TestPlatformHandler(async (): Promise<void> => { throw new Error("shouldn't be called") }, async (): Promise<boolean> => true)
 
-        spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
         spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
 
-        const context = getContext("main")
-        const config = ensureDefault({
-            baseUrl: "https://example.com",
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        }, {})
+        const config = ensureDefault({ repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
 
         // Act
-        await executeBackmerge(context, config, new TestPlatformHandler(create, has), ["staging"])
+        const matcher = expect(async () => await backmerge(context, config, handler, release, branches))
 
         // Assert
-        expect(called).toBeFalse()
+        matcher.not.toThrow()
     })
 
-    test("should fail to merge branch but not create pull request dry run", async () => {
+    test("should fail to merge branch but not create pull request dry run", () => {
         // Arrange
-        const has = async (): Promise<boolean> => false
-        let called = false
-        const create = async (): Promise<void> => { called = true }
+        const handler = new TestPlatformHandler(async (): Promise<void> => { throw new Error("shouldn't be called") }, async (): Promise<boolean> => false)
 
-        spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
         spyOn(git, "push").mockImplementation(() => { throw new Error("shouldn't be called") })
 
-        const context = getContext("main")
-        const config = ensureDefault({
-            baseUrl: "https://example.com",
-            dryRun: true,
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        }, {})
+        const config = ensureDefault({ dryRun: true, repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
 
         // Act
-        await executeBackmerge(context, config, new TestPlatformHandler(create, has), ["staging"])
+        const matcher = expect(async () => await backmerge(context, config, handler, release, branches))
 
         // Assert
-        expect(called).toBeFalse()
+        matcher.not.toThrow()
     })
 
     test("should fail to push branch and fail to create pull request", () => {
         // Arrange
-        const has = async (): Promise<boolean> => false
-        const create = async (): Promise<void> => { throw new Error("pull request error") }
+        const handler = new TestPlatformHandler(async (): Promise<void> => { throw new Error("pull request error") }, async (): Promise<boolean> => false)
 
-        spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(async () => {})
         spyOn(git, "push").mockImplementation(() => { throw new Error("an error message") })
 
-        const context = getContext("main")
-        const config = ensureDefault({
-            baseUrl: "https://example.com",
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        }, {})
+        const config = ensureDefault({ repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
 
         // Act
-        const matcher = expect(async () => await executeBackmerge(context, config, new TestPlatformHandler(create, has), ["staging"]))
+        const matcher = expect(async () => await backmerge(context, config, handler, release, branches))
 
         // Assert
         matcher.toThrowError("Failed to create pull request from 'main' to 'staging'.")
@@ -350,40 +219,23 @@ describe("executeBackmerge", () => {
 
     test("should succeed to merge and push a branch", async () => {
         // Arrange
-        const expectedURL = "https://test-user:some-token@github.com/kilianpaquier/semantic-release-backmerge.git"
+        const expectedUrl = "https://test-user:some-token@github.com/kilianpaquier/semantic-release-backmerge.git"
 
-        let fetchRemote = ""
-        let checkoutBranch = ""
-        let merge: { commit?: string, from?: string, to?: string } = {}
+        const checkouts: Branch[] = []
+        let merge: { commit?: string, from?: string } = {}
         let push: { branch?: string, dryRun?: boolean, remote?: string } = {}
-        spyOn(git, "fetch").mockImplementation(async (remote: string) => {
-            fetchRemote = remote
-        })
-        spyOn(git, "checkout").mockImplementation(async (branch: string) => {
-            checkoutBranch = branch
-        })
-        spyOn(git, "merge").mockImplementation(async (from: string, to: string, commit: string) => {
-            merge = { commit, from, to }
-        })
-        spyOn(git, "push").mockImplementation(async (remote: string, branch: string, dryRun?: boolean) => { 
-            push = { branch, dryRun, remote }
-        })
+        spyOn(git, "checkout").mockImplementation(async (branch: Branch) => { checkouts.push(branch) })
+        spyOn(git, "merge").mockImplementation(async (from: string, commit: string) => { merge = { commit, from } })
+        spyOn(git, "push").mockImplementation(async (remote: string, branch: string, dryRun?: boolean) => { push = { branch, dryRun, remote } })
 
-        const context = getContext("main")
-        const config = ensureDefault({
-            baseUrl: "https://example.com",
-            dryRun: true,
-            platform: Platform.GITHUB,
-            repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git",
-        }, { GITHUB_TOKEN: "some-token" })
+        const config = ensureDefault({ repositoryUrl: "git@github.com:kilianpaquier/semantic-release-backmerge.git" }, { GITHUB_TOKEN: "some-token" })
 
         // Act
-        await executeBackmerge(context, config, new TestPlatformHandler(), ["staging"])
+        await backmerge(context, config, new TestPlatformHandler(), release, branches)
 
         // Assert
-        expect(fetchRemote).toEqual(expectedURL)
-        expect(checkoutBranch).toEqual("main")
-        expect(merge).toEqual({ commit: "chore(release): merge branch main into staging [skip ci]", from: "main", to: "staging" })
-        expect(push).toEqual({ branch: "staging", dryRun: true, remote: expectedURL })
+        expect(checkouts).toEqual(branches)
+        expect(merge).toEqual({ commit: "chore(release): merge branch main into staging [skip ci]", from: "main" })
+        expect(push).toEqual({ branch: "staging", dryRun: false, remote: expectedUrl })
     })
 })

@@ -54,10 +54,12 @@ jobs:
         env:
           INPUT_MODE: ${{ inputs.mode }}
 
-  build:
-    name: Build
-    needs: version
-    uses: ./.github/workflows/build.yml
+  node:
+    name: Node
+    uses: ./.github/workflows/nodejs.yml
+    with:
+      build: true
+    secrets: inherit
 
   release:
     name: Release
@@ -70,7 +72,7 @@ jobs:
       id-token: write
     needs:
       - version
-      - build
+      - node
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/version

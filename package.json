@@ -41,7 +41,7 @@
     "@types/semver": "^7.5.8",
     "bun": "^1.1.33",
     "eslint": "^9.13.0",
-    "npm-check-updates": "^17.1.6",
+    "npm-check-updates": "^17.1.7",
     "typescript-eslint": "^8.11.0"
   },
   "peerDependencies": {
@@ -52,7 +52,7 @@
     "@semantic-release/error": "^4.0.0",
     "aggregate-error": "^5.0.0",
     "debug": "^4.3.7",
-    "execa": "^9.4.1",
+    "execa": "^9.5.0",
     "git-url-parse": "^15.0.0",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",

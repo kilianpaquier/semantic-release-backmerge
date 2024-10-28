@@ -1,3 +1,9 @@
+## [1.5.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.2...v1.5.3) (2024-10-28)
+
+### 🐛 Bug Fixes
+
+* typo in error message ([8c1a655](https://github.com/kilianpaquier/semantic-release-backmerge/commit/8c1a6558b52b3d7900e3306b0dc13a93a37d5a09))
+
 ## [1.5.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.1...v1.5.2) (2024-10-27)
 
 ### Chores

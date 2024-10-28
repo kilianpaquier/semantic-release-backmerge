@@ -59,7 +59,7 @@ describe("verifyConditions", () => {
         const matcher = expect(async () => await verifyConditions(config, context))
 
         // Assert
-        matcher.toThrowError("Failed to ensure git is spwanable by backmerge process.")
+        matcher.toThrowError("Failed to ensure git is spawnable by backmerge process.")
     })
 
     test("should fail with at least one invalid config field", () => {

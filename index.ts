@@ -33,7 +33,7 @@ export const verifyConditions = async (globalConfig: BackmergeConfig, context: V
         const stdout = await version(context.cwd, context.env);
         (context.logger as Logger).log(`Using git version: '${stdout}'.`)
     } catch (error) {
-        throw new SemanticReleaseError("Failed to ensure git is spwanable by backmerge process.", "EGITSPAWN", String(error))
+        throw new SemanticReleaseError("Failed to ensure git is spawnable by backmerge process.", "EGITSPAWN", String(error))
     }
 
     const config = ensureDefault(globalConfig, context.env)

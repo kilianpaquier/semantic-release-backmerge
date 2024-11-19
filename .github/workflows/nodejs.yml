@@ -74,12 +74,12 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun test --rerun-each 10 --coverage --coverage-reporter=lcov --coverage-dir=reports
       - if: ${{ ! startsWith(github.head_ref, 'dependabot') && ! startsWith(github.head_ref, 'renovate') }}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v4
         with:
           codecov_yml_path: .codecov.yml
           disable_search: true
           env_vars: OS
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           files: reports/lcov.info
           slug: ${{ github.repository }}
           token: ${{ secrets.CODECOV_TOKEN }}

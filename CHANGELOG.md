@@ -1,3 +1,11 @@
+## [1.5.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.3...v1.5.4) (2024-11-19)
+
+### ⚙️ Chores
+
+* **deps:** bump git-url-parse from 15.0.0 to 16.0.0 ([57c56ec](https://github.com/kilianpaquier/semantic-release-backmerge/commit/57c56ec1b9c3704ad3eccd2f5ebd5b9ee61a4034))
+* **deps:** bump minor dependencies ([29b443a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/29b443a31d7a33ecd5ff830c6ac6009725c41ba5))
+* **deps:** bump patch dependencies ([aad7396](https://github.com/kilianpaquier/semantic-release-backmerge/commit/aad73963617c50b7845d212a0cdb8df531035f43))
+
 ## [1.5.3](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.2...v1.5.3) (2024-10-28)
 
 ### 🐛 Bug Fixes

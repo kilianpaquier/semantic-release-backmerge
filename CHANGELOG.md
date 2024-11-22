@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.4...v1.6.0) (2024-11-22)
+
+### 🚀 Features
+
+* **auth:** implement SSH auth modificator (nothing special outside of adding `ssh://` if not provided) - fixes [#34](https://github.com/kilianpaquier/semantic-release-backmerge/issues/34) ([18f8421](https://github.com/kilianpaquier/semantic-release-backmerge/commit/18f8421e57de7e7b0cb01d45779e91a1c1cb02cc))
+
 ## [1.5.4](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.5.3...v1.5.4) (2024-11-19)
 
 ### ⚙️ Chores

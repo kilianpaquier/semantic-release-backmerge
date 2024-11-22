@@ -145,6 +145,7 @@ describe("backmerge", () => {
     afterEach(() => mock.restore())
 
     const repositoryUrl = "git@github.com:kilianpaquier/semantic-release-backmerge.git"
+    const expectedRepositoryUrl = "ssh://git@github.com:kilianpaquier/semantic-release-backmerge.git"
 
     const context = getContext("main")
     const release: Branch = { hash: "", name: "main" }
@@ -239,8 +240,6 @@ describe("backmerge", () => {
 
     test("should succeed to merge and push a branch", async () => {
         // Arrange
-        const expectedUrl = "https://test-user:some-token@github.com/kilianpaquier/semantic-release-backmerge.git"
-
         const checkouts: Branch[] = []
         const merge: { commit?: string, from?: string }[] = []
         const push: { branch?: string, dryRun?: boolean, remote?: string }[] = []
@@ -260,8 +259,8 @@ describe("backmerge", () => {
             { commit: "chore(release): merge branch main into develop [skip ci]", from: "main" }
         ])
         expect(push).toEqual([
-            { branch: "staging", dryRun: false, remote: expectedUrl },
-            { branch: "develop", dryRun: false, remote: expectedUrl }
+            { branch: "staging", dryRun: false, remote: expectedRepositoryUrl },
+            { branch: "develop", dryRun: false, remote: expectedRepositoryUrl }
         ])
     })
 })

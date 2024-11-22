@@ -26,17 +26,23 @@ const deblog = debug("semantic-release:backmerge")
  * @param user being the oauth prefix to use (specific depending on the current git platform).
  * @param token to use instead of present token in url.
  * 
- * @throws SemanticReleaseError in case the platform isn't an implemented platform or is not a platform at all.
+ * @throws an error in case the repositoryUrl is neither ssh, http or https
  * 
  * @returns the computed remote url with all modifications' done.
  */
 export const authModificator = (url: GitUrl, user: string, token: string): string => {
-    const proto = url.protocol === "http" ? "http" : "https"
-
+    const proto = url.protocols.length > 1 ? url.protocols[url.protocols.length - 1] : url.protocols[0]
     const origin = url.toString(proto)
-    // simple replace to add the authentication after toString
-    return origin.replace(`${proto}://${url.user}@`, `${proto}://`).
-        replace(`${proto}://`, `${proto}://${user}:${token}@`)
+    switch (proto) {
+        case "ssh":
+            return origin.startsWith(`${proto}://`) ? origin : origin.replace(`${url.user}@`, `${proto}://${url.user}@`)
+        case "http":
+        case "https":
+            return origin.replace(`${proto}://${url.user}@`, `${proto}://`).
+                replace(`${proto}://`, `${proto}://${user}:${token}@`)
+        default:
+            throw new Error(`Invalid repositoryUrl with protocol '${proto}', please open an issue for us to implement auth modification with this protocol.`)
+    }
 }
 
 /**

@@ -141,15 +141,14 @@ To avoid painful configurations, you may use the environments variables to autom
 
 ### Bitbucket (data center/server)
 
-| variable name     | description                                                         |
-| ----------------- | ------------------------------------------------------------------- |
-| `BITBUCKET_URL`   | Base URL to your bitbucket server                                   |
-| `BB_TOKEN`        | Bitbucket token to push backmerged branches or create pull requests |
-| `BITBUCKET_TOKEN` | Bitbucket token to push backmerged branches or create pull requests |
+| variable name                   | description                                                                                             |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `BITBUCKET_URL`                 | Base URL to your **Bitbucket** server                                                                   |
+| `BB_TOKEN` or `BITBUCKET_TOKEN` | **Bitbucket** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests |
 
 **Notes:** 
 
-- The Base URL name differs from [bitbucket (cloud)](#bitbucket-cloud) because the API endpoints to create pull request aren't the same.
+- The Base URL name differs from [Bitbucket (Cloud)](#bitbucket-cloud) because the API endpoints to create pull request aren't the same.
 - When `BITBUCKET_URL` is provided, you may omit the following configuration variables:
   - `baseUrl` is given this URL
   - `apiPathPrefix` is given by default `/rest/api/1.0`
@@ -160,15 +159,14 @@ To avoid painful configurations, you may use the environments variables to autom
 
 ### Bitbucket (cloud)
 
-| variable name         | description                                                         |
-| --------------------- | ------------------------------------------------------------------- |
-| `BITBUCKET_CLOUD_URL` | Base URL to your bitbucket cloud server                             |
-| `BB_TOKEN`            | Bitbucket token to push backmerged branches or create pull requests |
-| `BITBUCKET_TOKEN`     | Bitbucket token to push backmerged branches or create pull requests |
+| variable name                   | description                                                                                             |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `BITBUCKET_CLOUD_URL`           | Base URL to your **Bitbucket** cloud server                                                             |
+| `BB_TOKEN` or `BITBUCKET_TOKEN` | **Bitbucket** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests |
 
 **Notes:** 
 
-- The Base URL name differs from [bitbucket (data center/server)](#bitbucket-data-centerserver) because the API endpoints to create pull request aren't the same.
+- The Base URL name differs from [Bitbucket (Data Center/Server)](#bitbucket-data-centerserver) because the API endpoints to create pull request aren't the same.
 - When `BITBUCKET_CLOUD_URL` is provided, you may omit the following configuration variables:
   - `baseUrl` is given this URL
   - `apiPathPrefix` is given by default `/2.0`
@@ -179,10 +177,10 @@ To avoid painful configurations, you may use the environments variables to autom
 
 ### Gitea
 
-| variable name | description                                                     |
-| ------------- | --------------------------------------------------------------- |
-| `GITEA_URL`   | Base URL to your gitea server                                   |
-| `GITEA_TOKEN` | Gitea token to push backmerged branches or create pull requests |
+| variable name | description                                                                                     |
+| ------------- | ----------------------------------------------------------------------------------------------- |
+| `GITEA_URL`   | Base URL to your gitea server                                                                   |
+| `GITEA_TOKEN` | Gitea token to push backmerged branches (in case of HTTP(S) connection) or create pull requests |
 
 **Notes:** 
 
@@ -196,13 +194,10 @@ To avoid painful configurations, you may use the environments variables to autom
 
 ### Github
 
-| variable name    | description                                                                                                                                                                          |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `GH_URL`         | Base URL to your github server (you must provide it that case `apiPathPrefix` if it exists on your server)                                                                           |
-| `GITHUB_URL`     | Base URL to your github server (you must provide it that case `apiPathPrefix` if it exists on your server)                                                                           |
-| `GITHUB_API_URL` | Base URL to your github server (this variable already exists with [github actions](https://docs.github.com/fr/actions/learn-github-actions/variables#default-environment-variables)) |
-| `GH_TOKEN`       | Github token to push backmerged branches or create pull requests                                                                                                                     |
-| `GITHUB_TOKEN`   | Github token to push backmerged branches or create pull requests                                                                                                                     |
+| variable name                                | description                                                                                                                                                                                          |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GH_URL` or `GITHUB_URL` or `GITHUB_API_URL` | Base URL to your github server, note that `GITHUB_API_URL` already exists with [**GitHub** Actions](https://docs.github.com/fr/actions/learn-github-actions/variables#default-environment-variables) |
+| `GH_TOKEN` or `GITHUB_TOKEN`                 | **GitHub** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests                                                                                                 |
 
 **Notes:** 
 
@@ -216,13 +211,10 @@ To avoid painful configurations, you may use the environments variables to autom
 
 ### Gitlab
 
-| variable name   | description                                                                                                                                  |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GL_URL`        | Base URL to your gitlab server                                                                                                               |
-| `GITLAB_URL`    | Base URL to your gitlab server                                                                                                               |
-| `CI_SERVER_URL` | Base URL to your gitlab server (this variable already exists with [CICD](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)) |
-| `GL_TOKEN`      | Gitlab token to push backmerged branches or create pull requests (`api`, `read_repository` and `write_repository` scopes)                    |
-| `GITLAB_TOKEN`  | Gitlab token to push backmerged branches or create pull requests (`api`, `read_repository` and `write_repository` scopes)                    |
+| variable name                               | description                                                                                                                                                        |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GL_URL` or `GITLAB_URL` or `CI_SERVER_URL` | Base URL to your gitlab server, note that `CI_SERVER_URL` already exists with [**GitLab** CICD](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html) |
+| `GL_TOKEN` or `GITLAB_TOKEN`                | **GitLab** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests (`api`, `read_repository` and `write_repository` scopes)      |
 
 **Notes:** 
 

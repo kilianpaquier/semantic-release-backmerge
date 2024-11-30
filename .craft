@@ -1,8 +1,9 @@
 # Craft configuration file (https://github.com/kilianpaquier/craft)
 ---
-bot: dependabot
+bot: renovate
 ci:
   auth:
+    maintenance: github-token
     release: github-token
   name: github
   options:

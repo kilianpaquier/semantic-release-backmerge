@@ -8,8 +8,13 @@ on:
     inputs:
       dry_run:
         description: Run renovate in dry run mode.
-        type: boolean
-        default: false
+        type: choice
+        options:
+          - "null"
+          - extract
+          - lookup
+          - full
+        default: "null"
   schedule:
     - cron: "0 12 * * *"
 
@@ -20,12 +25,23 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      statuses: write
     steps:
       - uses: actions/checkout@v4
+      - id: log_level
+        run: |-
+          if [ "${RENOVATE_LOG_LEVEL}" != "" ]; then
+            echo "log_level=${RENOVATE_LOG_LEVEL}" >> $GITHUB_OUTPUT
+          else
+            echo "log_level=info" >> $GITHUB_OUTPUT
+          fi
+        env:
+          RENOVATE_LOG_LEVEL: ${{ vars.RENOVATE_LOG_LEVEL }}
       - uses: renovatebot/github-action@v41.0.6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
+          LOG_LEVEL: ${{ steps.log_level.outputs.log_level }}
           RENOVATE_AUTODISCOVER: "true"
           RENOVATE_AUTODISCOVER_FILTER: ${{ github.repository }}
           RENOVATE_DRY_RUN: ${{ inputs.dry_run }}

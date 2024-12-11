@@ -42,10 +42,8 @@
     "bun": "^1.1.38",
     "eslint": "^9.16.0",
     "npm-check-updates": "^17.1.11",
-    "typescript-eslint": "^8.18.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript-eslint": "^8.18.0",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@octokit/core": "^6.1.2",

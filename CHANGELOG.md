@@ -1,3 +1,9 @@
+## [1.6.2](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.1...v1.6.2) (2024-12-11)
+
+### Chores
+
+* **deps:** update dependency typescript to ^5.7.2 ([3b274c8](https://github.com/kilianpaquier/semantic-release-backmerge/commit/3b274c8051b1c8a0496fc46cb079a24146a5cae0))
+
 ## [1.6.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.0...v1.6.1) (2024-12-10)
 
 ### Chores

@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: Whether to only run renovate job in dry run mode or let renovate create pull requests.
+        description: Run renovate in dry run mode.
         type: boolean
         default: false
   schedule:

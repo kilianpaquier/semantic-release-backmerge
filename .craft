@@ -16,5 +16,4 @@ license: mit
 maintainers:
   - name: kilianpaquier
 no_chart: true
-no_makefile: true
 platform: github

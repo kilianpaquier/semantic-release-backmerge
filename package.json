@@ -31,18 +31,18 @@
     "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports"
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
+    "@eslint/js": "^9.19.0",
     "@types/bun": "latest",
     "@types/debug": "^4.1.12",
     "@types/eslint__js": "^8.42.3",
     "@types/git-url-parse": "^9.0.3",
-    "@types/lodash": "^4.17.14",
+    "@types/lodash": "^4.17.15",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
-    "bun": "^1.1.43",
-    "eslint": "^9.17.0",
-    "npm-check-updates": "^17.1.13",
-    "typescript-eslint": "^8.19.1",
+    "bun": "^1.2.1",
+    "eslint": "^9.19.0",
+    "npm-check-updates": "^17.1.14",
+    "typescript-eslint": "^8.22.0",
     "typescript": "^5.7.3"
   },
   "dependencies": {
@@ -55,7 +55,7 @@
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
     "semantic-release": "^24.2.1",
-    "semver": "^7.6.3",
+    "semver": "^7.7.0",
     "url-join": "^5.0.0"
   }
 }

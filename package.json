@@ -39,7 +39,7 @@
     "@types/lodash": "^4.17.15",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
-    "bun": "^1.2.1",
+    "bun": "^1.2.2",
     "eslint": "^9.19.0",
     "npm-check-updates": "^17.1.14",
     "typescript-eslint": "^8.22.0",

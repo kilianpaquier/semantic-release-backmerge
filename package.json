@@ -5,7 +5,7 @@
   "module": "dist/index.js",
   "type": "module",
   "version": "1.6.8",
-  "packageManager": "bun@1.1.45",
+  "packageManager": "bun@1.2.2",
   "files": [
     "CHANGELOG.md",
     "dist/*",
@@ -31,7 +31,7 @@
     "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports"
   },
   "devDependencies": {
-    "@eslint/js": "^9.19.0",
+    "@eslint/js": "^9.20.0",
     "@types/bun": "latest",
     "@types/debug": "^4.1.12",
     "@types/eslint__js": "^8.42.3",
@@ -40,9 +40,9 @@
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
     "bun": "^1.2.2",
-    "eslint": "^9.19.0",
+    "eslint": "^9.20.0",
     "npm-check-updates": "^17.1.14",
-    "typescript-eslint": "^8.22.0",
+    "typescript-eslint": "^8.23.0",
     "typescript": "^5.7.3"
   },
   "dependencies": {

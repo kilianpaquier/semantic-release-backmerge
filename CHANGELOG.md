@@ -1,3 +1,13 @@
+## [1.6.9](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.8...v1.6.9) (2025-02-09)
+
+### Chores
+
+* **deps:** update dependency bun to ^1.2.2 ([6817696](https://github.com/kilianpaquier/semantic-release-backmerge/commit/68176961e55d6fa15afbbea722a1a7701c1c2893))
+* **deps:** update js dependencies (non major) ([5d03a52](https://github.com/kilianpaquier/semantic-release-backmerge/commit/5d03a5201bf04759c654b8b073e1e56d473924f4))
+* **deps:** upgrade minor dependencies ([2f5c657](https://github.com/kilianpaquier/semantic-release-backmerge/commit/2f5c65734056ac6fedb3b95b5c1820d7a077aab6))
+* **deps:** upgrade patch dependencies ([68e3f56](https://github.com/kilianpaquier/semantic-release-backmerge/commit/68e3f564e4facb9a2546aa6858b8fb60c3211159))
+* **deps:** use range version for types/bun ([9d46393](https://github.com/kilianpaquier/semantic-release-backmerge/commit/9d4639353d330ffa85e9d90cfd1619483680fe85))
+
 ## [1.6.8](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.7...v1.6.8) (2025-01-16)
 
 ### Chores

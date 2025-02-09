@@ -5,7 +5,7 @@
   "module": "dist/index.js",
   "type": "module",
   "version": "1.6.8",
-  "packageManager": "bun@1.1.38",
+  "packageManager": "bun@1.1.45",
   "files": [
     "CHANGELOG.md",
     "dist/*",
@@ -55,7 +55,7 @@
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
     "semantic-release": "^24.2.1",
-    "semver": "^7.7.0",
+    "semver": "^7.7.1",
     "url-join": "^5.0.0"
   }
 }

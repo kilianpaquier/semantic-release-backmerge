@@ -1,3 +1,9 @@
+## [1.6.10](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.9...v1.6.10) (2025-02-21)
+
+### Chores
+
+* **deps:** update js dependencies (non major) ([42e5c3a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/42e5c3a69ebe37fede311681becd399d48278136))
+
 ## [1.6.9](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.8...v1.6.9) (2025-02-09)
 
 ### Chores

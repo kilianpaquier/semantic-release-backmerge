@@ -32,13 +32,13 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
         details: `[Base URL](${linkify("configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'baseUrl' configuration.`,
     }),
-    commit: (value: any) => ({
-        details: `[Commit](${linkify("configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
-        message: `Invalid 'commit' configuration.`,
-    }),
     checkHasPull: (value: any) => ({
         details: `[CheckHasPull](${linkify("configuration")}) must be a boolean. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'checkHasPull' configuration.`,
+    }),
+    commit: (value: any) => ({
+        details: `[Commit](${linkify("configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
+        message: `Invalid 'commit' configuration.`,
     }),
     // shouldn't happen since it comes from semantic-release config
     dryRun: () => ({

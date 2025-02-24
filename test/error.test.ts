@@ -82,8 +82,22 @@ describe("getConfigError", () => {
         // Assert
         expect(error.code).toEqual(code)
         expect(error.message).toContain("'commit'")
-        expect(error.details).toContain("must be a string")
+        expect(error.details).toContain("must be a non empty string")
         expect(error.details).toContain("true")
+    })
+
+    test("should have a valid checkHasPull error", () => {
+        // Arrange
+        const code = "EINVALIDCHECKHASPULL"
+
+        // Act
+        const error = getConfigError("checkHasPull", "a string")
+
+        // Assert
+        expect(error.code).toEqual(code)
+        expect(error.message).toContain("'checkHasPull'")
+        expect(error.details).toContain("must be a boolean")
+        expect(error.details).toContain("a string")
     })
 
     test("should have a valid title error", () => {

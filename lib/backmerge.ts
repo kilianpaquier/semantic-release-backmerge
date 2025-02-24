@@ -40,14 +40,14 @@ export interface Context {
 
 /**
  * filter removes from input branches the ones not appropriates for backmerging with the input released branch.
- * 
- * Not being appropriate is not being configured in the input targets list 
+ *
+ * Not being appropriate is not being configured in the input targets list
  * or being too old in case of maintenance branches.
- * 
+ *
  * @param release the released branch.
  * @param targets the input targets configurations in semantic-release-backmerge.
  * @param branches the list of branches potentially backmergeable.
- * 
+ *
  * @returns the list of branches to backmerge the released one into.
  */
 export const filter = (release: Branch, targets: Target[], branches: Branch[]): Branch[] => {
@@ -96,17 +96,17 @@ export const filter = (release: Branch, targets: Target[], branches: Branch[]): 
 
 /**
  * backmerge runs a backmerge from context.branch.name into all input branches.
- * 
- * For that, it runs a fetch of input remote, then a checkout of the released branch (to ensure all commits are up to date) 
+ *
+ * For that, it runs a fetch of input remote, then a checkout of the released branch (to ensure all commits are up to date)
  * and then merge released branch into each branch from branches.
- * 
+ *
  * If a merge fails, it tries to create a pull request.
- * 
+ *
  * @param context input context with the logger, released branch, etc.
  * @param config the semantic-release-backmerge plugin configuration.
  * @param handler the interface to handle current git platform API calls.
  * @param mergeables slice of branches to be backmerged with released branch commits.
- * 
+ *
  * @throws AggregateError of SemanticReleaseError(s) for each branch that couldn't be backmerged.
  */
 export const backmerge = async (context: Context, config: BackmergeConfig, handler: PlatformHandler, release: Branch, mergeables: Branch[]) => {

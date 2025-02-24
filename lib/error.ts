@@ -4,9 +4,9 @@ import { BackmergeConfig } from "./models/config"
 
 /**
  * linkify returns the right link for semantic-release-backmerge documentation according to input section.
- * 
+ *
  * @param section the documented section to link.
- * 
+ *
  * @returns the string link to documented section.
  */
 const linkify = (section: string): string => `https://github.com/kilianpaquier/semantic-release-backmerge/blob/master/README.md#${section}`
@@ -33,8 +33,12 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
         message: `Invalid 'baseUrl' configuration.`,
     }),
     commit: (value: any) => ({
-        details: `[Commit](${linkify("configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
+        details: `[Commit](${linkify("configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'commit' configuration.`,
+    }),
+    checkHasPull: (value: any) => ({
+        details: `[CheckHasPull](${linkify("configuration")}) must be a boolean. Provided value is ${JSON.stringify(value)}.`,
+        message: `Invalid 'checkHasPull' configuration.`,
     }),
     // shouldn't happen since it comes from semantic-release config
     dryRun: () => ({
@@ -64,10 +68,10 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
 
 /**
  * getConfigError returns the SemanticReleaseError associated to input configuration key.
- * 
+ *
  * @param key the configuration key to retrieve the associated error.
  * @param value the bad value associated to key.
- * 
+ *
  * @returns the SemanticReleaseError.
  */
 export const getConfigError = (key: keyof BackmergeConfig, value?: any): SemanticReleaseError => {

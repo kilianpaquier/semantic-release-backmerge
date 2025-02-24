@@ -9,18 +9,18 @@ import { token } from "./platform-handler"
 
 /**
  * stringNotEmpty validates that an input string is not empty.
- * 
+ *
  * @param value the string to validate.
- * 
+ *
  * @returns true if the input is not empty.
  */
 const stringNotEmpty = (value: string) => value !== ""
 
 /**
  * validTargets validates an input slice of targets (meaning both from and to fields are present)
- * 
+ *
  * @param targets the slice of targets to validate
- * 
+ *
  * @returns true if all targets are valid.
  */
 const validTargetsArray = (targets: Partial<Target>[]): boolean => targets.
@@ -31,20 +31,20 @@ const validTargetsArray = (targets: Partial<Target>[]): boolean => targets.
 
 /**
  * validPlatform validates an input string platform.
- * 
+ *
  * @param input the platform to validate.
- * 
+ *
  * @returns true if the input platform is valid.
  */
 const validPlatform = (input: Platform): boolean => Boolean(Object.values(Platform).find(platform => input === platform))
 
 /**
- * ensureDefaults takes as input a partial backmerge configuration, alongside environment variables 
+ * ensureDefaults takes as input a partial backmerge configuration, alongside environment variables
  * and ensure all its fields are valued with the default value or with the input value.
- * 
+ *
  * @param config the partial input configuration.
  * @param env the environment variables.
- * 
+ *
  * @returns the full configuration with default values if necessary.
  */
 export const ensureDefault = (config: Partial<BackmergeConfig>, env: Record<string, string>): BackmergeConfig => ({
@@ -62,7 +62,7 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env: Record<stri
 
 /**
  * verifyConfig validates an input full BackmergeConfig.
- * 
+ *
  * @param config the configuration to validate.
  */
 export const verifyConfig = (config: BackmergeConfig): void => {

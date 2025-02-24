@@ -17,15 +17,15 @@ const deblog = debug("semantic-release:backmerge")
 
 /**
  * verifyConditions is the exported function for semantic-release for verifyConditions lifecycle.
- * 
+ *
  * It verifies the input plugin configuration and throws an error if it's not valid.
- * 
+ *
  * @param globalConfig the semantic-release-backmerge plugin configuration.
  * @param context the semantic-release context.
- * 
+ *
  * @returns the validated configuration.
- * 
- * @throws an exception in case the input semantic-release-backmerge configuration is invalid 
+ *
+ * @throws an exception in case the input semantic-release-backmerge configuration is invalid
  * or missing inputs like tokens or URLs, etc.
  */
 export const verifyConditions = async (globalConfig: BackmergeConfig, context: VerifyConditionsContext): Promise<[BackmergeConfig, PlatformHandler]> => {
@@ -49,9 +49,9 @@ export const verifyConditions = async (globalConfig: BackmergeConfig, context: V
 
 /**
  * success is the function for semantic-release success lifecycle.
- * 
+ *
  * It executes the backmerge to all appropriate branches as the release was successful.
- * 
+ *
  * @param globalConfig the semantic-release-backmerge plugin configuration.
  * @param context the semantic-release context.
  */
@@ -86,7 +86,7 @@ export const success = async (globalConfig: BackmergeConfig, context: SuccessCon
         throw new SemanticReleaseError("Failed to retrieve released branch last commit hash. This shouldn't happen.", "ELISTREMOTE")
     }
 
-    // filter targets branch with the known remote branches 
+    // filter targets branch with the known remote branches
     // and with different business rules like vX.X, etc.
     const mergeables = filter(release, targets, branches)
     if (mergeables.length === 0) { // released branch is contained in branches

@@ -59,7 +59,7 @@ yarn install -D @kilianpaquier/semantic-release-backmerge
 
 When configured in [targets](#configuration), a provided branch (i.e `main`) can be backmerged in one or multiple others (i.e. `develop`) when a released in made with **semantic-release**.
 
-With the instance of `main` and `develop`, `develop` branch will be check'ed out locally and merged with `git merge <branch> --ff -m <commit_message>`. 
+With the instance of `main` and `develop`, `develop` branch will be check'ed out locally and merged with `git merge <branch> --ff -m <commit_message>`.
 It means that if git can avoid a merge commit, it will avoid it.
 
 In the event of conflicts (it may happen, production fixes could be made to `main` and features developped in `develop`), a pull request is created from `main` to `develop`.
@@ -121,7 +121,7 @@ Configuration `commit` and `title` are templated with `lodash` during backmerge 
 
 In some cases, you may want to maintain multiple maintenance branches associated to the same major version.
 
-In that case, **semantic-release-backmerge** is covering for you. When providing a `from` branch matching a maintenance branch, 
+In that case, **semantic-release-backmerge** is covering for you. When providing a `from` branch matching a maintenance branch,
 then backmerge will only allow backmerge into more recent maintenance branches (of the same major version):
 
 - `v1` cannot be backmerged
@@ -144,7 +144,7 @@ To avoid painful configurations, you may use the environments variables to autom
 | `BITBUCKET_URL`                 | Base URL to your **Bitbucket** server                                                                   |
 | `BB_TOKEN` or `BITBUCKET_TOKEN` | **Bitbucket** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests |
 
-**Notes:** 
+**Notes:**
 
 - The Base URL name differs from [Bitbucket (Cloud)](#bitbucket-cloud) because the API endpoints to create pull request aren't the same.
 - When `BITBUCKET_URL` is provided, you may omit the following configuration variables:
@@ -162,7 +162,7 @@ To avoid painful configurations, you may use the environments variables to autom
 | `BITBUCKET_CLOUD_URL`           | Base URL to your **Bitbucket** cloud server                                                             |
 | `BB_TOKEN` or `BITBUCKET_TOKEN` | **Bitbucket** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests |
 
-**Notes:** 
+**Notes:**
 
 - The Base URL name differs from [Bitbucket (Data Center/Server)](#bitbucket-data-centerserver) because the API endpoints to create pull request aren't the same.
 - When `BITBUCKET_CLOUD_URL` is provided, you may omit the following configuration variables:
@@ -180,7 +180,7 @@ To avoid painful configurations, you may use the environments variables to autom
 | `GITEA_URL`   | Base URL to your gitea server                                                                   |
 | `GITEA_TOKEN` | Gitea token to push backmerged branches (in case of HTTP(S) connection) or create pull requests |
 
-**Notes:** 
+**Notes:**
 
 - When `GITEA_URL` is provided, you may omit the following configuration variables:
   - `baseUrl` is given this URL
@@ -197,7 +197,7 @@ To avoid painful configurations, you may use the environments variables to autom
 | `GH_URL` or `GITHUB_URL` or `GITHUB_API_URL` | Base URL to your github server, note that `GITHUB_API_URL` already exists with [**GitHub** Actions](https://docs.github.com/fr/actions/learn-github-actions/variables#default-environment-variables) |
 | `GH_TOKEN` or `GITHUB_TOKEN`                 | **GitHub** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests                                                                                                 |
 
-**Notes:** 
+**Notes:**
 
 - When `GH_URL` or `GITHUB_URL` or `GITHUB_API_URL` is provided, you may omit the following configuration variables:
   - `baseUrl` is given this URL
@@ -214,7 +214,7 @@ To avoid painful configurations, you may use the environments variables to autom
 | `GL_URL` or `GITLAB_URL` or `CI_SERVER_URL` | Base URL to your gitlab server, note that `CI_SERVER_URL` already exists with [**GitLab** CICD](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html) |
 | `GL_TOKEN` or `GITLAB_TOKEN`                | **GitLab** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests (`api`, `read_repository` and `write_repository` scopes)      |
 
-**Notes:** 
+**Notes:**
 
 - When `GL_URL` or `GITLAB_URL` or `CI_SERVER_URL` is provided, you may omit the following configuration variables:
   - `baseUrl` is given this URL

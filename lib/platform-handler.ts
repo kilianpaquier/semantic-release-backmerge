@@ -14,10 +14,10 @@ const deblog = debug("semantic-release:backmerge")
 
 /**
  * isT checks whether input value is really a T or not.
- * 
+ *
  * @param input the input to verify.
  * @param fields the minimal fields to verify.
- * 
+ *
  * @returns truthy if input value is really a T.
  */
 const isT = <T>(input: any, ...fields: string[]): input is T => {
@@ -47,25 +47,25 @@ export interface Pull {
 export interface PlatformHandler {
     /**
      * createPull creates a pull request for given repository and owner with pull object.
-     * 
+     *
      * @param owner the repository owner.
      * @param repository the repository name.
      * @param pull the pull object to create.
-     * 
+     *
      * @throws an error in case the approprite API (depending on git platform) couldn't be called to create the pull request.
      */
     createPull(owner: string, repository: string, pull: Pull): Promise<void>
 
     /**
      * hasPull checks whether a pull request already exists between from and to with the right direction.
-     * 
+     *
      * @param owner the repository owner.
      * @param repository the repository name.
      * @param from the source branch of pull request.
      * @param to the target branch of pull request.
-     * 
+     *
      * @returns a boolean to indicate whether a pull request already exists or not.
-     * 
+     *
      * @throws an error in case the approprite API (depending on git platform) couldn't be called to list pull requests.
      */
     hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean>
@@ -371,15 +371,15 @@ class Gitlab implements PlatformHandler {
 
 /**
  * newPlatformHandler creates the appropriate PlatformHandler depending on input platform and baseUrl.
- * 
+ *
  * @param platform an input platform if configured manually.
  * @param baseUrl an input baseUrl if configured manually.
  * @param apiPathPrefix an input apiPathPrefix if configured manually.
  * @param token the token with minimal rights to read pull requests and create ones.
  * @param env the environment variables parse'd by semantic-release.
- * 
+ *
  * @returns the appropriate PlatformHandler.
- * 
+ *
  * @throws an error in case the input platform is invalid or not platform couldn't be guessed from environment variables.
  */
 export const newPlatformHandler = (platform: Platform, baseUrl: string, apiPathPrefix: string, token: string, env: Record<string, string>): PlatformHandler => {
@@ -433,9 +433,9 @@ export const newPlatformHandler = (platform: Platform, baseUrl: string, apiPathP
 
 /**
  * token returns the first available token depending on used CI from environment variables.
- * 
+ *
  * @param env the environment variables containing the appropriate token variable.
- * 
+ *
  * @returns the token.
  */
 export const token = (env: Record<string, string>): string =>

@@ -5,7 +5,7 @@
   "module": "dist/index.js",
   "type": "module",
   "version": "1.6.10",
-  "packageManager": "bun@1.2.2",
+  "packageManager": "bun@1.2.3",
   "files": [
     "CHANGELOG.md",
     "dist/*",
@@ -32,17 +32,17 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
-    "@types/bun": "^1.2.2",
+    "@types/bun": "^1.2.3",
     "@types/debug": "^4.1.12",
     "@types/eslint__js": "^8.42.3",
     "@types/git-url-parse": "^9.0.3",
     "@types/lodash": "^4.17.15",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
-    "bun": "^1.2.2",
+    "bun": "^1.2.3",
     "eslint": "^9.20.1",
-    "npm-check-updates": "^17.1.14",
-    "typescript-eslint": "^8.24.0",
+    "npm-check-updates": "^17.1.15",
+    "typescript-eslint": "^8.24.1",
     "typescript": "^5.7.3"
   },
   "dependencies": {
@@ -54,7 +54,7 @@
     "git-url-parse": "^16.0.1",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
-    "semantic-release": "^24.2.2",
+    "semantic-release": "^24.2.3",
     "semver": "^7.7.1",
     "url-join": "^5.0.0"
   }

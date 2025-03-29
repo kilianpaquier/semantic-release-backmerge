@@ -31,19 +31,19 @@
     "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports"
   },
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
-    "@types/bun": "^1.2.3",
+    "@eslint/js": "^9.23.0",
+    "@types/bun": "^1.2.5",
     "@types/debug": "^4.1.12",
     "@types/eslint__js": "^9.14.0",
     "@types/git-url-parse": "^9.0.3",
-    "@types/lodash": "^4.17.15",
+    "@types/lodash": "^4.17.16",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.5.8",
-    "bun": "^1.2.3",
-    "eslint": "^9.21.0",
-    "npm-check-updates": "^17.1.15",
-    "typescript-eslint": "^8.25.0",
-    "typescript": "^5.7.3"
+    "bun": "^1.2.5",
+    "eslint": "^9.23.0",
+    "npm-check-updates": "^17.1.16",
+    "typescript-eslint": "^8.27.0",
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "@octokit/core": "^6.1.4",

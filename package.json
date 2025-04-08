@@ -39,10 +39,10 @@
     "@types/lodash": "^4.17.16",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.7.0",
-    "bun": "^1.2.7",
+    "bun": "^1.2.8",
     "eslint": "^9.23.0",
     "npm-check-updates": "^17.1.16",
-    "typescript-eslint": "^8.28.0",
+    "typescript-eslint": "^8.29.0",
     "typescript": "^5.8.2"
   },
   "dependencies": {

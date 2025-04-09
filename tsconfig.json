@@ -1,26 +1,21 @@
 {
   "compilerOptions": {
-    // Enable latest features
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
-    // "jsx": "react-jsx",
     "allowJs": true,
 
-    // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "noEmit": true,
 
-    // Best practices
     "alwaysStrict": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "strict": true,
     "strictFunctionTypes": true,
 
-    // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
@@ -29,6 +24,6 @@
     "**/dist/**",
     "**/node_modules/**",
     "dist",
-    "node_modules",
+    "node_modules"
   ]
 }

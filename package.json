@@ -45,13 +45,13 @@
     "typescript-eslint": "^8.29.1"
   },
   "dependencies": {
-    "@octokit/core": "^6.1.4",
+    "@octokit/core": "^6.1.5",
     "@semantic-release/error": "^4.0.0",
     "aggregate-error": "^5.0.0",
     "debug": "^4.4.0",
     "execa": "^9.5.2",
-    "git-up": "^8.1.0",
-    "git-url-parse": "^16.0.1",
+    "git-up": "^8.1.1",
+    "git-url-parse": "^16.0.2",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
     "semantic-release": "^24.2.3",

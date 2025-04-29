@@ -1,3 +1,9 @@
+## [1.6.14](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.13...v1.6.14) (2025-04-29)
+
+### Chores
+
+* **deps:** upgrade dependencies ([f5ffef1](https://github.com/kilianpaquier/semantic-release-backmerge/commit/f5ffef1c9c84f24bb722478098e58263b8de0407))
+
 ## [1.6.13](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.12...v1.6.13) (2025-04-09)
 
 ### Chores

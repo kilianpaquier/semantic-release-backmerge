@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
-    "@types/bun": "^1.2.11",
+    "@types/bun": "^1.2.12",
     "@types/debug": "^4.1.12",
     "@types/git-up": "^8.1.0",
     "@types/git-url-parse": "^16.0.2",

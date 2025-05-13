@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
-    "@types/bun": "^1.2.11",
+    "@types/bun": "^1.2.13",
     "@types/debug": "^4.1.12",
     "@types/git-up": "^8.1.0",
     "@types/git-url-parse": "^16.0.2",
@@ -49,13 +49,13 @@
     "@semantic-release/error": "^4.0.0",
     "aggregate-error": "^5.0.0",
     "debug": "^4.4.0",
-    "execa": "^9.5.2",
+    "execa": "^9.5.3",
     "git-up": "^8.1.1",
     "git-url-parse": "^16.1.0",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
     "semantic-release": "^24.2.3",
-    "semver": "^7.7.1",
+    "semver": "^7.7.2",
     "url-join": "^5.0.0"
   }
 }

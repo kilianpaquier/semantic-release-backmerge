@@ -45,7 +45,7 @@
     "typescript-eslint": "^8.32.1"
   },
   "dependencies": {
-    "@octokit/core": "^6.1.5",
+    "@octokit/core": "^7.0.1",
     "@semantic-release/error": "^4.0.0",
     "aggregate-error": "^5.0.0",
     "debug": "^4.4.1",

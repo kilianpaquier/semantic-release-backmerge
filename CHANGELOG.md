@@ -1,3 +1,12 @@
+## [1.6.15](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.14...v1.6.15) (2025-05-27)
+
+### Chores
+
+* **deps-dev:** bump the minor group across 1 directory with 3 updates ([4d93bde](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4d93bded849d409b16e06f5518cc5bfc9617a69f))
+* **deps:** bump @octokit/core from 6.1.5 to 7.0.2 ([814df30](https://github.com/kilianpaquier/semantic-release-backmerge/commit/814df30328cb88b9b5983ce9ad726efe861a1d20))
+* **deps:** bump the patch group across 1 directory with 3 updates ([087eebe](https://github.com/kilianpaquier/semantic-release-backmerge/commit/087eebe095f29d335cc0bdd73cc12ecc77550bdc))
+* **deps:** bump the patch group across 1 directory with 5 updates ([d28f77b](https://github.com/kilianpaquier/semantic-release-backmerge/commit/d28f77b8087b7e785380c8965d07e170920aa27a))
+
 ## [1.6.14](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.13...v1.6.14) (2025-04-29)
 
 ### Chores

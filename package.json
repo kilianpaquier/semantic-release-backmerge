@@ -28,7 +28,7 @@
     "build": "bun build ./index.ts --outdir dist --target node --minify",
     "clean": "git clean -Xf ./*",
     "lint": "eslint --ignore-pattern 'dist/*'",
-    "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports"
+    "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports --reporter=junit --reporter-outfile=reports/node-test.xunit.xml"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",

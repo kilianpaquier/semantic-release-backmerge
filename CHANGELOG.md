@@ -1,3 +1,9 @@
+## [1.6.16](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.15...v1.6.16) (2025-06-01)
+
+### Chores
+
+* **deps:** bump the minor group with 2 updates ([fca9610](https://github.com/kilianpaquier/semantic-release-backmerge/commit/fca9610eda9b6b40ff8f5c115a9a5ba7f5007a2c))
+
 ## [1.6.15](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.14...v1.6.15) (2025-05-27)
 
 ### Chores

@@ -143,7 +143,20 @@ jobs:
       - run: mkdir -p reports/
       - run: |
           bun install --frozen-lockfile
-          bun test --rerun-each 10 --coverage --coverage-reporter=lcov --coverage-dir=reports
+          bun test --rerun-each 10 --coverage --coverage-reporter=lcov --coverage-dir=reports --reporter=junit --reporter-outfile="reports/node-test.xunit.xml"
+      - if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          codecov_yml_path: .codecov.yml
+          disable_search: true
+          env_vars: OS
+          fail_ci_if_error: false
+          files: reports/node-test.xunit.xml
+          flags: ${{ matrix.os }}
+          slug: ${{ github.repository }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+        env:
+          OS: ${{ matrix.os }}
       - uses: codecov/codecov-action@v5
         with:
           codecov_yml_path: .codecov.yml

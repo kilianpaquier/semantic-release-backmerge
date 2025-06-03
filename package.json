@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
-    "@types/bun": "^1.2.14",
+    "@types/bun": "^1.2.15",
     "@types/debug": "^4.1.12",
     "@types/git-up": "^8.1.0",
     "@types/git-url-parse": "^16.0.2",
@@ -42,7 +42,7 @@
     "eslint": "^9.27.0",
     "npm-check-updates": "^18.0.1",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.33.0"
+    "typescript-eslint": "^8.33.1"
   },
   "dependencies": {
     "@octokit/core": "^7.0.2",

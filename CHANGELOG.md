@@ -1,3 +1,10 @@
+## [1.6.17](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.16...v1.6.17) (2025-07-01)
+
+### Chores
+
+* **deps-dev:** bump the minor group across 1 directory with 3 updates ([4fefa94](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4fefa94b1fb7a70ac635a71dfec5323a0fe16343))
+* **deps:** bump the patch group across 1 directory with 3 updates ([1659de7](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1659de743b8a1703595d945ff3ece91cf09a1707))
+
 ## [1.6.16](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.15...v1.6.16) (2025-06-01)
 
 ### Chores

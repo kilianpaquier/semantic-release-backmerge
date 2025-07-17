@@ -1,3 +1,9 @@
+## [1.6.18](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.17...v1.6.18) (2025-07-17)
+
+### Chores
+
+* **deps:** bump the patch group across 1 directory with 4 updates ([fe9caa6](https://github.com/kilianpaquier/semantic-release-backmerge/commit/fe9caa6296cb350f4ed7ff252c4f740e72df2a4b))
+
 ## [1.6.17](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.16...v1.6.17) (2025-07-01)
 
 ### Chores

@@ -61,10 +61,6 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: package.json
-      - uses: actions/setup-node@v4
-        with:
-          cache: bun
-          node-version: lts/*
       - run: bun audit
 
   node-lint:

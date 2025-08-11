@@ -1,4 +1,4 @@
-import { Branch, checkout, fetch, ls, version } from "./lib/git"
+import { Branch, authModificator, checkout, fetch, ls, version } from "./lib/git"
 import { Logger, backmerge, filter } from "./lib/backmerge"
 import { PlatformHandler, newPlatformHandler } from "./lib/platform-handler"
 import { SuccessContext, VerifyConditionsContext } from 'semantic-release'
@@ -6,6 +6,7 @@ import { ensureDefault, verifyConfig } from "./lib/verify-config"
 
 import SemanticReleaseError from "@semantic-release/error"
 import debug from "debug"
+import parse from "git-url-parse"
 
 import { BackmergeConfig } from "./lib/models/config"
 
@@ -70,11 +71,14 @@ export const success = async (globalConfig: BackmergeConfig, context: SuccessCon
     // fetch remote and retrieve all remote branches
     const branches: Branch[] = []
     try {
+        const url = parse(config.repositoryUrl)
+        const authRemote = authModificator(url, handler.gitUser(), config.token)
+
         // ensure at any time and any moment that the fetch'ed remote url is the same as there
         // https://github.com/semantic-release/git/blob/master/lib/prepare.js#L69
         // it's to ensure that the commit done during @semantic-release/git is backmerged alongside the other commits
-        await fetch(config.repositoryUrl, context.cwd, context.env)
-        branches.push(...await ls(config.repositoryUrl, context.cwd, context.env))
+        await fetch(authRemote, context.cwd, context.env)
+        branches.push(...await ls(authRemote, context.cwd, context.env))
     } catch (error) {
         throw new SemanticReleaseError("Failed to fetch git remote or list all branches.", "EFECTHLISTREMOTE", String(error))
     }

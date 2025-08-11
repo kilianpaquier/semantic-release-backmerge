@@ -109,6 +109,7 @@ describe("success", () => {
     afterEach(() => mock.restore())
 
     const context = getContext("main")
+    const repositoryUrl = "https://github.com/kilianpaquier/semantic-release-backmerge.git"
 
     test("should fail with invalid configuration", () => {
         // Arrange
@@ -128,7 +129,7 @@ describe("success", () => {
         spyOn(index, "verifyConditions").mockImplementation(async (config: BackmergeConfig) => [config, new TestPlatformHandler()])
         spyOn(git, "fetch").mockImplementation(async () => { throw new Error("shouldn't be called") })
 
-        const config = ensureDefault({ targets: [{ from: "staging", to: "develop" }] }, {})
+        const config = ensureDefault({ repositoryUrl, targets: [{ from: "staging", to: "develop" }] }, {})
 
         // Act
         const matcher = expect(async () => await success(config, context))
@@ -142,7 +143,7 @@ describe("success", () => {
         spyOn(index, "verifyConditions").mockImplementation(async (config: BackmergeConfig) => [config, new TestPlatformHandler()])
         spyOn(git, "fetch").mockImplementation(async () => { throw new Error("an error message") })
 
-        const config = ensureDefault({ targets: [{ from: "main", to: "staging" }] }, {})
+        const config = ensureDefault({ repositoryUrl, targets: [{ from: "main", to: "staging" }] }, {})
 
         // Act
         const matcher = expect(async () => await success(config, context))
@@ -157,7 +158,7 @@ describe("success", () => {
         spyOn(git, "fetch").mockImplementation(async () => {})
         spyOn(git, "ls").mockImplementation(async () => { throw new Error("an error message") })
 
-        const config = ensureDefault({ targets: [{ from: "main", to: "staging" }] }, {})
+        const config = ensureDefault({ repositoryUrl, targets: [{ from: "main", to: "staging" }] }, {})
 
         // Act
         const matcher = expect(async () => await success(config, context))
@@ -173,7 +174,7 @@ describe("success", () => {
         spyOn(git, "ls").mockImplementation(async () => [{ hash: "", name: "staging" }])
         spyOn(git, "checkout").mockImplementation(async () => { throw new Error("an error message") })
 
-        const config = ensureDefault({ targets: [{ from: "main", to: "staging" }] }, {})
+        const config = ensureDefault({ repositoryUrl, targets: [{ from: "main", to: "staging" }] }, {})
 
         // Act
         const matcher = expect(async () => await success(config, context))
@@ -190,7 +191,7 @@ describe("success", () => {
         spyOn(git, "ls").mockImplementation(async () => [{ hash: "", name: "main" }])
         spyOn(git, "checkout").mockImplementation(async () => { throw new Error("shouldn't be called") })
 
-        const config = ensureDefault({ targets: [{ from: "main", to: "staging" }] }, {})
+        const config = ensureDefault({ repositoryUrl, targets: [{ from: "main", to: "staging" }] }, {})
 
         // Act
         const matcher = expect(async () => await success(config, context))
@@ -207,7 +208,7 @@ describe("success", () => {
         spyOn(git, "ls").mockImplementation(async () => [{ hash: "", name: "main" }])
         spyOn(git, "checkout").mockImplementation(async () => { throw new Error("an error message") })
 
-        const config = ensureDefault({ targets: [{ from: "main", to: "staging" }] }, {})
+        const config = ensureDefault({ repositoryUrl, targets: [{ from: "main", to: "staging" }] }, {})
 
         // Act
         const matcher = expect(async () => await success(config, context))
@@ -225,7 +226,7 @@ describe("success", () => {
         spyOn(git, "ls").mockImplementation(async () => [{ hash: "", name: "main" }])
         spyOn(git, "checkout").mockImplementation(async () => {})
 
-        const config = ensureDefault({ targets: [{ from: "main", to: "staging" }] }, {})
+        const config = ensureDefault({ repositoryUrl,  targets: [{ from: "main", to: "staging" }] }, {})
 
         // Act
         const matcher = expect(async () => await success(config, context))
@@ -243,7 +244,7 @@ describe("success", () => {
         spyOn(git, "ls").mockImplementation(async () => [{ hash: "", name: "main" }])
         spyOn(git, "checkout").mockImplementation(async () => {})
 
-        const config = ensureDefault({ targets: [{ from: "main", to: "staging" }] }, {})
+        const config = ensureDefault({ repositoryUrl, targets: [{ from: "main", to: "staging" }] }, {})
 
         // Act
         const matcher = expect(async () => await success(config, context))

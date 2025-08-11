@@ -1,3 +1,13 @@
+## [1.6.19](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.18...v1.6.19) (2025-08-11)
+
+### Bug Fixes
+
+* **git:** fetch and list branch authenticated (handle private repositories as such) - fixes [#87](https://github.com/kilianpaquier/semantic-release-backmerge/issues/87) ([9ca8a32](https://github.com/kilianpaquier/semantic-release-backmerge/commit/9ca8a3227cbd04fa54091067178ffca3d8448da6))
+
+### Chores
+
+* **deps:** upgrade dependencies ([d689e6c](https://github.com/kilianpaquier/semantic-release-backmerge/commit/d689e6cc1de6e59fae9f8300ec07455a6332ff53))
+
 ## [1.6.18](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.17...v1.6.18) (2025-07-17)
 
 ### Chores

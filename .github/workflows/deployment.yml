@@ -176,7 +176,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ needs.run-workflow.outputs.ref_name }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: build
           path: dist

@@ -42,7 +42,7 @@
     "eslint": "^9.33.0",
     "npm-check-updates": "^18.0.2",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.39.0"
+    "typescript-eslint": "^8.40.0"
   },
   "dependencies": {
     "@octokit/core": "^7.0.3",

@@ -31,7 +31,7 @@
     "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports --reporter=junit --reporter-outfile=reports/node-test.xunit.xml"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
+    "@eslint/js": "^9.34.0",
     "@types/bun": "^1.2.20",
     "@types/debug": "^4.1.12",
     "@types/git-up": "^8.1.0",
@@ -39,10 +39,10 @@
     "@types/lodash": "^4.17.20",
     "@types/semantic-release__error": "^3.0.3",
     "@types/semver": "^7.7.0",
-    "eslint": "^9.33.0",
+    "eslint": "^9.34.0",
     "npm-check-updates": "^18.0.2",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.39.0"
+    "typescript-eslint": "^8.40.0"
   },
   "dependencies": {
     "@octokit/core": "^7.0.3",

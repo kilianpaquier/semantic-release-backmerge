@@ -4,7 +4,10 @@
   <img alt="GitHub Release" src="https://img.shields.io/github/v/release/kilianpaquier/semantic-release-backmerge?include_prereleases&sort=semver&style=for-the-badge">
   <img alt="GitHub Issues" src="https://img.shields.io/github/issues-raw/kilianpaquier/semantic-release-backmerge?style=for-the-badge">
   <img alt="GitHub License" src="https://img.shields.io/github/license/kilianpaquier/semantic-release-backmerge?style=for-the-badge">
-  <img alt="Coverage" src="https://img.shields.io/codecov/c/github/kilianpaquier/semantic-release-backmerge/main?style=for-the-badge">
+  <img alt="GitHub Actions" src="https://img.shields.io/github/actions/workflow/status/kilianpaquier/semantic-release-backmerge/integration.yml?style=for-the-badge">
+  <img alt="Coverage" src="https://img.shields.io/codecov/c/github/kilianpaquier/semantic-release-backmerge?style=for-the-badge">
+  <img alt="NPM Downloads" src="https://img.shields.io/npm/d18m/%40kilianpaquier%2Fsemantic-release-backmerge?style=for-the-badge">
+  <img alt="OpenSSF Scorecard" src="https://img.shields.io/ossf-scorecard/github.com/kilianpaquier/semantic-release-backmerge?label=OpenSSF+Scorecard&style=for-the-badge">
 </p>
 
 ---

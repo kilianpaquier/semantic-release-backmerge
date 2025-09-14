@@ -1,3 +1,11 @@
+## [1.6.20](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.19...v1.6.20) (2025-09-14)
+
+### Chores
+
+* **deps:** pin all dependencies ([3e78caa](https://github.com/kilianpaquier/semantic-release-backmerge/commit/3e78caaf0901010327dec809e22fcf4d058640be))
+* **deps:** upgrade dependencies minor ([54e3a95](https://github.com/kilianpaquier/semantic-release-backmerge/commit/54e3a95fd196dc480cdf7344767baa04d96fe6ec))
+* **deps:** upgrade dependencies patch ([b2c09df](https://github.com/kilianpaquier/semantic-release-backmerge/commit/b2c09df2b24bb5df564d7c65a8b96db7d1cd3c6c))
+
 ## [1.6.19](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.18...v1.6.19) (2025-08-11)
 
 ### Bug Fixes

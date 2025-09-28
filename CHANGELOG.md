@@ -1,3 +1,11 @@
+## [1.6.21](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.20...v1.6.21) (2025-09-28)
+
+### Chores
+
+* **deps-dev:** bump @types/bun from 1.2.21 to 1.2.22 ([ef0627d](https://github.com/kilianpaquier/semantic-release-backmerge/commit/ef0627d2292aa97b8cfb5a8d263b89eb32061cee))
+* **deps-dev:** bump the minor group across 1 directory with 4 updates ([261a98a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/261a98a6397e7fc61c401ed1b399204b8eef0a05))
+* **deps:** bump @octokit/core from 7.0.3 to 7.0.4 ([9c0009d](https://github.com/kilianpaquier/semantic-release-backmerge/commit/9c0009db04dc7ad17c7ce9c85f23c1a3821228cb))
+
 ## [1.6.20](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.19...v1.6.20) (2025-09-14)
 
 ### Chores

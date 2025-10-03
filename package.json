@@ -54,7 +54,7 @@
     "git-url-parse": "16.1.0",
     "lodash": "4.17.21",
     "node-fetch": "3.3.2",
-    "semantic-release": "24.2.8",
+    "semantic-release": "24.2.9",
     "semver": "7.7.2",
     "url-join": "5.0.0"
   }

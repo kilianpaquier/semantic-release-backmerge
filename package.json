@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.36.0",
-    "@types/bun": "1.2.22",
+    "@types/bun": "1.2.23",
     "@types/debug": "4.1.12",
     "@types/git-up": "8.1.0",
     "@types/git-url-parse": "16.0.2",
@@ -41,11 +41,11 @@
     "@types/semver": "7.7.1",
     "eslint": "9.36.0",
     "npm-check-updates": "18.3.0",
-    "typescript": "5.9.2",
+    "typescript": "5.9.3",
     "typescript-eslint": "8.44.1"
   },
   "dependencies": {
-    "@octokit/core": "7.0.4",
+    "@octokit/core": "7.0.5",
     "@semantic-release/error": "4.0.0",
     "aggregate-error": "5.0.0",
     "debug": "4.4.3",
@@ -54,7 +54,7 @@
     "git-url-parse": "16.1.0",
     "lodash": "4.17.21",
     "node-fetch": "3.3.2",
-    "semantic-release": "24.2.8",
+    "semantic-release": "24.2.9",
     "semver": "7.7.2",
     "url-join": "5.0.0"
   }

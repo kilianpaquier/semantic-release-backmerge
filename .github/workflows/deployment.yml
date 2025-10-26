@@ -53,7 +53,6 @@ jobs:
             if (!latest) {
               throw new Error(`No '${process.env.WORKFLOW_ID}' workflow runs found on ref name '${process.env.GITHUB_REF_NAME}'`)
             }
-            console.log(latest)
             return latest.conclusion
         env:
           WORKFLOW_ID: integration.yml
@@ -87,11 +86,11 @@ jobs:
           fetch-depth: 0
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
-        uses: cycjimmy/semantic-release-action@ba330626c4750c19d8299de843f05c7aa5574f62 # v5.0.2
+        uses: cycjimmy/semantic-release-action@9cc899c47e6841430bbaedb43de1560a568dfd16 # v5.0.0
         with:
           dry_run: true
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release depName=semantic-release
-          semantic_version: v24.2.7
+          semantic_version: v25.0.1
           extra_plugins: |-
             @semantic-release/changelog
             @semantic-release/commit-analyzer
@@ -191,11 +190,11 @@ jobs:
           path: dist
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
-        uses: cycjimmy/semantic-release-action@ba330626c4750c19d8299de843f05c7aa5574f62 # v5.0.2
+        uses: cycjimmy/semantic-release-action@9cc899c47e6841430bbaedb43de1560a568dfd16 # v5.0.0
         with:
           dry_run: ${{ inputs.release != 'release' }}
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release depName=semantic-release
-          semantic_version: v24.2.7
+          semantic_version: v25.0.1
           extra_plugins: |-
             @semantic-release/changelog
             @semantic-release/commit-analyzer

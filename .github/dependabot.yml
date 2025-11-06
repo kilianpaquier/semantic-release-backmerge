@@ -11,6 +11,9 @@ updates:
 
   - package-ecosystem: bun
     directory: /
+    labels:
+      - dependabot
+      - dependencies
     schedule:
       interval: daily
       time: "12:00"

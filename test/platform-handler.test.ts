@@ -103,7 +103,7 @@ describe("gitUser", () => {
         expect(handler.gitUser()).toEqual("gitea-token")
     })
 
-    test("should guess github platform", () => {
+    describe("should guess github platform", () => {
         type record = Record<string, string>
 
         const envs = ["GH_URL", "GITHUB_URL", "GITHUB_API_URL"]
@@ -122,7 +122,7 @@ describe("gitUser", () => {
         }
     })
 
-    test("should guess gitlab platform", () => {
+    describe("should guess gitlab platform", () => {
         type record = Record<string, string>
 
         const envs = ["GL_URL", "GITLAB_URL", "CI_SERVER_URL"]
@@ -153,7 +153,7 @@ describe("gitUser", () => {
 describe("token", () => {
     type record = Record<string, string>
 
-    test("should read token from environment variables", () => {
+    describe("should read token from environment variables", () => {
         const envs = ["BB_TOKEN", "BITBUCKET_TOKEN", "GITEA_TOKEN", "GH_TOKEN", "GITHUB_TOKEN", "GL_TOKEN", "GITLAB_TOKEN"]
         for (const envvar of envs) {
             test(`should read token from ${envvar}`, () => {
@@ -196,7 +196,7 @@ describe("hasPull", () => {
         matcher.toThrowError("some error message")
     }
 
-    test("should throw error on invalid pull requests response", () => {
+    describe("should throw error on invalid pull requests response", () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should throw error on invalid ${platform} pull requests response`, () => {
@@ -223,7 +223,7 @@ describe("hasPull", () => {
         }
     })
 
-    test("should throw error while checking pull request", async () => {
+    describe("should throw error while checking pull request", async () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITEA, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should throw error while checking ${platform} pull request`, () => {
@@ -238,7 +238,7 @@ describe("hasPull", () => {
         }
     })
 
-    test("should fail to check pull request", async () => {
+    describe("should fail to check pull request", async () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should fail to check ${platform} pull request`, () => {
@@ -398,7 +398,7 @@ describe("createPull", () => {
         matcher.toThrowError("some error message")
     }
 
-    test("should throw error on pull request creation", async () => {
+    describe("should throw error on pull request creation", async () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITEA, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should throw error on ${platform} pull request creation`, () => {
@@ -413,7 +413,7 @@ describe("createPull", () => {
         }
     })
 
-    test("should fail to create pull request", async () => {
+    describe("should fail to create pull request", async () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITEA, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should fail to create ${platform} pull request`, () => {

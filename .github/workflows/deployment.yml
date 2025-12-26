@@ -67,6 +67,7 @@ jobs:
     name: Version
     runs-on: ubuntu-latest
     needs: run-workflow
+    environment: release
     outputs:
       version: ${{ steps.version.outputs.version }}
     permissions:

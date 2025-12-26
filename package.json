@@ -45,17 +45,17 @@
     "typescript-eslint": "8.46.3"
   },
   "dependencies": {
-    "@octokit/core": "7.0.5",
+    "@octokit/core": "7.0.6",
     "@semantic-release/error": "4.0.0",
     "aggregate-error": "5.0.0",
     "debug": "4.4.3",
-    "execa": "9.6.0",
+    "execa": "9.6.1",
     "git-up": "8.1.1",
     "git-url-parse": "16.1.0",
     "lodash": "4.17.21",
     "node-fetch": "3.3.2",
     "semantic-release": "24.2.9",
-    "semver": "7.7.2",
+    "semver": "7.7.3",
     "url-join": "5.0.0"
   }
 }

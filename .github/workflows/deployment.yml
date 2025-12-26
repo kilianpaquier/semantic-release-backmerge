@@ -31,7 +31,7 @@ jobs:
     steps:
       # https://docs.stepsecurity.io/harden-runner/workflow-runs
       # https://github.com/marketplace/actions/harden-runner
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+      - uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
           disable-sudo-and-containers: true
           egress-policy: audit
@@ -77,20 +77,20 @@ jobs:
     steps:
       # https://docs.stepsecurity.io/harden-runner/workflow-runs
       # https://github.com/marketplace/actions/harden-runner
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+      - uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
           disable-sudo-and-containers: true
           egress-policy: audit
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
-        uses: cycjimmy/semantic-release-action@9cc899c47e6841430bbaedb43de1560a568dfd16 # v5.0.0
+        uses: cycjimmy/semantic-release-action@b12c8f6015dc215fe37bc154d4ad456dd3833c90 # v6.0.0
         with:
           dry_run: true
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release depName=semantic-release
-          semantic_version: v25.0.1
+          semantic_version: v25.0.2
           extra_plugins: |-
             @semantic-release/changelog
             @semantic-release/commit-analyzer
@@ -102,7 +102,6 @@ jobs:
             @semantic-release/npm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - id: version
         run: |-
           if [ -n "$SEMREL_INFO_NEXT_VERSION" ]; then
@@ -133,11 +132,11 @@ jobs:
     steps:
       # https://docs.stepsecurity.io/harden-runner/workflow-runs
       # https://github.com/marketplace/actions/harden-runner
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+      - uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
           disable-sudo-and-containers: true
           egress-policy: audit
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       # https://github.com/marketplace/actions/setup-bun
       - uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
         with:
@@ -154,7 +153,7 @@ jobs:
           path: ${{ matrix.directory }}/dist
           retention-days: 1
       - if: ${{ !endsWith(matrix.artifact, '-pages') }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: ${{ matrix.artifact }}
           path: ${{ matrix.directory }}/dist
@@ -177,24 +176,24 @@ jobs:
     steps:
       # https://docs.stepsecurity.io/harden-runner/workflow-runs
       # https://github.com/marketplace/actions/harden-runner
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+      - uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
           disable-sudo-and-containers: true
           egress-policy: audit
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
-      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           name: build
           path: dist
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
-        uses: cycjimmy/semantic-release-action@9cc899c47e6841430bbaedb43de1560a568dfd16 # v5.0.0
+        uses: cycjimmy/semantic-release-action@b12c8f6015dc215fe37bc154d4ad456dd3833c90 # v6.0.0
         with:
           dry_run: ${{ inputs.release != 'release' }}
           # renovate: datasource=github-tags packageName=semantic-release/semantic-release depName=semantic-release
-          semantic_version: v25.0.1
+          semantic_version: v25.0.2
           extra_plugins: |-
             @semantic-release/changelog
             @semantic-release/commit-analyzer
@@ -206,7 +205,6 @@ jobs:
             @semantic-release/npm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - id: environment_url
         if: ${{ inputs.release == 'release' && steps.semrel_version.outputs.new_release_published == 'true' }}
         run: |-

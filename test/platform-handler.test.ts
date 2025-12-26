@@ -21,13 +21,28 @@ export class TestPlatformHandler implements PlatformHandler {
     }
 
     hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
-       return this.has!(owner, repository, from, to)
+        return this.has!(owner, repository, from, to)
     }
 
     gitUser(): string {
         return "test-user"
     }
 }
+
+const bunfetch = (wrap: (input: string | URL | Request, init?: BunFetchRequestInit) => Promise<Response>) => {
+    const ffetch: typeof fetch = async (input: string | URL | Request, init?: BunFetchRequestInit): Promise<Response> => wrap(input, init)
+    ffetch.preconnect = () => { }
+    spyOn(global, "fetch").mockImplementationOnce(ffetch)
+}
+
+const bunresponse = (data: any, ok = true): Promise<Response> =>
+    // @ts-expect-error because fetch signature is too complex, we only need a small part
+    Promise.resolve({
+        json: () => Promise.resolve(data),
+        ok,
+        text: () => Promise.resolve(JSON.stringify(data))
+    })
+
 
 describe("gitUser", () => {
     test("should create bitbucket platform manually", () => {
@@ -202,15 +217,7 @@ describe("hasPull", () => {
             test(`should throw error on invalid ${platform} pull requests response`, () => {
                 // Arrange
                 const json = { invalid: true, text: "some text" }
-                spyOn(global, "fetch").mockImplementation(async (): Promise<Response> => {
-                    const response = {
-                        json: () => json,
-                        ok: true,
-                        text: () => JSON.stringify(json)
-                    }
-                    // @ts-expect-error because fetch signature is too complex, we only need a small part
-                    return Promise.resolve(response)
-                })
+                bunfetch(() => bunresponse(json))
 
                 const handler = newPlatformHandler(platform, "baseURL", "prefix", "some-token", {})
 
@@ -223,14 +230,12 @@ describe("hasPull", () => {
         }
     })
 
-    describe("should throw error while checking pull request", async () => {
+    describe("should throw error while checking pull request", () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITEA, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should throw error while checking ${platform} pull request`, () => {
                 // Arrange
-                spyOn(global, "fetch").mockImplementation(async (): Promise<Response> => {
-                    throw new Error("some error message")
-                })
+                bunfetch(() => { throw new Error("some error message") })
 
                 // Act & Assert
                 failure(platform)
@@ -238,15 +243,12 @@ describe("hasPull", () => {
         }
     })
 
-    describe("should fail to check pull request", async () => {
+    describe("should fail to check pull request", () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should fail to check ${platform} pull request`, () => {
                 // Arrange
-                spyOn(global, "fetch").mockImplementation(async (): Promise<Response> =>
-                    // @ts-expect-error because fetch signature is too complex, we only need a small part
-                    Promise.resolve({ ok: false, text: () => "some error message" })
-                )
+                bunfetch(() => bunresponse("some error message", false))
 
                 // Act & Assert
                 failure(platform)
@@ -261,25 +263,19 @@ describe("hasPull", () => {
         const expectedSecondPage = expectedUrl("state=OPEN&at=refs/heads/main&start=1&limit=100") // start is 1 since mock only return one element
 
         const pages: string[] = []
-        let pagination = false
-        spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request): Promise<Response> => {
+        bunfetch((input): Promise<Response> => {
             pages.push(input as string)
-            const dest = pagination ? "refs/heads/develop" : "refs/heads/staging" // should stop paging at second page
-            const response = {
-                json: () => ({
-                    isLastPage: false, // ensure paging is stopped when we find the right destination
-                    values: [
-                        {
-                            fromRef: { id: "refs/heads/main" },
-                            toRef: { id: dest }
-                        },
-                    ],
-                }),
-                ok: true,
-            }
-            pagination = true
-            // @ts-expect-error because fetch signature is too complex, we only need a small part
-            return Promise.resolve(response)
+            return bunresponse({
+                isLastPage: false, // ensure paging is stopped when we find the right destination
+                values: [{ fromRef: { id: "refs/heads/main" }, toRef: { id: "refs/heads/staging" } }]
+            })
+        })
+        bunfetch((input): Promise<Response> => {
+            pages.push(input as string)
+            return bunresponse({
+                isLastPage: false, // ensure paging is stopped when we find the right destination
+                values: [{ fromRef: { id: "refs/heads/main" }, toRef: { id: "refs/heads/develop" } }]
+            })
         })
 
         const handler = newPlatformHandler(Platform.BITBUCKET, "baseURL", "prefix", "some-token", {})
@@ -296,28 +292,22 @@ describe("hasPull", () => {
         // Arrange
         const expectedUrl = (query: string) => `baseURL/prefix/repositories/owner/repository/pullrequests?${query}`
         const expectedFirstPage = expectedUrl("state=OPEN")
-        const expectedSecondPage = expectedUrl("state=OPEN&page=2") // start is 1 since mock only return one element
+        const expectedSecondPage = expectedUrl("state=OPEN&page=2")
 
         const pages: string[] = []
-        let pagination = false
-        spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request): Promise<Response> => {
+        bunfetch((input): Promise<Response> => {
             pages.push(input as string)
-            const dest = pagination ? "develop" : "staging" // should stop paging at second page
-            const response = {
-                json: () => ({
-                    next: expectedSecondPage,
-                    values: [
-                        {
-                            destination: { branch: { name: dest } },
-                            source: { branch: { name: "main" } },
-                        },
-                    ],
-                }),
-                ok: true,
-            }
-            pagination = true
-            // @ts-expect-error because fetch signature is too complex, we only need a small part
-            return Promise.resolve(response)
+            return bunresponse({
+                next: expectedSecondPage,
+                values: [{ destination: { branch: { name: "staging" } }, source: { branch: { name: "main" } } }],
+            })
+        })
+        bunfetch((input): Promise<Response> => {
+            pages.push(input as string)
+            return bunresponse({
+                next: "",
+                values: [{ destination: { branch: { name: "develop" } }, source: { branch: { name: "main" } } }],
+            })
         })
 
         const handler = newPlatformHandler(Platform.BITBUCKET_CLOUD, "baseURL", "prefix", "some-token", {})
@@ -335,10 +325,9 @@ describe("hasPull", () => {
         const expectedUrl = "baseURL/prefix/repos/owner/repository/pulls/develop/main"
 
         let url = ""
-        spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request): Promise<Response> => {
+        bunfetch((input): Promise<Response> => {
             url = (input as string)
-            // @ts-expect-error because fetch signature is too complex, we only need a small part
-            return Promise.resolve({ ok: true })
+            return bunresponse({})
         })
 
         const handler = newPlatformHandler(Platform.GITEA, "baseURL", "prefix", "some-token", {})
@@ -356,14 +345,9 @@ describe("hasPull", () => {
         const expectedUrl = "baseURL/prefix/projects/owner%2Frepository/merge_requests?state=opened&target_branch=develop&source_branch=main"
 
         let url = ""
-        spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request): Promise<Response> => {
+        bunfetch((input): Promise<Response> => {
             url = (input as string)
-            const response = {
-                json: () => ([{}]),
-                ok: true,
-            }
-            // @ts-expect-error because fetch signature is too complex, we only need a small part
-            return Promise.resolve(response)
+            return bunresponse([{}])
         })
 
         const handler = newPlatformHandler(Platform.GITLAB, "baseURL", "prefix", "some-token", {})
@@ -398,14 +382,12 @@ describe("createPull", () => {
         matcher.toThrowError("some error message")
     }
 
-    describe("should throw error on pull request creation", async () => {
+    describe("should throw error on pull request creation", () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITEA, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should throw error on ${platform} pull request creation`, () => {
                 // Arrange
-                spyOn(global, "fetch").mockImplementation(async (): Promise<Response> => {
-                    throw new Error("some error message")
-                })
+                bunfetch(() => { throw new Error("some error message") })
 
                 // Act & Assert
                 failure(platform)
@@ -413,15 +395,12 @@ describe("createPull", () => {
         }
     })
 
-    describe("should fail to create pull request", async () => {
+    describe("should fail to create pull request", () => {
         const platforms = [Platform.BITBUCKET, Platform.BITBUCKET_CLOUD, Platform.GITEA, Platform.GITLAB]
         for (const platform of platforms) {
             test(`should fail to create ${platform} pull request`, () => {
                 // Arrange
-                spyOn(global, "fetch").mockImplementation(async (): Promise<Response> =>
-                    // @ts-expect-error because fetch signature is too complex, we only need a small part
-                    Promise.resolve({ ok: false, text: () => "some error message" })
-                )
+                bunfetch(() => bunresponse("some error message", false))
 
                 // Act & Assert
                 failure(platform)
@@ -455,12 +434,11 @@ describe("createPull", () => {
         }
 
         let url = ""
-        let body: FetchRequestInit = {}
-        spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request, init?: FetchRequestInit): Promise<Response> => {
+        let body: BunFetchRequestInit = {}
+        bunfetch((input, init): Promise<Response> => {
             url = (input as string).toString()
             body = init ?? {}
-            // @ts-expect-error because fetch signature is too complex, we only need a small part
-            return Promise.resolve({ ok: true })
+            return bunresponse({})
         })
 
         const handler = newPlatformHandler(Platform.BITBUCKET, "baseURL", "prefix", "some-token", {})
@@ -497,12 +475,11 @@ describe("createPull", () => {
         }
 
         let url = ""
-        let body: FetchRequestInit = {}
-        spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request, init?: FetchRequestInit): Promise<Response> => {
+        let body: BunFetchRequestInit = {}
+        bunfetch((input, init): Promise<Response> => {
             url = (input as string).toString()
             body = init ?? {}
-            // @ts-expect-error because fetch signature is too complex, we only need a small part
-            return Promise.resolve({ ok: true })
+            return bunresponse({})
         })
 
         const handler = newPlatformHandler(Platform.BITBUCKET_CLOUD, "baseURL", "prefix", "some-token", {})
@@ -539,12 +516,11 @@ describe("createPull", () => {
         }
 
         let url = ""
-        let body: FetchRequestInit = {}
-        spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request, init?: FetchRequestInit): Promise<Response> => {
+        let body: BunFetchRequestInit = {}
+        bunfetch((input, init): Promise<Response> => {
             url = (input as string).toString()
             body = init ?? {}
-            // @ts-expect-error because fetch signature is too complex, we only need a small part
-            return Promise.resolve({ ok: true })
+            return bunresponse({})
         })
 
         const handler = newPlatformHandler(Platform.GITEA, "baseURL", "prefix", "some-token", {})
@@ -581,12 +557,11 @@ describe("createPull", () => {
         }
 
         let url = ""
-        let body: FetchRequestInit = {}
-        spyOn(global, "fetch").mockImplementation(async (input: string | URL | Request, init?: FetchRequestInit): Promise<Response> => {
+        let body: BunFetchRequestInit = {}
+        bunfetch((input, init): Promise<Response> => {
             url = (input as string).toString()
             body = init ?? {}
-            // @ts-expect-error because fetch signature is too complex, we only need a small part
-            return Promise.resolve({ ok: true })
+            return bunresponse({})
         })
 
         const handler = newPlatformHandler(Platform.GITLAB, "baseURL", "prefix", "some-token", {})

@@ -1,3 +1,13 @@
+## [1.7.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.23...v1.7.0) (2025-12-26)
+
+### Features
+
+* **deps:** bump semantic-release from 24.2.9 to 25.0.2 ([b977b93](https://github.com/kilianpaquier/semantic-release-backmerge/commit/b977b933d43bc92b0e05d5ecde02be8fed11cfdb))
+
+### Continuous Integration
+
+* reenable auto releasing ([1129991](https://github.com/kilianpaquier/semantic-release-backmerge/commit/112999128dbae84f63c164686ce52984895d2ccb))
+
 ## [1.6.23](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.22...v1.6.23) (2025-12-26)
 
 ### Chores

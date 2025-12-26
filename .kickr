@@ -13,7 +13,7 @@ ci:
     auth: github-token
 dependencies:
   manager: dependabot
-license: apache-2.0
+license: mit
 maintainers:
   - name: kilianpaquier
 platform: github

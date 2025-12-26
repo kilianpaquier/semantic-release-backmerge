@@ -70,10 +70,12 @@ plugins:
         - BREAKING CHANGES
         - BREAKING
   - "@semantic-release/changelog"
+  - "semantic-release-license"
   - "@semantic-release/npm"
   - - "@semantic-release/git"
     - assets:
         - CHANGELOG.md
+        - LICENSE
         - package.json
       message: "chore(release): v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
   - - "@semantic-release/github"

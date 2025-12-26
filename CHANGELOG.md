@@ -1,3 +1,30 @@
+## [1.6.23](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.22...v1.6.23) (2025-12-26)
+
+### Chores
+
+* **deps-dev:** bump dependencies to their latest minor / patch ([c8b28d9](https://github.com/kilianpaquier/semantic-release-backmerge/commit/c8b28d92a4e8fbf98feead1d9f160be429bb9777))
+* **deps-dev:** bump npm-check-updates from 18.3.0 to 19.0.0 ([4f6b5a2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4f6b5a23e799968214d1f62b9801e94bfa72dc7c))
+* **deps-dev:** bump the minor group across 1 directory with 4 updates ([705a2e7](https://github.com/kilianpaquier/semantic-release-backmerge/commit/705a2e76489dc1a514eebd64f2ce6cc2b0a6a3d9))
+* **deps-dev:** bump typescript-eslint in the minor group ([e5c2665](https://github.com/kilianpaquier/semantic-release-backmerge/commit/e5c2665050031e6e01b6e7901ad2fd2e2be00a63))
+* **deps:** bump dependencies to their latest minor / patch ([28c9e81](https://github.com/kilianpaquier/semantic-release-backmerge/commit/28c9e819401671c2bf1c65686354398e5c175a6b))
+* **license:** provide the right license name in .kickr according to current LICENSE file (MIT) ([186b3f9](https://github.com/kilianpaquier/semantic-release-backmerge/commit/186b3f90435cdee87ecd8bfaf67a57b53b599cce))
+
+### Continuous Integration
+
+* **deployment:** add dependency lock file path to setup-node ([1c7a1a6](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1c7a1a62127976db26b6cac60de1f452e2db1b28))
+* **deployment:** add environment to version job ([c9e7044](https://github.com/kilianpaquier/semantic-release-backmerge/commit/c9e7044390954238005ffd1001bdc070ca8e8c86))
+* **deployment:** ensure latest node version is installed for OIDC ([fcbf8e1](https://github.com/kilianpaquier/semantic-release-backmerge/commit/fcbf8e168a093ccbb56137ebe12fcfe2b9907e07))
+* **deps:** bump cycjimmy/semantic-release-action ([1be5501](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1be5501ffce46fa0d2eb3340ec243795b51da84c))
+* **deps:** bump the major-minor-patch group with 2 updates ([3c77ae8](https://github.com/kilianpaquier/semantic-release-backmerge/commit/3c77ae83b73c25f5c8f940af12d81da65862bdf4))
+* disable auto release temporarely for OIDC first release with npm ([9602fbc](https://github.com/kilianpaquier/semantic-release-backmerge/commit/9602fbcffc00eb1d321e65fe55c5c3d636ca4a91))
+* **layout:** regenerate kickr layout ([4fd5c1a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/4fd5c1a78df459dcc76379cc14928d54b5674be1))
+* **layout:** regenerate kickr layout ([67d3c7d](https://github.com/kilianpaquier/semantic-release-backmerge/commit/67d3c7dda956ffbf014d1e89b209303937f688fb))
+* **layout:** regenerate kickr layout ([039edfa](https://github.com/kilianpaquier/semantic-release-backmerge/commit/039edfa527cb3b0d9f05a019a93ef85af89795b0))
+
+### Tests
+
+* **ts:** ensure fetch signature is the right one for bun fetch ([73b6f69](https://github.com/kilianpaquier/semantic-release-backmerge/commit/73b6f690e2f5f9e943b4c675f38513fb21c8c6ba))
+
 ## [1.6.22](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.21...v1.6.22) (2025-10-09)
 
 ### Chores

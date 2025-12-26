@@ -11,6 +11,7 @@ ci:
     - ossf-scorecard
   release:
     auth: github-token
+    auto: true
 dependencies:
   manager: dependabot
 license: mit

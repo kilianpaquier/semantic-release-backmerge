@@ -13,7 +13,7 @@ on:
           - dry-run
           - none
           - release
-        default: dry-run
+        default: release
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
@@ -88,8 +88,6 @@ jobs:
       # https://github.com/marketplace/actions/setup-node-js-environment
       - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
-          cache-dependency-path: bun.lock
-          cache: npm
           node-version: lts/*
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version
@@ -198,8 +196,6 @@ jobs:
       # https://github.com/marketplace/actions/setup-node-js-environment
       - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
-          cache-dependency-path: bun.lock
-          cache: npm
           node-version: lts/*
       # https://github.com/marketplace/actions/action-for-semantic-release
       - id: semrel_version

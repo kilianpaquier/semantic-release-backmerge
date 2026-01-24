@@ -1,3 +1,15 @@
+## [1.7.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.0...v1.7.1) (2026-01-24)
+
+### Chores
+
+* **deps-dev:** bump the minor group across 1 directory with 2 updates ([1d5df60](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1d5df60c59728fce6b8cc141f0bbc7dfa514d5da))
+* **deps:** bump lodash in the npm_and_yarn group across 1 directory ([bee170a](https://github.com/kilianpaquier/semantic-release-backmerge/commit/bee170a522769f64f36b7d2b966d31d8d883b564))
+
+### Continuous Integration
+
+* **layout:** regenerate kickr layout ([06e57f3](https://github.com/kilianpaquier/semantic-release-backmerge/commit/06e57f3b445104b44c27c1ac3b4399120f512397))
+* **layout:** regenerate kickr layout ([1327ba2](https://github.com/kilianpaquier/semantic-release-backmerge/commit/1327ba2ef1d723c137dc5d1be0493e13cc953c83))
+
 ## [1.7.0](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.6.23...v1.7.0) (2025-12-26)
 
 ### Features

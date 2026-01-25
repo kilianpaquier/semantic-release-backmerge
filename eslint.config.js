@@ -1,16 +1,17 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config(
+import { defineConfig } from "eslint/config";
+
+export default defineConfig(
     eslint.configs.all,
-    ...tseslint.configs.recommendedTypeChecked,
-    ...tseslint.configs.stylisticTypeChecked,
+    tseslint.configs.recommendedTypeChecked,
+    tseslint.configs.stylisticTypeChecked,
     {
-        // files: ["**/*.ts"],
         languageOptions: {
             parserOptions: {
-                project: true,
-                tsconfigDirName: import.meta.dirname,
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
             },
         },
         rules: {

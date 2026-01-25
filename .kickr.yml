@@ -2,21 +2,13 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/kickr-dev/kickr/beta/.schemas/kickr.v1.schema.json
 version: 1
 ci:
-  provider: github
+  provider: gitlab
   options:
-    - codecov
-    - codeql
-    - harden-runner
-    - kickr:github-app
-    - ossf-scorecard
-  release:
-    auth: github-token
-    auto: true
-dependencies:
-  manager: dependabot
+    - kickr
+  release: {}
 license: mit
 maintainers:
-  - name: kilianpaquier
-platform: github
+  - name: u.kilianpaquier
+platform: gitlab
 pre-commit:
   - conventional-commits

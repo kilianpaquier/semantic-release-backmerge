@@ -7,68 +7,68 @@ import { authModificator, ls, version } from "../lib/git"
 describe("authModificator", () => {
     test("should return a valid authenticated git URL from one with a port and ssh", () => {
         // Arrange
-        const info = parse("ssh://git@github.com:7099/kilianpaquier/semantic-release-backmerge.git")
+        const info = parse("ssh://git@git.example.com:7099/kilianpaquier/semantic-release-backmerge.git")
 
         // Act
         const url = authModificator(info, "user", "token")
 
         // Assert
-        expect(url).toEqual("ssh://git@github.com:7099/kilianpaquier/semantic-release-backmerge.git")
+        expect(url).toEqual("ssh://git@git.example.com:7099/kilianpaquier/semantic-release-backmerge.git")
     })
 
     test("should return a valid authenticated git URL with SSH", () => {
         // Arrange
-        const info = parse("git@github.com:kilianpaquier/subgroup/semantic-release-backmerge.git")
+        const info = parse("git@git.example.com:kilianpaquier/subgroup/semantic-release-backmerge.git")
 
         // Act
         const url = authModificator(info, "user", "token")
 
         // Assert
-        expect(url).toEqual("ssh://git@github.com:kilianpaquier/subgroup/semantic-release-backmerge.git")
+        expect(url).toEqual("ssh://git@git.example.com:kilianpaquier/subgroup/semantic-release-backmerge.git")
     })
 
     test("should return a valid authenticated git URL with a port", () => {
         // Arrange
-        const info = parse("https://github.com:7099/kilianpaquier/semantic-release-backmerge.git")
+        const info = parse("https://git.example.com:7099/kilianpaquier/semantic-release-backmerge.git")
 
         // Act
         const url = authModificator(info, "user", "token")
 
         // Assert
-        expect(url).toEqual("https://user:token@github.com:7099/kilianpaquier/semantic-release-backmerge.git")
+        expect(url).toEqual("https://user:token@git.example.com:7099/kilianpaquier/semantic-release-backmerge.git")
     })
 
     test("should return a valid authenticated git URL with git specific HTTPS", () => {
         // Arrange
-        const info = parse("git+https://github.com/kilianpaquier/semantic-release-backmerge.git")
+        const info = parse("git+https://git.example.com/kilianpaquier/semantic-release-backmerge.git")
 
         // Act
         const url = authModificator(info, "user", "token")
 
         // Assert
-        expect(url).toEqual("https://user:token@github.com/kilianpaquier/semantic-release-backmerge.git")
+        expect(url).toEqual("https://user:token@git.example.com/kilianpaquier/semantic-release-backmerge.git")
     })
 
     test("should return a valid authenticated git URL with already authenticated one", () => {
         // Arrange
-        const info = parse("https://gitlab-ci-token:glpat-RKuRfmL9gfDnw@gitlab.example.com/my-group/my-project.git")
+        const info = parse("https://gitlab-ci-token:glpat-RKuRfmL9gfDnw@git.example.com/my-group/my-project.git")
 
         // Act
         const url = authModificator(info, "user", "token")
 
         // Assert
-        expect(url).toEqual("https://user:token@gitlab.example.com/my-group/my-project.git")
+        expect(url).toEqual("https://user:token@git.example.com/my-group/my-project.git")
     })
 
     test("should return a valid authenticated git URL with HTTP", () => {
         // Arrange
-        const info = parse("http://github.com/kilianpaquier/semantic-release-backmerge.git")
+        const info = parse("http://git.example.com/kilianpaquier/semantic-release-backmerge.git")
 
         // Act
         const url = authModificator(info, "user", "token")
 
         // Assert
-        expect(url).toEqual("http://user:token@github.com/kilianpaquier/semantic-release-backmerge.git")
+        expect(url).toEqual("http://user:token@git.example.com/kilianpaquier/semantic-release-backmerge.git")
     })
 })
 

@@ -109,7 +109,7 @@ describe("success", () => {
     afterEach(() => mock.restore())
 
     const context = getContext("main")
-    const repositoryUrl = "https://github.com/kilianpaquier/semantic-release-backmerge.git"
+    const repositoryUrl = "https://git.example.com/kilianpaquier/semantic-release-backmerge.git"
 
     test("should fail with invalid configuration", () => {
         // Arrange

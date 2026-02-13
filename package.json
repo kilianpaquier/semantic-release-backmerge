@@ -18,7 +18,7 @@
     "provenance": true
   },
   "repository": {
-    "url": "https://github.com/kilianpaquier/semantic-release-backmerge"
+    "url": "https://gitlab.com/kilianpaquier/semantic-release-backmerge"
   },
   "keywords": [
     "semantic-release-plugin",

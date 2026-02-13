@@ -51,6 +51,11 @@ workflow:
   variables:
     GIT_DEPTH: "0"
     GITLAB_TOKEN: $RELEASE_TOKEN
+  id_tokens:
+    NPM_ID_TOKEN:
+      aud: npm:registry.npmjs.org
+    SIGSTORE_ID_TOKEN:
+      aud: sigstore
 
 semantic-release-info:
   stage: build
@@ -75,8 +80,3 @@ semantic-release-info:
 
 semantic-release:
   interruptible: false
-  id_tokens:
-    NPM_ID_TOKEN:
-      aud: npm:registry.npmjs.org
-    SIGSTORE_ID_TOKEN:
-      aud: sigstore

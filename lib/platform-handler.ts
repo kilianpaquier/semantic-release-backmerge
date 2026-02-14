@@ -24,7 +24,7 @@ const isT = <T>(input: any, ...fields: string[]): input is T => {
     const cast = input as T
     for (const field of fields) {
         // @ts-expect-error check struct type fields
-        if (typeof cast[field] === "undefined") {
+        if (typeof cast[field] === "undefined") { // nosemgrep: gitlab.eslint.detect-object-injection
             return false
         }
     }

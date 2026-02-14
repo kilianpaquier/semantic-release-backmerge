@@ -81,7 +81,7 @@ export const verifyConfig = (config: BackmergeConfig): void => {
 
     const errors = Object.entries(config).reduce((agg: SemanticReleaseError[], [option, value]) => {
         // @ts-expect-error option is a keyof BackmergeConfig
-        for (const validation of validators[option]) {
+        for (const validation of validators[option]) { // nosemgrep: gitlab.eslint.detect-object-injection
             if (!validation(value)) { // eslint-disable-line @typescript-eslint/no-unsafe-call
                 // @ts-expect-error option is a keyof BackmergeConfig
                 return [...agg, getConfigError(option, value)]

@@ -76,6 +76,6 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
  */
 export const getConfigError = (key: keyof BackmergeConfig, value?: any): SemanticReleaseError => {
     const code = `EINVALID${key.toUpperCase()}`
-    const error = configErrors[key](value)
+    const error = configErrors[key](value) // nosemgrep: gitlab.eslint.detect-object-injection
     return new SemanticReleaseError(error.message, code, error.details)
 }

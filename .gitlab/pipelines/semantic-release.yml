@@ -12,7 +12,7 @@ variables:
   ADAPTIVE_PIPELINE_DISABLED: "true"
   VERSION: $SEMREL_INFO_NEXT_VERSION
 
-  SEMREL_AUTO_RELEASE_ENABLED: false
+  SEMREL_AUTO_RELEASE_ENABLED: "false"
   SEMREL_BRANCHES_REF: /^(alpha|beta|dev|develop|main|next|rc|staging|v[0-9]+(\.[0-9]+)?\.x)$/
   SEMREL_HOOKS_DIR: scripts
   SEMREL_INFO_ON: all

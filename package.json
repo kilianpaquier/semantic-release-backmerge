@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/bun": "1.3.9",
+    "@types/bun": "1.3.10",
     "@types/debug": "4.1.12",
     "@types/git-up": "8.1.0",
     "@types/git-url-parse": "16.0.2",

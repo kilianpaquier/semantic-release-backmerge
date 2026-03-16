@@ -1,3 +1,31 @@
+## [1.7.2](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.1...v1.7.2) (2026-03-16)
+
+### Chores
+
+* **deps:** update dependency @types/bun to v1.3.10 ([7e901cb](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/7e901cbdc0438c11e187f9c80041020285b73de2))
+* **deps:** update dependency @types/lodash to v4.17.24 ([31d3f97](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/31d3f97d4d50133511cc99cf1514af05db425308))
+* **deps:** update dependency eslint to v10.0.1 ([e5b6783](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/e5b6783495a73bbec36bf0220f5334d466736f7b))
+* **deps:** update dependency eslint to v10.0.3 ([f371b48](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/f371b48fbc44ccaad81e9273193ab2e4154cc4dc))
+* **deps:** update dependency npm-check-updates to v19.4.0 ([0461e53](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/0461e53b01771cffbec8a4507194d81d9433a5c9))
+* **deps:** update dependency npm-check-updates to v19.4.1 ([bd1a5a7](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/bd1a5a79126cc702d4f12ac2a0c2105cbe8a7041))
+* **deps:** update dependency npm-check-updates to v19.5.0 ([e0988a5](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/e0988a502b137f4486896a42a15bab35b5374811))
+* **deps:** update dependency npm-check-updates to v19.6.3 ([fad6b06](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/fad6b064f2f8b0c92f28992279e7829e66bc5959))
+* **deps:** update dependency typescript-eslint to v8.57.0 ([0abab70](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/0abab704668a4dac3a3e652796fc2af7711d9ab8))
+* **deps:** update node dependencies ([3fb12ce](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/3fb12ce3ec4c89fc6e0e7d029c72a8c7b8ade401))
+* **deps:** update node dev dependencies ([beaf50c](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/beaf50c36a389c4553ce8965460a337be7711883))
+* **deps:** update node dev dependencies ([2a17a35](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/2a17a35a72f5c4181227b47a38f53f29f3114b5f))
+* **deps:** update node dev dependencies to v10 ([516ab69](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/516ab692abc887d17ca95cbeb23f0e54b16b373a))
+
+### Continuous Integration
+
+* **deps:** update bun dependency version ([8622a70](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/8622a709a8cdf475cf7327574e9fa36f164695ba))
+* **git:** replace platform inside package.json ([1118b6e](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/1118b6e48f0b40d0d2e0b4d58ffc20f497df0b22))
+* **layout:** regenerate kickr layout ([66c73b0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/66c73b053a4112e7bd990e587b0059efcbc5945d))
+* **layout:** regenerate kickr layout ([9a8292b](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/9a8292ba554a548adf3aa5d913a090fb9a6a8cfb))
+* migrate to GitLab CICD ([41af9b3](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/41af9b3810255ee19033a686f8f489141ade2b1b))
+* **semgrep:** disable rules for non-relevant cases ([5ca76ef](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/5ca76efc97f0c1e5612637fe3bc6cce8611d5980))
+* **semrel:** provide OIDC tokens also on info job ([86c7ee0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/86c7ee04e909285e4db8361f151af999c5fdda44))
+
 ## [1.7.1](https://github.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.0...v1.7.1) (2026-01-24)
 
 ### Chores

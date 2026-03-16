@@ -50,3 +50,5 @@ semantic-release-info:
 
 semantic-release:
   interruptible: false
+  dependencies:
+    - node-build

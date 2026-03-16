@@ -52,3 +52,8 @@ semantic-release:
   interruptible: false
   dependencies:
     - node-build
+
+semantic-release:dry-run:
+  extends: semantic-release
+  variables:
+    SEMREL_DRY_RUN: "true"

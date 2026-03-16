@@ -1,3 +1,13 @@
+## [1.7.3](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.2...v1.7.3) (2026-03-16)
+
+### Bug Fixes
+
+* **releasing:** missing artifacts download in semantic-release job ([fa186bc](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/fa186bc30178109f0129c40f4c4aa14bae737a4b))
+
+### Continuous Integration
+
+* **releasing:** add semantic-release dry run job ([b6d3cb0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/b6d3cb0592c417364e024433ff3cc15760ff43f8))
+
 ## [1.7.2](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.1...v1.7.2) (2026-03-16)
 
 ### Chores

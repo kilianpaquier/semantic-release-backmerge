@@ -1,3 +1,17 @@
+## [1.7.4](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.3...v1.7.4) (2026-04-06)
+
+### Bug Fixes
+
+* **deps:** upgrade lodash to v4.18.1 (CVE related) ([b39e818](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/b39e818120b0c3efe92c47216caf10b84baa361a))
+
+### Chores
+
+* **deps:** update dependency npm-check-updates to v19.6.6 ([7a5775c](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/7a5775cf4ab1818e86722940c6f6e36b7a26482a))
+* **deps:** update dependency typescript-eslint to v8.57.2 ([56c56b3](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/56c56b39456a4f8b42eb48b1a66d27fe14d6445b))
+* **deps:** update dependency typescript-eslint to v8.58.0 ([fa2a8da](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/fa2a8daacfd52d1422796825a3c137af85bbb85d))
+* **deps:** update dev dependencies bun and eslint ([0b3f124](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/0b3f12416b5b928e27f7b005cb354341c93f2bec))
+* **deps:** update node dev dependencies ([c0eed8f](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/c0eed8f8d9852a3e30ffffcdbefff2a27a331a50))
+
 ## [1.7.3](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.2...v1.7.3) (2026-03-16)
 
 ### Bug Fixes

@@ -1,3 +1,16 @@
+## [1.7.5](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.4...v1.7.5) (2026-05-16)
+
+### Chores
+
+* **deps:** update dependency npm-check-updates to v20 ([666e1c5](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/666e1c55c3554b21f70d85bafb6a5dae5eb0618b))
+* **deps:** update dependency npm-check-updates to v22 ([dd06f1f](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/dd06f1f42f25a5abcd053bf56bba26f3aa7ead1d))
+* **deps:** update dependency semver to v7.8.0 ([e688d20](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/e688d2055f633761b68bc2696561391f3dea48a5))
+* **deps:** update dependency typescript to v6 ([eb809ef](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/eb809efef9cf1d9eaefa7641620e2b9daa480187))
+* **deps:** update dependency typescript-eslint to v8.59.1 ([65850c4](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/65850c479eb3f32b5741dd31ece7d02d78a7748b))
+* **deps:** update node dev dependencies ([33cb3d2](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/33cb3d26d73de758249c9db1224e6b2db0550852))
+* **deps:** update node dev dependencies ([3ea2cc0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/3ea2cc0c33db3a65718a77308fa919688bc03506))
+* **deps:** update node dev dependencies ([da71a08](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/da71a08bb4a55fab276525f3c26a69642c4bf055))
+
 ## [1.7.4](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.3...v1.7.4) (2026-04-06)
 
 ### Bug Fixes

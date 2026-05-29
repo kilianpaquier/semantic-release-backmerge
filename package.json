@@ -40,10 +40,10 @@
     "@types/lodash": "4.17.24",
     "@types/semantic-release__error": "3.0.3",
     "@types/semver": "7.7.1",
-    "eslint": "10.3.0",
+    "eslint": "10.4.0",
     "npm-check-updates": "22.2.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.59.3"
+    "typescript-eslint": "8.59.4"
   },
   "dependencies": {
     "@octokit/core": "7.0.6",

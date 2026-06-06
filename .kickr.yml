@@ -4,6 +4,7 @@ version: 1
 gitlab:
   options:
     - kickr
+    - overrides:integration
   release: {}
 license: mit
 maintainers:

@@ -1,0 +1,6 @@
+# Add GitLab CI/CD integration job overrides here.
+
+node-build:
+  before_script:
+    - !reference [.node-base, before_script]
+    - apk add git

@@ -5,21 +5,19 @@ include:
 
   # pre-commit template
   # https://gitlab.com/to-be-continuous/pre-commit
-  - component: gitlab.com/to-be-continuous/pre-commit/gitlab-ci-pre-commit@805b30e6daceca57eae1296f7864bd65577c0b40 # 1.5.0
+  - component: $CI_SERVER_FQDN/to-be-continuous/pre-commit/gitlab-ci-pre-commit@805b30e6daceca57eae1296f7864bd65577c0b40 # 1.5.0
     inputs:
       pre-commit-file: .pre-commit-config.yaml
 
   # Node.js template
   # https://gitlab.com/to-be-continuous/node
-  - component: gitlab.com/to-be-continuous/node/gitlab-ci-node@f7977da89f556dc703580eb16412b1ec7e4f0ae9 # 5.3.0
+  - component: $CI_SERVER_FQDN/to-be-continuous/node/gitlab-ci-node@f7977da89f556dc703580eb16412b1ec7e4f0ae9 # 5.3.0
     inputs:
       build-dir: $BUILD_DIR
       lint-enabled: "true"
       lint-args: run lint --ignore-pattern .bun --ignore-pattern .npm --ignore-pattern .yarn
       publish-enabled: "false"
-
-variables:
-  BUILD_DIR: dist
+  - local: .gitlab/integration.overrides.yml
 
 node-audit:
   allow_failure: true

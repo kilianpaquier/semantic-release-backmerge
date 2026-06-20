@@ -1,3 +1,22 @@
+## [1.7.6](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.5...v1.7.6) (2026-06-20)
+
+### Chores
+
+* **deps:** update dependency semver to v7.8.1 ([14b0236](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/14b02366bcccd5dd8af1b1f9ae427c17f65d0573))
+* **deps:** update node dependencies ([42ac2df](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/42ac2df2a9fe7199acc8a567ec0e88e6e45bb1a9))
+* **deps:** update node dependencies to v7.8.2 ([078ef87](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/078ef876c6dc58dd2dde3f04735b94959b49e60e))
+* **deps:** update node dev dependencies ([0d75e7d](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/0d75e7d3dfedc4aac99ca176775ba8a88ae7f5bc))
+* **deps:** update node dev dependencies ([ee99d44](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/ee99d44d3f066c5e57645f7d018fee8289deb52c))
+* **deps:** update node dev dependencies ([2350f30](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/2350f30c45bbc9ca0cdf3e7448bc4223e3436628))
+* **deps:** update node dev dependencies ([3811ca2](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/3811ca24271add7eb53fd22df4b6055809ccf156))
+* **deps:** update node dev dependencies ([ab89a9e](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/ab89a9e0f0543375d3246bce9dee3612277163d6))
+
+### Continuous Integration
+
+* **layout:** regenerate kickr layout ([0c25d11](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/0c25d112a79fe3657a611c99fed7a32fefcb2d86))
+* **layout:** regenerate kickr layout ([76c9068](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/76c90681efdd4e5bc79f7df55e2aa5a34f6c7fee))
+* **layout:** regenerate kickr layout ([2eb2022](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/2eb20220ec07f601e1ad82a7f72c2d9ee953497e))
+
 ## [1.7.5](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.4...v1.7.5) (2026-05-16)
 
 ### Chores

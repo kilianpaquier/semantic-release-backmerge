@@ -154,7 +154,7 @@ To avoid painful configurations, you may use the environments variables to autom
   - `platform` is set to `bitbucket`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/projects/{owner}/repos/{name}/pull-requests`
   - Example: `POST https://stash.company.com/rest/api/1.0/projects/kilianpaquier/repos/semantic-release-backmerge/pull-requests`
-  - See [documentation](https://developer.atlassian.com/server/bitbucket/rest/v819/api-group-pull-requests/#api-api-latest-projects-projectkey-repos-repositoryslug-pull-requests-post)
+  - See [documentation](https://developer.atlassian.com/server/bitbucket/rest/v1002/api-group-pull-requests/#api-api-latest-projects-projectkey-repos-repositoryslug-pull-requests-post)
 
 ### Bitbucket (cloud)
 
@@ -189,14 +189,14 @@ To avoid painful configurations, you may use the environments variables to autom
   - `platform` is set to `gitea`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repos/{owner}/{name}/pulls`
   - Example: `POST https://company.gitea.com/api/v1/repos/kilianpaquier/semantic-release-backmerge/pulls`
-  - See [Gitea documentation](https://docs.gitea.com/api/1.22/#tag/repository/operation/repoCreatePullRequest)
+  - See [Gitea documentation](https://gitea.com/api/swagger#/repository/repoCreatePullRequest)
   - See [Forgejo documentation](https://v15.next.forgejo.org/api/swagger#/repository/repoCreatePullRequest)
 
 ### GitHub
 
 | variable name                                | description                                                                                                                                                                                          |
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GH_URL` or `GITHUB_URL` or `GITHUB_API_URL` | Base URL to your github server, note that `GITHUB_API_URL` already exists with [**GitHub** Actions](https://docs.github.com/fr/actions/learn-github-actions/variables#default-environment-variables) |
+| `GH_URL` or `GITHUB_URL` or `GITHUB_API_URL` | Base URL to your github server, note that `GITHUB_API_URL` already exists with [**GitHub** Actions](https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables) |
 | `GH_TOKEN` or `GITHUB_TOKEN`                 | **GitHub** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests                                                                                                 |
 
 **Notes:**
@@ -207,14 +207,14 @@ To avoid painful configurations, you may use the environments variables to autom
   - `platform` is set to `github`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repos/{owner}/{repo}/pulls`
   - Example: `POST https://api.github.com/repos/kilianpaquier/semantic-release-backmerge/pulls`
-  - See [documentation](https://docs.github.com/fr/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request)
+  - See [documentation](https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request)
 
 ### GitLab
 
-| variable name                               | description                                                                                                                                                        |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `GL_URL` or `GITLAB_URL` or `CI_SERVER_URL` | Base URL to your gitlab server, note that `CI_SERVER_URL` already exists with [**GitLab** CICD](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html) |
-| `GL_TOKEN` or `GITLAB_TOKEN`                | **GitLab** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests (`api`, `read_repository` and `write_repository` scopes)      |
+| variable name                               | description                                                                                                                                                   |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GL_URL` or `GITLAB_URL` or `CI_SERVER_URL` | Base URL to your gitlab server, note that `CI_SERVER_URL` already exists with [**GitLab** CICD](https://docs.gitlab.com/ci/variables/predefined_variables/)   |
+| `GL_TOKEN` or `GITLAB_TOKEN`                | **GitLab** token to push backmerged branches (in case of HTTP(S) connection) or create pull requests (`api`, `read_repository` and `write_repository` scopes) |
 
 **Notes:**
 
@@ -225,4 +225,4 @@ To avoid painful configurations, you may use the environments variables to autom
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/projects/{uri_encoded({owner}/{repo})}/merge_requests`
   - Example: `POST https://gitlab.company.com/api/v4/projects/kilianpaquier%2Fsemantic-release-backmerge/merge_requests`
   - Example: `POST https://gitlab.company.com/api/v4/projects/kilianpaquier%2Fsubgroup%2Fsemantic-release-backmerge/merge_requests`
-  - See [documentation](https://docs.gitlab.com/ee/api/merge_requests.html#create-mr)
+  - See [documentation](https://docs.gitlab.com/api/merge_requests/#create-a-merge-request)

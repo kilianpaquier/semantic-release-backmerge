@@ -110,12 +110,23 @@ describe("gitUser", () => {
         expect(handler.gitUser()).toEqual("x-token-auth")
     })
 
-    test("should guess gitea platform", () => {
-        // Act
-        const handler = newPlatformHandler(Platform.NULL, "", "", "", { GITEA_URL: "baseURL" })
+    describe("should guess gitea platform", () => {
+        type record = Record<string, string>
 
-        // Assert
-        expect(handler.gitUser()).toEqual("gitea-token")
+        const envs = ["GITEA_URL", "FORGEJO_URL"]
+        for (const envvar of envs) {
+            test(`should guess gitea platform with environment variable '${envvar}'`, () => {
+                // Arrange
+                const env: record = {}
+                env[envvar] = "baseURL"
+
+                // Act
+                const handler = newPlatformHandler(Platform.NULL, "", "", "", env)
+
+                // Assert
+                expect(handler.gitUser()).toEqual("gitea-token")
+            })
+        }
     })
 
     describe("should guess github platform", () => {
@@ -169,7 +180,7 @@ describe("token", () => {
     type record = Record<string, string>
 
     describe("should read token from environment variables", () => {
-        const envs = ["BB_TOKEN", "BITBUCKET_TOKEN", "GITEA_TOKEN", "GH_TOKEN", "GITHUB_TOKEN", "GL_TOKEN", "GITLAB_TOKEN"]
+        const envs = ["BB_TOKEN", "BITBUCKET_TOKEN", "GITEA_TOKEN", "FORGEJO_TOKEN", "GH_TOKEN", "GITHUB_TOKEN", "GL_TOKEN", "GITLAB_TOKEN"]
         for (const envvar of envs) {
             test(`should read token from ${envvar}`, () => {
                 // Arrange

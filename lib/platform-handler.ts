@@ -411,9 +411,10 @@ export const newPlatformHandler = (platform: Platform, baseUrl: string, apiPathP
         return new BitbucketCloud(env.BITBUCKET_CLOUD_URL, token, apiPathPrefix)
     }
 
-    // gitea
-    if (env.GITEA_URL) {
-        return new Gitea(env.GITEA_URL, token, apiPathPrefix)
+    // gitea / forgejo
+    const giteaUrl = env.GITEA_URL ?? env.FORGEJO_URL
+    if (giteaUrl) {
+        return new Gitea(giteaUrl, token, apiPathPrefix)
     }
 
     // github
@@ -440,4 +441,4 @@ export const newPlatformHandler = (platform: Platform, baseUrl: string, apiPathP
  */
 export const token = (env: Record<string, string>): string =>
     // checking all environment variables since it doesn't matter which is valued whatever the platform could be
-    env.BB_TOKEN ?? env.BITBUCKET_TOKEN ?? env.GITEA_TOKEN ?? env.GH_TOKEN ?? env.GITHUB_TOKEN ?? env.GL_TOKEN ?? env.GITLAB_TOKEN ?? ""
+    env.BB_TOKEN ?? env.BITBUCKET_TOKEN ?? env.GITEA_TOKEN ?? env.FORGEJO_TOKEN ?? env.GH_TOKEN ?? env.GITHUB_TOKEN ?? env.GL_TOKEN ?? env.GITLAB_TOKEN ?? ""

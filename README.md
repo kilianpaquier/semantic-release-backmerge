@@ -26,7 +26,7 @@ A [**semantic-release**](https://github.com/semantic-release/semantic-release) p
 - [Environment variables](#environment-variables)
   - [Bitbucket (data center/server)](#bitbucket-data-centerserver)
   - [Bitbucket (cloud)](#bitbucket-cloud)
-  - [Gitea](#gitea)
+  - [Gitea | Forgejo](#gitea--forgejo)
   - [GitHub](#github)
   - [GitLab](#gitlab)
 
@@ -174,22 +174,23 @@ To avoid painful configurations, you may use the environments variables to autom
   - Example: `POST https://company.bitbucket.org/2.0/repositories/kilianpaquier/semantic-release-backmerge/pullrequests`
   - See [documentation](https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/#api-repositories-workspace-repo-slug-pullrequests-post)
 
-### Gitea
+### Gitea | Forgejo
 
-| variable name | description                                                                                     |
-| ------------- | ----------------------------------------------------------------------------------------------- |
-| `GITEA_URL`   | Base URL to your gitea server                                                                   |
-| `GITEA_TOKEN` | Gitea token to push backmerged branches (in case of HTTP(S) connection) or create pull requests |
+| variable name                    | description                                                                                                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `GITEA_URL` or `FORGEJO_URL`     | Base URL to your gitea or forgejo server                                                                   |
+| `GITEA_TOKEN` or `FORGEJO_TOKEN` | Gitea or forgejo token to push backmerged branches (in case of HTTP(S) connection) or create pull requests |
 
 **Notes:**
 
-- When `GITEA_URL` is provided, you may omit the following configuration variables:
+- When `GITEA_URL` or `FORGEJO_URL` is provided, you may omit the following configuration variables:
   - `baseUrl` is given this URL
   - `apiPathPrefix` is given by default `/api/v1`
   - `platform` is set to `gitea`
 - Endpoint to create pull requests is `POST {baseUrl}{apiPathPrefix}/repos/{owner}/{name}/pulls`
   - Example: `POST https://company.gitea.com/api/v1/repos/kilianpaquier/semantic-release-backmerge/pulls`
-  - See [documentation](https://docs.gitea.com/api/1.22/#tag/repository/operation/repoCreatePullRequest)
+  - See [Gitea documentation](https://docs.gitea.com/api/1.22/#tag/repository/operation/repoCreatePullRequest)
+  - See [Forgejo documentation](https://v15.next.forgejo.org/api/swagger#/repository/repoCreatePullRequest)
 
 ### GitHub
 

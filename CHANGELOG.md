@@ -1,3 +1,5 @@
+## [1.8.0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.6...v1.8.0) (2026-07-12)
+
 ## [1.7.6](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.5...v1.7.6) (2026-06-20)
 
 ### Chores

@@ -1,3 +1,29 @@
+## [1.9.0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.8.0...v1.9.0) (2026-08-16)
+
+### Documentation
+
+* **changelog:** add commits made and justification for empty release notes and changelog in v1.8.0 ([ffa917f](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/ffa917ff83d0ec461511d35aa5ce25481fb109d2))
+
+### Chores
+
+* **deps:** update dependency @octokit/core to v7.0.7 ([0de2a90](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/0de2a90891726ac759b02b1c6af064f3412bff3f))
+* **deps:** update dependency npm-check-updates to v23 ([fd57774](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/fd57774d33896e6cd4b229232c4eeea61d1cb3d3))
+* **deps:** update dependency semantic-release to v25.0.8 ([d9669ac](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/d9669ac55fe73d32993b24dc88646f305f4aebb5))
+* **deps:** update dependency semantic-release to v25.0.9 ([c8dd09a](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/c8dd09a13a885191b1356a5c2fbce21f67702666))
+* **deps:** update dependency typescript-eslint to v8.64.0 ([20c94b0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/20c94b0ab41e122df26dded6e6bd645cf8ed0db1))
+* **deps:** update dependency typescript-eslint to v8.67.0 ([edf78e5](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/edf78e550ba8139b5afe1dc84f0e646dacf1d22b))
+* **deps:** update node dev dependencies ([15f1855](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/15f18554abcb3568fa5445c777c91bad44bb06c5))
+* **deps:** update node dev dependencies ([668d105](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/668d10558bde54bac06b6012bd30eacda2fc118c))
+* **package:** update packageManager bun version ([5041bc8](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/5041bc8f118ddf447523e243f828401d7538a1cd))
+
+### Code Refactoring
+
+* **deps:** remove unused dependencies and move semantic-release as peerDependency to match official plugins structure ([9564047](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/9564047b8574f06abd41cbf41414db089d75f4ae))
+
+### Continuous Integration
+
+* **layout:** regenerate kickr layout ([e17cf4d](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/e17cf4d81a8c85a397310ce88db398539c63100f))
+
 ## [1.8.0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.6...v1.8.0) (2026-07-12)
 
 *Release notes and changelog generation failed for this version:*

@@ -1,7 +1,7 @@
 import { Branch, authModificator, checkout, fetch, ls, version } from "./lib/git"
 import { Logger, backmerge, filter } from "./lib/backmerge"
 import { PlatformHandler, newPlatformHandler } from "./lib/platform-handler"
-import { SuccessContext, VerifyConditionsContext } from 'semantic-release'
+import { SuccessContext, VerifyConditionsContext } from "semantic-release"
 import { ensureDefault, verifyConfig } from "./lib/verify-config"
 
 import SemanticReleaseError from "@semantic-release/error"

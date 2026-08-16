@@ -1,5 +1,21 @@
 ## [1.8.0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.6...v1.8.0) (2026-07-12)
 
+*Release notes and changelog generation failed for this version:*
+* *conventional-changelog-conventionalcommits released a [major version v10 on June 26, 2026](https://github.com/conventional-changelog/conventional-changelog/releases/tag/conventional-changelog-conventionalcommits-v10.0.0)*
+* *the conventional-changelog-conventionalcommits dependency wasn't pinned in .gitlab/semrel-plugins.txt, which list the dependencies used for release creation*
+* *semantic-release [had not yet added support for v10](https://github.com/semantic-release/release-notes-generator/issues/992)*
+
+Changes (commits) made between v1.7.6 and v1.8.0:
+
+* ci(layout): regenerate kickr layout
+* chore(deps): update node dev dependencies
+* docs(readme): update links to Swagger and their version (no changes needed with latest platforms versions)
+* feat(gitea): add preferencial environment variables for forgejo users
+* chore(layout): regenerate kickr layout
+* chore(deps): update node dev dependencies
+* ci(layout): regenerate kickr layout
+* chore(deps): update node dev dependencies
+
 ## [1.7.6](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.7.5...v1.7.6) (2026-06-20)
 
 ### Chores

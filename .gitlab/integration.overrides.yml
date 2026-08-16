@@ -3,4 +3,4 @@
 node-build:
   before_script:
     - !reference [.node-base, before_script]
-    - apk add git
+    - apk add git git-daemon

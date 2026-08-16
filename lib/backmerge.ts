@@ -124,7 +124,7 @@ export const backmerge = async (context: Context, config: BackmergeConfig, handl
 
         // try to merge with git the released branch into the current loop branch
         try {
-            await checkout(branch)
+            await checkout(branch, context.cwd, context.env)
             await merge(release.name, template(config.commit)(templateData), context.cwd, context.env)
             if (config.dryRun) {
                 context.logger.log(`Running with --dry-run, push to '${branch.name}' will not update remote state.`)

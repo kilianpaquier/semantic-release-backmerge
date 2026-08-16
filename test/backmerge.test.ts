@@ -10,6 +10,7 @@ import { ensureDefault } from "../lib/verify-config"
 
 const getContext = (name: string): Context => ({
     branch: { name },
+    cwd: "/backmerge/unit-tests", // just a string, doesn't mean anything for tests run
     env: {},
     lastRelease: {
         channels: [],
@@ -240,12 +241,22 @@ describe("backmerge", () => {
 
     test("should succeed to merge and push a branch", async () => {
         // Arrange
+        const cwds: string[] = []
         const checkouts: Branch[] = []
         const merge: { commit?: string, from?: string }[] = []
         const push: { branch?: string, dryRun?: boolean, remote?: string }[] = []
-        spyOn(git, "checkout").mockImplementation(async (branch: Branch) => { checkouts.push(branch) })
-        spyOn(git, "merge").mockImplementation(async (from: string, commit: string) => { merge.push({ commit, from }) })
-        spyOn(git, "push").mockImplementation(async (remote: string, branch: string, dryRun?: boolean) => { push.push({ branch, dryRun, remote }) })
+        spyOn(git, "checkout").mockImplementation(async (branch: Branch, cwd?: string) => {
+            cwds.push(cwd ?? "")
+            checkouts.push(branch)
+        })
+        spyOn(git, "merge").mockImplementation(async (from: string, commit: string, cwd?: string) => {
+            cwds.push(cwd ?? "")
+            merge.push({ commit, from })
+        })
+        spyOn(git, "push").mockImplementation(async (remote: string, branch: string, dryRun?: boolean, cwd?: string) => {
+            cwds.push(cwd ?? "")
+            push.push({ branch, dryRun, remote })
+        })
 
         const config = ensureDefault({ repositoryUrl }, { GITHUB_TOKEN: "some-token" })
 
@@ -253,6 +264,7 @@ describe("backmerge", () => {
         await backmerge(context, config, new TestPlatformHandler(), release, branches)
 
         // Assert
+        expect(cwds).toEqual(new Array<string>(branches.length * 3).fill(context.cwd!)) // a checkout, a merge and a push per branch
         expect(checkouts).toEqual(branches)
         expect(merge).toEqual([
             { commit: "chore(release): merge branch main into staging [skip ci]", from: "main" },

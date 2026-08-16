@@ -2,10 +2,15 @@
 
 # Various build / compile directories
 dist/
+logs/
 reports/
+tmp/
 
-# Created by https://www.toptal.com/developers/gitignore/api/node,dotenv
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,dotenv
+# Bun cache directory
+.bun
+
+# Created by https://www.toptal.com/developers/gitignore/api/dotenv,node
+# Edit at https://www.toptal.com/developers/gitignore?templates=dotenv,node
 
 ### dotenv ###
 .env
@@ -62,7 +67,6 @@ web_modules/
 *.tsbuildinfo
 
 # Optional npm cache directory
-.bun
 .npm
 
 # Optional eslint cache
@@ -150,4 +154,4 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-# End of https://www.toptal.com/developers/gitignore/api/node,dotenv
+# End of https://www.toptal.com/developers/gitignore/api/dotenv,node

@@ -77,18 +77,18 @@ export interface PlatformHandler {
 }
 
 class Bitbucket implements PlatformHandler {
-    private heads = "refs/heads/"
+    private readonly heads = "refs/heads/"
 
-    private apiUrl: string
-    private token: string
+    private readonly apiUrl: string
+    private readonly token: string
 
-    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+    public constructor(baseUrl: string, token: string, apiPathPrefix: string) {
         this.apiUrl = urlJoin(baseUrl, apiPathPrefix === "" ? "/rest/api/1.0" : apiPathPrefix)
         this.token = token
         deblog("initialized bitbucket platform handler with URL '%s'", this.apiUrl)
     }
 
-    async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
+    public async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
         // https://developer.atlassian.com/server/bitbucket/rest/v819/api-group-pull-requests/#api-api-latest-projects-projectkey-repos-repositoryslug-pull-requests-post
         const response = await fetch(`${this.apiUrl}/projects/${owner}/repos/${repository}/pull-requests`, {
             body: JSON.stringify({
@@ -110,7 +110,7 @@ class Bitbucket implements PlatformHandler {
         }
     }
 
-    async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
+    public async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
         interface resultType {
             isLastPage: boolean
             values: {
@@ -150,22 +150,22 @@ class Bitbucket implements PlatformHandler {
         return false // no pull found in all pages
     }
 
-    gitUser(): string {
+    public gitUser(): string {
         return "x-token-auth"
     }
 }
 
 class BitbucketCloud implements PlatformHandler {
-    private apiUrl: string
-    private token: string
+    private readonly apiUrl: string
+    private readonly token: string
 
-    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+    public constructor(baseUrl: string, token: string, apiPathPrefix: string) {
         this.apiUrl = urlJoin(baseUrl, apiPathPrefix === "" ? "/2.0" : apiPathPrefix)
         this.token = token
         deblog("initialized bitbucket cloud platform handler with URL '%s'", this.apiUrl)
     }
 
-    async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
+    public async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
         // https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/#api-repositories-workspace-repo-slug-pullrequests-post
         const response = await fetch(`${this.apiUrl}/repositories/${owner}/${repository}/pullrequests`, {
             body: JSON.stringify({
@@ -185,7 +185,7 @@ class BitbucketCloud implements PlatformHandler {
         }
     }
 
-    async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
+    public async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
         interface resultType {
             next: string
             values: {
@@ -208,7 +208,8 @@ class BitbucketCloud implements PlatformHandler {
             if (!isT<resultType>(json, "next", "values")) {
                 throw new Error(await response.text())
             }
-            next = json.next // next is empty when it's the last page
+            // next is empty when it's the last page
+            next = json.next // oxlint-disable-line prefer-destructuring
 
             // find the appropriate pull request target
             for (const pull of json.values) {
@@ -220,22 +221,22 @@ class BitbucketCloud implements PlatformHandler {
         return false // no pull found in all pages
     }
 
-    gitUser(): string {
+    public gitUser(): string {
         return "x-token-auth"
     }
 }
 
 class Gitea implements PlatformHandler {
-    private apiUrl: string
-    private token: string
+    private readonly apiUrl: string
+    private readonly token: string
 
-    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+    public constructor(baseUrl: string, token: string, apiPathPrefix: string) {
         this.apiUrl = urlJoin(baseUrl, apiPathPrefix === "" ? "/api/v1" : apiPathPrefix)
         this.token = token
         deblog("initialized gitea platform handler with URL '%s'", this.apiUrl)
     }
 
-    async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
+    public async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
         // https://docs.gitea.com/api/1.22/#tag/repository/operation/repoCreatePullRequest
         const response = await fetch(`${this.apiUrl}/repos/${owner}/${repository}/pulls`, {
             body: JSON.stringify({
@@ -255,7 +256,7 @@ class Gitea implements PlatformHandler {
         }
     }
 
-    async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
+    public async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
         // https://docs.gitea.com/api/1.22/#tag/repository/operation/repoGetPullRequestByBaseHead
         const response = await fetch(`${this.apiUrl}/repos/${owner}/${repository}/pulls/${to}/${from}`, {
             headers: { Authorization: `Bearer ${this.token}` },
@@ -264,18 +265,18 @@ class Gitea implements PlatformHandler {
         return response.ok
     }
 
-    gitUser(): string {
+    public gitUser(): string {
         return "gitea-token" // no specific prefix identified
     }
 }
 
 class Github implements PlatformHandler {
-    private apiUrl: string
-    private token: string
+    private readonly apiUrl: string
+    private readonly token: string
 
-    private octokit: Octokit
+    private readonly octokit: Octokit
 
-    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+    public constructor(baseUrl: string, token: string, apiPathPrefix: string) {
         this.apiUrl = urlJoin(baseUrl, apiPathPrefix)
         this.token = token
 
@@ -285,7 +286,7 @@ class Github implements PlatformHandler {
         deblog("initialized github platform handler with URL '%s'", this.apiUrl)
     }
 
-    async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
+    public async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
         // https://docs.github.com/fr/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
         await this.octokit.request("POST /repos/{owner}/{repo}/pulls", {
             base: pull.to,
@@ -298,7 +299,7 @@ class Github implements PlatformHandler {
         })
     }
 
-    async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
+    public async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
         // https://docs.github.com/fr/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests
         const response = await this.octokit.request("GET /repos/{owner}/{repo}/pulls", {
             base: to,
@@ -308,25 +309,25 @@ class Github implements PlatformHandler {
             repo: repository,
             state: "open",
         })
-        return response.data.length !== 0
+        return response.data.length > 0
     }
 
-    gitUser(): string {
+    public gitUser(): string {
         return "x-access-token"
     }
 }
 
 class Gitlab implements PlatformHandler {
-    private apiUrl: string
-    private token: string
+    private readonly apiUrl: string
+    private readonly token: string
 
-    constructor(baseUrl: string, token: string, apiPathPrefix: string) {
+    public constructor(baseUrl: string, token: string, apiPathPrefix: string) {
         this.apiUrl = urlJoin(baseUrl, apiPathPrefix === "" ? "/api/v4" : apiPathPrefix)
         this.token = token
         deblog("initialized gitlab platform handler with URL '%s'", this.apiUrl)
     }
 
-    async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
+    public async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
         // https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
         const response = await fetch(`${this.apiUrl}/projects/${encodeURIComponent(`${owner}/${repository}`)}/merge_requests`, {
             body: JSON.stringify({
@@ -346,7 +347,7 @@ class Gitlab implements PlatformHandler {
         }
     }
 
-    async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
+    public async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
         // https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
         const response = await fetch(
             `${this.apiUrl}/projects/${encodeURIComponent(`${owner}/${repository}`)}/merge_requests?state=opened&target_branch=${to}&source_branch=${from}`,
@@ -361,10 +362,10 @@ class Gitlab implements PlatformHandler {
         if (!isT<any[]>(json, "length")) {
             throw new Error(await response.text())
         }
-        return json.length !== 0
+        return json.length > 0
     }
 
-    gitUser(): string {
+    public gitUser(): string {
         return "gitlab-ci-token"
     }
 }

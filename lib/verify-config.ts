@@ -14,7 +14,7 @@ import { token } from "./platform-handler"
  *
  * @returns true if the input is not empty.
  */
-const stringNotEmpty = (value: string) => value !== ""
+const stringNotEmpty = (value: string): boolean => value !== ""
 
 /**
  * validTargets validates an input slice of targets (meaning both from and to fields are present)
@@ -82,7 +82,7 @@ export const verifyConfig = (config: BackmergeConfig): void => {
     const errors = Object.entries(config).reduce((agg: SemanticReleaseError[], [option, value]) => {
         // @ts-expect-error option is a keyof BackmergeConfig
         for (const validation of validators[option]) { // nosemgrep: gitlab.eslint.detect-object-injection
-            if (!validation(value)) { // eslint-disable-line @typescript-eslint/no-unsafe-call
+            if (!validation(value)) { // oxlint-disable-line no-unsafe-call
                 // @ts-expect-error option is a keyof BackmergeConfig
                 return [...agg, getConfigError(option, value)]
             }

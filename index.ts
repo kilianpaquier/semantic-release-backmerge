@@ -56,7 +56,7 @@ export const verifyConditions = async (globalConfig: BackmergeConfig, context: V
  * @param globalConfig the semantic-release-backmerge plugin configuration.
  * @param context the semantic-release context.
  */
-export const success = async (globalConfig: BackmergeConfig, context: SuccessContext) => {
+export const success = async (globalConfig: BackmergeConfig, context: SuccessContext): Promise<void> => {
     const logger = context.logger as Logger
     const [config, handler] = await verifyConditions(globalConfig, context)
 

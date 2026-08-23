@@ -8,39 +8,45 @@ import { getConfigError } from "../lib/error"
  * TestPlatformHandler is a mock PlatformHandler to use in testing functions.
  */
 export class TestPlatformHandler implements PlatformHandler {
-    private create?: (owner: string, repository: string, pull: Pull) => Promise<void>
-    private has?: (owner: string, repository: string, from: string, to: string) => Promise<boolean>
+    private readonly create?: (owner: string, repository: string, pull: Pull) => Promise<void>
+    private readonly has?: (owner: string, repository: string, from: string, to: string) => Promise<boolean>
 
-    constructor(create?: (owner: string, repository: string, pull: Pull) => Promise<void>, has?: (owner: string, repository: string, from: string, to: string) => Promise<boolean>) {
+    public constructor(create?: (owner: string, repository: string, pull: Pull) => Promise<void>, has?: (owner: string, repository: string, from: string, to: string) => Promise<boolean>) {
         this.create = create
         this.has = has
     }
 
-    createPull(owner: string, repository: string, pull: Pull): Promise<void> {
-        return this.create!(owner, repository, pull)
+    public async createPull(owner: string, repository: string, pull: Pull): Promise<void> {
+        if (!this.create) {
+            throw new Error("TestPlatformHandler.createPull called without a create callback")
+        }
+        return this.create(owner, repository, pull)
     }
 
-    hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
-        return this.has!(owner, repository, from, to)
+    public async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
+        if (!this.has) {
+            throw new Error("TestPlatformHandler.hasPull called without a has callback")
+        }
+        return this.has(owner, repository, from, to)
     }
 
-    gitUser(): string {
+    public gitUser(): string {
         return "test-user"
     }
 }
 
-const bunfetch = (wrap: (input: string | URL | Request, init?: BunFetchRequestInit) => Promise<Response>) => {
+const bunfetch = (wrap: (input: string | URL | Request, init?: BunFetchRequestInit) => Promise<Response>): void => {
     const ffetch: typeof fetch = async (input: string | URL | Request, init?: BunFetchRequestInit): Promise<Response> => wrap(input, init)
-    ffetch.preconnect = () => { }
-    spyOn(global, "fetch").mockImplementationOnce(ffetch)
+    ffetch.preconnect = (): void => {}
+    spyOn(globalThis, "fetch").mockImplementationOnce(ffetch)
 }
 
-const bunresponse = (data: any, ok = true): Promise<Response> =>
+const bunresponse = async (data: any, ok = true): Promise<Response> =>
     // @ts-expect-error because fetch signature is too complex, we only need a small part
-    Promise.resolve({
-        json: () => Promise.resolve(data),
+    ({
+        json: async (): Promise<any> => data,
         ok,
-        text: () => Promise.resolve(JSON.stringify(data))
+        text: async () => JSON.stringify(data)
     })
 
 
@@ -117,8 +123,7 @@ describe("gitUser", () => {
         for (const envvar of envs) {
             test(`should guess gitea platform with environment variable '${envvar}'`, () => {
                 // Arrange
-                const env: record = {}
-                env[envvar] = "baseURL"
+                const env: record = { [envvar]: "baseURL" }
 
                 // Act
                 const handler = newPlatformHandler(Platform.NULL, "", "", "", env)
@@ -136,8 +141,7 @@ describe("gitUser", () => {
         for (const envvar of envs) {
             test(`should guess github platform with environment variable '${envvar}'`, () => {
                 // Arrange
-                const env: record = {}
-                env[envvar] = "baseURL"
+                const env: record = { [envvar]: "baseURL" }
 
                 // Act
                 const handler = newPlatformHandler(Platform.NULL, "", "", "", env)
@@ -155,8 +159,7 @@ describe("gitUser", () => {
         for (const envvar of envs) {
             test(`should guess gitlab platform with environment variable '${envvar}'`, () => {
                 // Arrange
-                const env: record = {}
-                env[envvar] = "baseURL"
+                const env: record = { [envvar]: "baseURL" }
 
                 // Act
                 const handler = newPlatformHandler(Platform.NULL, "", "", "", env)
@@ -184,8 +187,7 @@ describe("token", () => {
         for (const envvar of envs) {
             test(`should read token from ${envvar}`, () => {
                 // Arrange
-                const env: record = {}
-                env[envvar] = "some-token"
+                const env: record = { [envvar]: "some-token" }
 
                 // Act
                 const actual = token(env)
@@ -211,7 +213,7 @@ describe("token", () => {
 describe("hasPull", () => {
     afterEach(() => mock.restore())
 
-    const failure = (platform: Platform) => {
+    const failure = (platform: Platform): void => {
         // Arrange
         const handler = newPlatformHandler(platform, "baseURL", "prefix", "some-token", {})
 
@@ -228,7 +230,7 @@ describe("hasPull", () => {
             test(`should throw error on invalid ${platform} pull requests response`, () => {
                 // Arrange
                 const json = { invalid: true, text: "some text" }
-                bunfetch(() => bunresponse(json))
+                bunfetch(async () => bunresponse(json))
 
                 const handler = newPlatformHandler(platform, "baseURL", "prefix", "some-token", {})
 
@@ -259,7 +261,7 @@ describe("hasPull", () => {
         for (const platform of platforms) {
             test(`should fail to check ${platform} pull request`, () => {
                 // Arrange
-                bunfetch(() => bunresponse("some error message", false))
+                bunfetch(async () => bunresponse("some error message", false))
 
                 // Act & Assert
                 failure(platform)
@@ -269,19 +271,19 @@ describe("hasPull", () => {
 
     test("should check bitbucket pull request", async () => {
         // Arrange
-        const expectedUrl = (query: string) => `baseURL/prefix/projects/owner/repos/repository/pull-requests?${query}`
+        const expectedUrl = (query: string): string => `baseURL/prefix/projects/owner/repos/repository/pull-requests?${query}`
         const expectedFirstPage = expectedUrl("state=OPEN&at=refs/heads/main&start=0&limit=100")
         const expectedSecondPage = expectedUrl("state=OPEN&at=refs/heads/main&start=1&limit=100") // start is 1 since mock only return one element
 
         const pages: string[] = []
-        bunfetch((input): Promise<Response> => {
+        bunfetch(async (input): Promise<Response> => {
             pages.push(input as string)
             return bunresponse({
                 isLastPage: false, // ensure paging is stopped when we find the right destination
                 values: [{ fromRef: { id: "refs/heads/main" }, toRef: { id: "refs/heads/staging" } }]
             })
         })
-        bunfetch((input): Promise<Response> => {
+        bunfetch(async (input): Promise<Response> => {
             pages.push(input as string)
             return bunresponse({
                 isLastPage: false, // ensure paging is stopped when we find the right destination
@@ -301,19 +303,19 @@ describe("hasPull", () => {
 
     test("should check bitbucket cloud pull request", async () => {
         // Arrange
-        const expectedUrl = (query: string) => `baseURL/prefix/repositories/owner/repository/pullrequests?${query}`
+        const expectedUrl = (query: string): string => `baseURL/prefix/repositories/owner/repository/pullrequests?${query}`
         const expectedFirstPage = expectedUrl("state=OPEN")
         const expectedSecondPage = expectedUrl("state=OPEN&page=2")
 
         const pages: string[] = []
-        bunfetch((input): Promise<Response> => {
+        bunfetch(async (input): Promise<Response> => {
             pages.push(input as string)
             return bunresponse({
                 next: expectedSecondPage,
                 values: [{ destination: { branch: { name: "staging" } }, source: { branch: { name: "main" } } }],
             })
         })
-        bunfetch((input): Promise<Response> => {
+        bunfetch(async (input): Promise<Response> => {
             pages.push(input as string)
             return bunresponse({
                 next: "",
@@ -336,8 +338,8 @@ describe("hasPull", () => {
         const expectedUrl = "baseURL/prefix/repos/owner/repository/pulls/develop/main"
 
         let url = ""
-        bunfetch((input): Promise<Response> => {
-            url = (input as string)
+        bunfetch(async (input): Promise<Response> => {
+            url = input as string
             return bunresponse({})
         })
 
@@ -356,8 +358,8 @@ describe("hasPull", () => {
         const expectedUrl = "baseURL/prefix/projects/owner%2Frepository/merge_requests?state=opened&target_branch=develop&source_branch=main"
 
         let url = ""
-        bunfetch((input): Promise<Response> => {
-            url = (input as string)
+        bunfetch(async (input): Promise<Response> => {
+            url = input as string
             return bunresponse([{}])
         })
 
@@ -375,7 +377,7 @@ describe("hasPull", () => {
 describe("createPull", () => {
     afterEach(() => mock.restore())
 
-    const failure = (platform: Platform) => {
+    const failure = (platform: Platform): void => {
         // Arrange
         const pull = {
             body: "some body",
@@ -411,7 +413,7 @@ describe("createPull", () => {
         for (const platform of platforms) {
             test(`should fail to create ${platform} pull request`, () => {
                 // Arrange
-                bunfetch(() => bunresponse("some error message", false))
+                bunfetch(async () => bunresponse("some error message", false))
 
                 // Act & Assert
                 failure(platform)
@@ -446,8 +448,8 @@ describe("createPull", () => {
 
         let url = ""
         let body: BunFetchRequestInit = {}
-        bunfetch((input, init): Promise<Response> => {
-            url = (input as string).toString()
+        bunfetch(async (input, init): Promise<Response> => {
+            url = input as string
             body = init ?? {}
             return bunresponse({})
         })
@@ -487,8 +489,8 @@ describe("createPull", () => {
 
         let url = ""
         let body: BunFetchRequestInit = {}
-        bunfetch((input, init): Promise<Response> => {
-            url = (input as string).toString()
+        bunfetch(async (input, init): Promise<Response> => {
+            url = input as string
             body = init ?? {}
             return bunresponse({})
         })
@@ -528,8 +530,8 @@ describe("createPull", () => {
 
         let url = ""
         let body: BunFetchRequestInit = {}
-        bunfetch((input, init): Promise<Response> => {
-            url = (input as string).toString()
+        bunfetch(async (input, init): Promise<Response> => {
+            url = input as string
             body = init ?? {}
             return bunresponse({})
         })
@@ -569,8 +571,8 @@ describe("createPull", () => {
 
         let url = ""
         let body: BunFetchRequestInit = {}
-        bunfetch((input, init): Promise<Response> => {
-            url = (input as string).toString()
+        bunfetch(async (input, init): Promise<Response> => {
+            url = input as string
             body = init ?? {}
             return bunresponse({})
         })

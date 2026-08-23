@@ -1,8 +1,7 @@
+import { authModificator, ls, version } from "../lib/git"
 import { describe, expect, test } from "bun:test"
 
 import parse from "git-url-parse"
-
-import { authModificator, ls, version } from "../lib/git"
 
 describe("authModificator", () => {
     test("should return a valid authenticated git URL from one with a port and ssh", () => {

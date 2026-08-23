@@ -1,10 +1,10 @@
 import * as git from "../../lib/git"
 
+import { Result, execa } from "execa"
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
 
-import { Result, execa } from "execa"
+import path from "node:path"
 
-import { join } from "node:path"
 import { tmpdir } from "node:os"
 
 /**
@@ -55,15 +55,15 @@ export interface Commit {
  * @returns the created bare repository and the directories around it.
  */
 export const init = async (): Promise<Origin> => {
-    const tmp = await mkdtemp(join(tmpdir(), "backmerge-"))
-    const projects = join(tmp, "projects")
-    const path = join(projects, "owner", "repo.git")
+    const tmp = await mkdtemp(path.join(tmpdir(), "backmerge-"))
+    const projects = path.join(tmp, "projects")
+    const repo = path.join(projects, "owner", "repo.git")
 
-    await mkdir(path, { recursive: true })
-    await execa("git", ["init", "--bare", "-b", "main", path])
-    await execa("git", ["config", "--bool", "http.receivepack", "true"], { cwd: path }) // required to push over HTTP
+    await mkdir(repo, { recursive: true })
+    await execa("git", ["init", "--bare", "-b", "main", repo])
+    await execa("git", ["config", "--bool", "http.receivepack", "true"], { cwd: repo }) // required to push over HTTP
 
-    return { [Symbol.asyncDispose]: () => rm(tmp, { force: true, recursive: true }), path, projects, tmp }
+    return { [Symbol.asyncDispose]: async () => rm(tmp, { force: true, recursive: true }), path: repo, projects, tmp }
 }
 
 /**
@@ -75,7 +75,7 @@ export const init = async (): Promise<Origin> => {
  * @returns the current directory semantic-release must be run in.
  */
 export const clone = async (url: string, tmp: string): Promise<string> => {
-    const cwd = join(tmp, "cwd")
+    const cwd = path.join(tmp, "cwd")
 
     await execa("git", ["clone", `${url}/owner/repo.git`, cwd])
     await execa("git", ["config", "user.email", "integration@example.com"], { cwd })
@@ -94,9 +94,9 @@ export const clone = async (url: string, tmp: string): Promise<string> => {
  * @param cwd the current directory.
  * @param commits the changes to commit, in order.
  */
-export const commit = async (cwd: string, ...commits: Commit[]) => {
+export const commit = async (cwd: string, ...commits: Commit[]): Promise<void> => {
     for (const { content, file, message } of commits) {
-        await writeFile(join(cwd, file), content)
+        await writeFile(path.join(cwd, file), content)
         await execa("git", ["add", "."], { cwd })
         await execa("git", ["commit", "-m", message], { cwd })
     }
@@ -108,7 +108,7 @@ export const commit = async (cwd: string, ...commits: Commit[]) => {
  * @param cwd the current directory.
  * @param name the branch to switch to.
  */
-export const checkout = async (cwd: string, name: string) => {
+export const checkout = async (cwd: string, name: string): Promise<void> => {
     // the full ref, otherwise an unknown branch silently resolves to a remote or a tag of that name
     const { stdout: hash } = await execa("git", ["rev-parse", "--verify", `refs/heads/${name}`], { cwd, reject: false })
     await git.checkout({ hash: hash === "" ? "HEAD" : hash, name }, cwd)
@@ -120,8 +120,10 @@ export const checkout = async (cwd: string, name: string) => {
  * @param url the base url of the fake server exposing the bare repository.
  * @param cwd the current directory.
  * @param name the branch to push to.
+ *
+ * @returns a promise resolved once the branch is pushed.
  */
-export const push = (url: string, cwd: string, name: string) => git.push(`${url}/owner/repo.git`, name, false, cwd)
+export const push = async (url: string, cwd: string, name: string): Promise<void> => git.push(`${url}/owner/repo.git`, name, false, cwd)
 
 /**
  * release runs semantic-release in the input directory.
@@ -132,14 +134,14 @@ export const push = (url: string, cwd: string, name: string) => git.push(`${url}
  *
  * @returns the semantic-release result, failures included.
  */
-export const release = (cwd: string, variable: string, token: string): Promise<Result> => {
-    const semanticRelease = join(import.meta.dirname, "..", "..", "node_modules", "semantic-release", "bin", "semantic-release.js")
+export const release = async (cwd: string, variable: string, token: string): Promise<Result> => {
+    const semanticRelease = path.join(import.meta.dirname, "..", "..", "node_modules", "semantic-release", "bin", "semantic-release.js")
     return execa("node", [semanticRelease, "--no-ci"], {
         cwd,
         env: {
             GIT_TERMINAL_PROMPT: "0",
             HOME: cwd,
-            PATH: process.env.PATH!,
+            PATH: process.env.PATH,
             [variable]: token
         },
         // isolated environment so no ambient CI variable or real token leaks into the run

@@ -77,7 +77,7 @@ export const bitbucket = (projects: string, token: string): Server => {
     const pulls: Pull[] = []
 
     const server = Bun.serve({
-        fetch: request => cgi(projects, request),
+        fetch: async request => cgi(projects, request),
         hostname: "127.0.0.1",
         idleTimeout: 0,
         port: 0,
@@ -102,9 +102,9 @@ export const bitbucket = (projects: string, token: string): Server => {
                     const json = await request.json() as { description: string, fromRef: { id: string }, title: string, toRef: { id: string } }
                     pulls.push({
                         body: json.description,
-                        from: String(json.fromRef.id).replace(heads, ""),
+                        from: json.fromRef.id.replace(heads, ""),
                         title: json.title,
-                        to: String(json.toRef.id).replace(heads, ""),
+                        to: json.toRef.id.replace(heads, ""),
                     })
                     return Response.json({ id: pulls.length }, { status: 201 })
                 },
@@ -129,7 +129,7 @@ export const bitbucketCloud = (projects: string, token: string): Server => {
     const pulls: Pull[] = []
 
     const server = Bun.serve({
-        fetch: request => cgi(projects, request),
+        fetch: async request => cgi(projects, request),
         hostname: "127.0.0.1",
         idleTimeout: 0,
         port: 0,
@@ -183,7 +183,7 @@ export const gitea = (projects: string, token: string): Server => {
     const pulls: Pull[] = []
 
     const server = Bun.serve({
-        fetch: request => cgi(projects, request),
+        fetch: async request => cgi(projects, request),
         hostname: "127.0.0.1",
         idleTimeout: 0,
         port: 0,
@@ -231,7 +231,7 @@ export const github = (projects: string, token: string): Server => {
     const pulls: Pull[] = []
 
     const server = Bun.serve({
-        fetch: request => cgi(projects, request),
+        fetch: async request => cgi(projects, request),
         hostname: "127.0.0.1",
         idleTimeout: 0,
         port: 0,
@@ -277,7 +277,7 @@ export const gitlab = (projects: string, token: string): Server => {
     const pulls: Pull[] = []
 
     const server = Bun.serve({
-        fetch: request => cgi(projects, request),
+        fetch: async request => cgi(projects, request),
         hostname: "127.0.0.1",
         idleTimeout: 0,
         port: 0,

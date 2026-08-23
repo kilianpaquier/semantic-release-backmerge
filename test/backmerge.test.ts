@@ -155,7 +155,7 @@ describe("backmerge", () => {
     test("should fail to merge branch and create pull request", async () => {
         // Arrange
         let called = 0
-        const handler = new TestPlatformHandler(async (): Promise<void> => { called++ }, async (): Promise<boolean> => false)
+        const handler = new TestPlatformHandler(async (): Promise<void> => { called += 1 }, async (): Promise<boolean> => false)
 
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
@@ -173,7 +173,7 @@ describe("backmerge", () => {
     test("should fail to merge branch and create pull request even if it exists", async () => {
         // Arrange
         let called = 0
-        const handler = new TestPlatformHandler(async (): Promise<void> => { called++ }, async (): Promise<boolean> => { throw new Error("shouldn't be called") })
+        const handler = new TestPlatformHandler(async (): Promise<void> => { called += 1 }, async (): Promise<boolean> => { throw new Error("shouldn't be called") })
 
         spyOn(git, "checkout").mockImplementation(async () => {})
         spyOn(git, "merge").mockImplementation(() => { throw new Error("an error message") })
@@ -264,7 +264,7 @@ describe("backmerge", () => {
         await backmerge(context, config, new TestPlatformHandler(), release, branches)
 
         // Assert
-        expect(cwds).toEqual(new Array<string>(branches.length * 3).fill(context.cwd!)) // a checkout, a merge and a push per branch
+        expect(cwds).toEqual(Array.from<string>({ length: branches.length * 3 }).fill(context.cwd ?? "")) // a checkout, a merge and a push per branch
         expect(checkouts).toEqual(branches)
         expect(merge).toEqual([
             { commit: "chore(release): merge branch main into staging [skip ci]", from: "main" },

@@ -2,9 +2,10 @@ import { beforeAll, describe, expect, test } from "bun:test"
 import { bitbucket, bitbucketCloud, gitea, github, gitlab } from "./git-http-server"
 import { checkout, clone, commit, init, log, push, release, releaserc } from "./fixture"
 
+import path from "node:path"
+
 import { Platform } from "../../lib/models/config"
 import { execa } from "execa"
-import { join } from "node:path"
 import { newPlatformHandler } from "../../lib/platform-handler"
 import { writeFile } from "node:fs/promises"
 
@@ -21,8 +22,8 @@ describe("integration", () => {
         { platform: Platform.GITLAB, start: gitlab, variable: "GITLAB_TOKEN" },
     ]
 
-    const plugin = join(import.meta.dirname, "..", "..")
-    beforeAll(() => execa("bun", ["run", "build"], { cwd: plugin }))
+    const plugin = path.join(import.meta.dirname, "..", "..")
+    beforeAll(async () => execa("bun", ["run", "build"], { cwd: plugin }))
 
     describe.each(platforms)("backmerge with $platform", ({ platform, start, variable }) => {
         test("should merge and push the released branch into the target branch", async () => {
@@ -42,7 +43,7 @@ describe("integration", () => {
             await commit(cwd, { content: "from main\n", file: "content.txt", message: "feat: add feature" })
             await push(server.url, cwd, "main")
 
-            await writeFile(join(cwd, ".releaserc.json"), releaserc(plugin, platform, server.url))
+            await writeFile(path.join(cwd, ".releaserc.json"), releaserc(plugin, platform, server.url))
 
             // Act
             const result = await release(cwd, variable, token)
@@ -75,7 +76,7 @@ describe("integration", () => {
             await commit(cwd, { content: "from main\n", file: "content.txt", message: "feat: add feature" })
             await push(server.url, cwd, "main")
 
-            await writeFile(join(cwd, ".releaserc.json"), releaserc(plugin, platform, server.url))
+            await writeFile(path.join(cwd, ".releaserc.json"), releaserc(plugin, platform, server.url))
 
             // Act
             const result = await release(cwd, variable, token)
@@ -84,7 +85,7 @@ describe("integration", () => {
             expect(result.exitCode).toEqual(0)
             expect(await log("develop", origin.path)).toEqual(["docs: develop note", "chore: init"])
             expect(server.pulls).toEqual([{
-                body: expect.stringContaining("add feature"),
+                body: expect.stringContaining("add feature") as string,
                 from: "main",
                 title: "Automatic merge failure",
                 to: "develop",
@@ -109,7 +110,7 @@ describe("integration", () => {
             await commit(cwd, { content: "from main\n", file: "content.txt", message: "feat: add feature" })
             await push(server.url, cwd, "main")
 
-            await writeFile(join(cwd, ".releaserc.json"), releaserc(plugin, platform, server.url))
+            await writeFile(path.join(cwd, ".releaserc.json"), releaserc(plugin, platform, server.url))
 
             const existing = { body: "already there", from: "main", title: "existing", to: "develop" }
             await newPlatformHandler(platform, server.url, "", token, {}).createPull("owner", "repo", existing)

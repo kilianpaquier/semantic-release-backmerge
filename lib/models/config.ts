@@ -44,4 +44,4 @@ export const defaultTitle = "Automatic merge failure"
  * defaultCommit is the default commit message for a merge commit.
  * It's interpolated by lodash before being used.
  */
-export const defaultCommit = "chore(release): merge branch ${ from } into ${ to } [skip ci]" // eslint-disable-line no-template-curly-in-string
+export const defaultCommit = "chore(release): merge branch ${from} into ${to} [skip ci]" // oxlint-disable-line no-template-curly-in-string

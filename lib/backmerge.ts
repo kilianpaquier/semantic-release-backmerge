@@ -1,3 +1,4 @@
+import { BackmergeConfig, Target } from "./models/config"
 import { Branch, authModificator, checkout, merge, push } from "./git"
 import { LastRelease, NextRelease } from "semantic-release"
 
@@ -7,7 +8,6 @@ import debug from "debug"
 import parse from "git-url-parse"
 import semver from "semver"
 
-import { BackmergeConfig, Target } from "./models/config"
 import { PlatformHandler } from "./platform-handler"
 import { template } from "lodash"
 
@@ -105,11 +105,12 @@ export const filter = (release: Branch, targets: Target[], branches: Branch[]): 
  * @param context input context with the logger, released branch, etc.
  * @param config the semantic-release-backmerge plugin configuration.
  * @param handler the interface to handle current git platform API calls.
+ * @param release the released branch.
  * @param mergeables slice of branches to be backmerged with released branch commits.
  *
  * @throws AggregateError of SemanticReleaseError(s) for each branch that couldn't be backmerged.
  */
-export const backmerge = async (context: Context, config: BackmergeConfig, handler: PlatformHandler, release: Branch, mergeables: Branch[]) => {
+export const backmerge = async (context: Context, config: BackmergeConfig, handler: PlatformHandler, release: Branch, mergeables: Branch[]): Promise<void> => {
     const url = parse(config.repositoryUrl)
     const authRemote = authModificator(url, handler.gitUser(), config.token)
 

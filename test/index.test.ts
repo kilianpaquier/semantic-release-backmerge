@@ -40,9 +40,9 @@ const getContext = (name: string): SuccessContext => ({
     },
     releases: [],
     // @ts-expect-error unused
-    stderr: undefined, // eslint-disable-line no-undefined
+    stderr: undefined,
     // @ts-expect-error unused
-    stdout: undefined, // eslint-disable-line no-undefined
+    stdout: undefined,
 })
 
 describe("verifyConditions", () => {

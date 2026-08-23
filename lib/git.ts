@@ -54,7 +54,7 @@ export const authModificator = (url: GitUrl, user: string, token: string): strin
  *
  * @returns the output of git --version.
  */
-export const version = async (cwd?: string, env?: Record<string, string>) => {
+export const version = async (cwd?: string, env?: Record<string, string>): Promise<string> => {
     const { stdout, stderr } = await execa("git", ["--version"], { cwd, env })
     if (stderr !== "") {
         deblog("received stderr text from git version: %s", stderr)
@@ -75,7 +75,7 @@ export const version = async (cwd?: string, env?: Record<string, string>) => {
  *
  * @throws an error if the git ls-remote cannot be done.
  */
-export const ls = async (remote: string, cwd?: string, env?: Record<string, string>) => {
+export const ls = async (remote: string, cwd?: string, env?: Record<string, string>): Promise<Branch[]> => {
     deblog("executing git ls-remote")
     const { stdout, stderr } = await execa("git", ["ls-remote", "--heads", remote], { cwd, env })
     if (stderr !== "") {
@@ -110,7 +110,7 @@ export const ls = async (remote: string, cwd?: string, env?: Record<string, stri
  *
  * @throws an error if the checkout cannot be done.
  */
-export const checkout = async (branch: Branch, cwd?: string, env?: Record<string, string>) => {
+export const checkout = async (branch: Branch, cwd?: string, env?: Record<string, string>): Promise<void> => {
     deblog("executing git checkout command with branch '%j'", branch)
     const { stderr } = await execa("git", ["checkout", "-B", branch.name, branch.hash], { cwd, env })
     if (stderr !== "") {
@@ -124,7 +124,7 @@ export const checkout = async (branch: Branch, cwd?: string, env?: Record<string
  * @param cwd the current directory.
  * @param env all known environment variables.
  */
-export const current = async(cwd?: string, env?: Record<string, string>) => {
+export const current = async (cwd?: string, env?: Record<string, string>): Promise<void> => {
     const { stdout, stderr } = await execa("git", ["log", "--reverse", "-1", "HEAD", "--stat"], { cwd, env })
     if (stderr !== "") {
         deblog("received stderr text from git rev-parse: %s", stderr)
@@ -141,7 +141,7 @@ export const current = async(cwd?: string, env?: Record<string, string>) => {
  *
  * @throws an error if the fetch cannot be done.
  */
-export const fetch = async (remote: string, cwd?: string, env?: Record<string, string>) => {
+export const fetch = async (remote: string, cwd?: string, env?: Record<string, string>): Promise<void> => {
     deblog("executing git fetch command")
     const { stderr } = await execa("git", ["fetch", remote], { cwd, env })
     if (stderr !== "") {
@@ -161,10 +161,10 @@ export const fetch = async (remote: string, cwd?: string, env?: Record<string, s
  *
  * @throws an error if the merge fails (in case of conflicts, etc.).
  */
-export const merge = async (from: string, commit: string, cwd?: string, env?: Record<string, string>) => {
+export const merge = async (from: string, commit: string, cwd?: string, env?: Record<string, string>): Promise<void> => {
     try {
         deblog("executing git merge command with branch '%s'", from)
-        const { stderr } = await execa("git", ["merge", `${from}`, "--ff", "-m", commit], { cwd, env })
+        const { stderr } = await execa("git", ["merge", from, "--ff", "-m", commit], { cwd, env })
         if (stderr !== "") {
             deblog("received stderr text from git merge --ff with branch '%s': %s", from, stderr)
         }
@@ -189,7 +189,7 @@ export const merge = async (from: string, commit: string, cwd?: string, env?: Re
  *
  * @throws an error if the push cannot be executed.
  */
-export const push = async (remote: string, branch: string, dryRun?: boolean, cwd?: string, env?: Record<string, string>) => {
+export const push = async (remote: string, branch: string, dryRun?: boolean, cwd?: string, env?: Record<string, string>): Promise<void> => {
     const args = ["push", remote, `HEAD:${branch}`]
     if (dryRun) {
         args.push("--dry-run")

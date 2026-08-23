@@ -80,7 +80,7 @@ This plugin can be configured through the semantic-release [configuration file](
     [
       "@kilianpaquier/semantic-release-backmerge",
       {
-        "commit": "chore(release): merge branch ${ from } into ${ to } [skip ci]",
+        "commit": "chore(release): merge branch ${from} into ${to} [skip ci]",
         "targets": [
           { "from": "main", "to": "develop" }
           { "from": "main", "to": "staging" }

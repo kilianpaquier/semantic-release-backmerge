@@ -17,6 +17,7 @@ include:
       build-disabled: "false"
       lint-enabled: "true"
       lint-args: run lint --ignore-pattern .bun --ignore-pattern .npm --ignore-pattern .yarn
+      project-dir: .
       publish-enabled: "false"
   - local: .gitlab/integration.overrides.yml
 

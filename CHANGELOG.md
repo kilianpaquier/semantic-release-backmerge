@@ -1,3 +1,30 @@
+## [1.9.1](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.9.0...v1.9.1) (2026-08-23)
+
+### Bug Fixes
+
+* **backmerge:** provide context.cwd and .env in checkout call ([95f5c4c](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/95f5c4c5bc3511c1dd306a853daec63b62635143))
+
+### Chores
+
+* **deps:** update dependency execa to v10 ([e110573](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/e110573042404c23922d9689439c14f4f557cfee))
+* **deps:** update dependency typescript to v7 ([2e8620c](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/2e8620c4a0d1823c5dbaf2fe52d56c9a91e14f9d))
+* **lint:** remove reduce usage, non-null assertions and explicit any ([94bc8cc](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/94bc8ccaa6a2ea15cc3ac7cafd5b4b484b75ca88))
+* **lint:** remove typeof check and use `keyof` to avoid [@ts-ignore](https://gitlab.com/ts-ignore) comment on platforms API responses bodies ([8ff6ada](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/8ff6ada52a564fd74152bea1e4b46b8f07ac9447))
+* **lint:** use RegExp.exec to filter target branches instead of string.match ([10565d1](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/10565d1daccf3886f0c9a1a925fdcf196ad93c48))
+* **lockfile:** subsequent dependencies maintainance ([0b4d785](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/0b4d7859d4d9a6f54bdf5de39cd599c7940d8f2f))
+
+### Continuous Integration
+
+* **layout:** regenerate kickr layout ([d9c7bb9](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/d9c7bb96d8a0335675f5c022eea65b34d1bba71c))
+
+### Styles
+
+* **lint:** migrate eslint to oxlint ([05804bb](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/05804bb3b1840ed8f9221518680f1a9b2f6f68d4))
+
+### Tests
+
+* add integration tests with local git http backend and pull requests call expectation ([605647c](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/605647c7a5267f354abb024c878b97f887413915))
+
 ## [1.9.0](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.8.0...v1.9.0) (2026-08-16)
 
 ### Documentation

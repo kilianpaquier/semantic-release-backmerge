@@ -70,12 +70,8 @@ export const filter = (release: Branch, targets: Target[], branches: Branch[]): 
             const branchMaintenance = semver.valid(semver.coerce(branch.name))
 
             if (releaseMaintenance && branchMaintenance) {
-                // don't keep branches of other major versions
-                const nextMajor = semver.inc(releaseMaintenance, "major")
-                const currentMajor = semver.coerce(semver.major(releaseMaintenance))!
-
                 // don't keep any branches if the current branch is the major branch (like v1 or v1.x)
-                if (semver.eq(releaseMaintenance, currentMajor)) {
+                if (semver.minor(releaseMaintenance) === 0 && semver.patch(releaseMaintenance) === 0) {
                     return false
                 }
 
@@ -86,7 +82,7 @@ export const filter = (release: Branch, targets: Target[], branches: Branch[]): 
                 }
 
                 // don't merge minor versions into next majors versions
-                if (semver.gte(branchMaintenance, nextMajor!)) {
+                if (semver.major(branchMaintenance) > semver.major(releaseMaintenance)) {
                     deblog(`not backmerging into '${branch.name}' since semver major version is after '${release.name}'`)
                     return false
                 }

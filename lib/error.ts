@@ -23,20 +23,20 @@ interface ConfigError {
  * configErrors is the global variable with all configuration key with their associated error.
  * It's used in GetConfigError function.
  */
-const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError } = {
-    apiPathPrefix: (value: any) => ({
+const configErrors: { [k in keyof BackmergeConfig]: (value?: unknown) => ConfigError } = {
+    apiPathPrefix: (value: unknown) => ({
         details: `[API Path Prefix](${linkify("configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'apiPathPrefix' configuration.`,
     }),
-    baseUrl: (value: any) => ({
+    baseUrl: (value: unknown) => ({
         details: `[Base URL](${linkify("configuration")}) must be a string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'baseUrl' configuration.`,
     }),
-    checkHasPull: (value: any) => ({
+    checkHasPull: (value: unknown) => ({
         details: `[CheckHasPull](${linkify("configuration")}) must be a boolean. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'checkHasPull' configuration.`,
     }),
-    commit: (value: any) => ({
+    commit: (value: unknown) => ({
         details: `[Commit](${linkify("configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'commit' configuration.`,
     }),
@@ -44,7 +44,7 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
     dryRun: () => ({
         message: "Invalid 'dryRun' configuration (coming from semantic-release options).",
     }),
-    platform: (value: any) => ({
+    platform: (value: unknown) => ({
         details: `[Platform](${linkify("configuration")}) must be one of 'bitbucket', 'bitbucket-cloud', 'gitea', 'github', 'gitlab'. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'platform' configuration.`,
     }),
@@ -52,11 +52,11 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
     repositoryUrl: () => ({
         message: "Invalid 'repositoryUrl' configuration (coming from semantic-release options).",
     }),
-    targets: (value: any) => ({
+    targets: (value: unknown) => ({
         details: `[Targets](${linkify("configuration")}) must be a valid array of targets ({ from: "...", to: "..." }). Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'targets' configuration.`,
     }),
-    title: (value: any) => ({
+    title: (value: unknown) => ({
         details: `[Title](${linkify("configuration")}) must be a non empty string. Provided value is ${JSON.stringify(value)}.`,
         message: `Invalid 'title' configuration.`,
     }),
@@ -74,7 +74,7 @@ const configErrors: { [k in keyof BackmergeConfig]: (value?: any) => ConfigError
  *
  * @returns the SemanticReleaseError.
  */
-export const getConfigError = (key: keyof BackmergeConfig, value?: any): SemanticReleaseError => {
+export const getConfigError = (key: keyof BackmergeConfig, value?: unknown): SemanticReleaseError => {
     const code = `EINVALID${key.toUpperCase()}`
     const error = configErrors[key](value) // nosemgrep: gitlab.eslint.detect-object-injection
     return new SemanticReleaseError(error.message, code, error.details)

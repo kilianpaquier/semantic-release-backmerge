@@ -1,5 +1,6 @@
 {
   "name": "@kilianpaquier/semantic-release-backmerge",
+  "description": "Backmerge feature for semantic-release with automatic PR creation when a conflict is identified. Available for GitHub, GitLab, Bitbucket, Forgejo and Gitea",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.js",

@@ -1,3 +1,21 @@
+## [1.9.2](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.9.1...v1.9.2) (2026-09-20)
+
+### Documentation
+
+* **package:** add repository description for better npmjs.org search results ([0c45c71](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/0c45c718619af48583a6343b8262eec22b0101bd))
+
+### Chores
+
+* **deps:** lockfile maintainance ([061449f](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/061449f9195bf382a786867af08f0187ac9c05a2))
+* **deps:** update dependency @octokit/core to v7.0.8 ([cdf2263](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/cdf22631e907218fb423fbf471f286d93718309e))
+* **deps:** update dependency @types/bun to v1.4.0 ([2739ad9](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/2739ad9ce1fa5f01c3c4e4060a4411b5ed74b489))
+* **deps:** update node dev dependencies ([c1e2991](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/c1e2991a83372e7bb5b2a098b5ea49ca37d8a17c))
+* **deps:** update node dev dependencies ([e587e78](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/e587e78c491c2e82868f441a3f477d17960b6a7c))
+
+### Continuous Integration
+
+* **layout:** regenerate kickr layout ([a9e3087](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/a9e3087243cef0a08a546295a8019c871f90bef0))
+
 ## [1.9.1](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.9.0...v1.9.1) (2026-08-23)
 
 ### Bug Fixes

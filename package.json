@@ -6,7 +6,7 @@
   "module": "dist/index.js",
   "type": "module",
   "version": "1.9.2",
-  "packageManager": "bun@1.4.0",
+  "packageManager": "bun@1.4.2",
   "files": [
     "CHANGELOG.md",
     "dist/*",

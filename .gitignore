@@ -10,11 +10,26 @@ tmp/
 # Bun cache directory
 .bun
 
-# Created by https://www.toptal.com/developers/gitignore/api/dotenv,node
-# Edit at https://www.toptal.com/developers/gitignore?templates=dotenv,node
+# Created by https://www.toptal.com/developers/gitignore/api/dotenv,git,node,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=dotenv,git,node,visualstudiocode
 
 ### dotenv ###
 .env
+
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+*.orig
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
 
 ### Node ###
 # Logs
@@ -155,4 +170,23 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-# End of https://www.toptal.com/developers/gitignore/api/dotenv,node
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# End of https://www.toptal.com/developers/gitignore/api/dotenv,git,node,visualstudiocode

@@ -1,11 +1,16 @@
-# @kilianpaquier/semantic-release-backmerge <!-- omit in toc -->
+# semantic-release-backmerge <!-- omit in toc -->
 
 <div align="center">
-  <img alt="GitLab Release" src="https://img.shields.io/gitlab/v/release/kilianpaquier%2Fsemantic-release-backmerge?gitlab_url=https%3A%2F%2Fgitlab.com&include_prereleases&sort=semver&style=for-the-badge">
-  <img alt="GitLab Issues" src="https://img.shields.io/gitlab/issues/open/kilianpaquier%2Fsemantic-release-backmerge?gitlab_url=https%3A%2F%2Fgitlab.com&style=for-the-badge">
-  <img alt="GitLab License" src="https://img.shields.io/gitlab/license/kilianpaquier%2Fsemantic-release-backmerge?gitlab_url=https%3A%2F%2Fgitlab.com&style=for-the-badge">
-  <img alt="GitLab CICD" src="https://img.shields.io/gitlab/pipeline-status/kilianpaquier%2Fsemantic-release-backmerge?gitlab_url=https%3A%2F%2Fgitlab.com&branch=main&style=for-the-badge">
-  <img alt="NPM Downloads" src="https://img.shields.io/npm/d18m/%40kilianpaquier%2Fsemantic-release-backmerge?style=for-the-badge">
+
+<!-- BEGIN_KICKR_BADGES -->
+[![GitLab Release](https://img.shields.io/gitlab/v/release/kilianpaquier%2Fsemantic-release-backmerge?gitlab_url=https%3A%2F%2Fgitlab.com&include_prereleases&sort=semver&style=for-the-badge)](https://gitlab.com/kilianpaquier/semantic-release-backmerge/-/releases)
+[![GitLab Issues](https://img.shields.io/gitlab/issues/open/kilianpaquier%2Fsemantic-release-backmerge?gitlab_url=https%3A%2F%2Fgitlab.com&style=for-the-badge)](https://gitlab.com/kilianpaquier/semantic-release-backmerge/-/work_items)
+[![GitLab License](https://img.shields.io/gitlab/license/kilianpaquier%2Fsemantic-release-backmerge?gitlab_url=https%3A%2F%2Fgitlab.com&style=for-the-badge)](https://gitlab.com/kilianpaquier/semantic-release-backmerge/-/blob/HEAD/LICENSE)
+[![GitLab CICD](https://img.shields.io/gitlab/pipeline-status/kilianpaquier%2Fsemantic-release-backmerge?gitlab_url=https%3A%2F%2Fgitlab.com&branch=main&style=for-the-badge)](https://gitlab.com/kilianpaquier/semantic-release-backmerge/-/pipelines?ref=main)
+[![NPM Downloads](https://img.shields.io/npm/d18m/%40kilianpaquier%2Fsemantic-release-backmerge?style=for-the-badge)](https://www.npmjs.com/package/@kilianpaquier/semantic-release-backmerge)
+[![Plumber Score](https://img.shields.io/endpoint?url=https%3A%2F%2Fscore.getplumber.io%2Fgitlab.com%2Fkilianpaquier%2Fsemantic-release-backmerge.json&style=for-the-badge)](https://score.getplumber.io/gitlab.com/kilianpaquier/semantic-release-backmerge)
+<!-- END_KICKR_BADGES -->
+
 </div>
 
 ---

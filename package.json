@@ -1,66 +1,66 @@
 {
-  "name": "@kilianpaquier/semantic-release-backmerge",
-  "description": "Backmerge feature for semantic-release with automatic PR creation when a conflict is identified. Available for GitHub, GitLab, Bitbucket, Forgejo and Gitea",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "type": "module",
-  "version": "1.9.2",
-  "packageManager": "bun@1.4.4",
-  "files": [
-    "CHANGELOG.md",
-    "dist/*",
-    "LICENSE",
-    "package.json",
-    "README.md"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "repository": {
-    "url": "https://gitlab.com/kilianpaquier/semantic-release-backmerge"
-  },
-  "keywords": [
-    "semantic-release-plugin",
-    "backmerge"
-  ],
-  "config": {
-    "buildDir": "dist"
-  },
-  "scripts": {
-    "build": "bun build ./index.ts --outdir $npm_package_config_buildDir --target node --minify",
-    "clean": "git clean -Xf ./*",
-    "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports --reporter=junit --reporter-outfile=reports/node-test.xunit.xml",
-    "lint": "oxlint . --ignore-pattern $npm_package_config_buildDir",
-    "test:integration": "bun test ./test/integration",
-    "test:unit": "bun test ./test/*.test.ts",
-    "test": "bun test"
-  },
-  "devDependencies": {
-    "@types/bun": "1.4.4",
-    "@types/debug": "4.1.13",
-    "@types/lodash": "4.17.27",
-    "@types/semantic-release__error": "3.0.3",
-    "@types/semver": "7.8.0",
-    "npm-check-updates": "23.1.1",
-    "oxlint": "1.89.0",
-    "oxlint-tsgolint": "7.0.2005",
-    "semantic-release": "25.0.9",
-    "typescript": "7.0.2"
-  },
-  "dependencies": {
-    "@octokit/core": "7.0.8",
-    "@semantic-release/error": "4.0.0",
-    "aggregate-error": "5.1.0",
-    "debug": "4.4.3",
-    "execa": "10.2.1",
-    "git-url-parse": "16.1.0",
-    "lodash": "4.18.1",
-    "semver": "7.8.5",
-    "url-join": "5.2.0"
-  },
-  "peerDependencies": {
-    "semantic-release": ">=24.1.0"
-  }
+    "name": "@kilianpaquier/semantic-release-backmerge",
+    "description": "Backmerge feature for semantic-release with automatic PR creation when a conflict is identified. Available for GitHub, GitLab, Bitbucket, Forgejo and Gitea",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "module": "dist/index.js",
+    "type": "module",
+    "version": "1.9.2",
+    "packageManager": "bun@1.4.4",
+    "files": [
+        "CHANGELOG.md",
+        "dist/*",
+        "LICENSE",
+        "package.json",
+        "README.md"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    },
+    "repository": {
+        "url": "https://gitlab.com/kilianpaquier/semantic-release-backmerge"
+    },
+    "keywords": [
+        "semantic-release-plugin",
+        "backmerge"
+    ],
+    "config": {
+        "buildDir": "dist"
+    },
+    "scripts": {
+        "build": "bun build ./index.ts --outdir $npm_package_config_buildDir --target node --minify",
+        "clean": "git clean -Xf ./*",
+        "cover": "bun test --coverage --coverage-reporter=lcov --coverage-dir=reports --reporter=junit --reporter-outfile=reports/node-test.xunit.xml",
+        "lint": "oxlint . --ignore-pattern $npm_package_config_buildDir",
+        "test:integration": "bun test ./test/integration",
+        "test:unit": "bun test ./test/*.test.ts",
+        "test": "bun test"
+    },
+    "devDependencies": {
+        "@types/bun": "1.4.4",
+        "@types/debug": "4.1.13",
+        "@types/lodash": "4.17.27",
+        "@types/semantic-release__error": "3.0.3",
+        "@types/semver": "7.8.0",
+        "npm-check-updates": "23.1.1",
+        "oxlint": "1.89.0",
+        "oxlint-tsgolint": "7.0.2005",
+        "semantic-release": "25.0.9",
+        "typescript": "7.0.2"
+    },
+    "dependencies": {
+        "@octokit/core": "7.0.8",
+        "@semantic-release/error": "4.0.0",
+        "aggregate-error": "5.1.0",
+        "debug": "4.4.3",
+        "execa": "10.2.1",
+        "git-url-parse": "16.1.0",
+        "lodash": "4.18.1",
+        "semver": "7.8.5",
+        "url-join": "5.2.0"
+    },
+    "peerDependencies": {
+        "semantic-release": ">=24.1.0"
+    }
 }

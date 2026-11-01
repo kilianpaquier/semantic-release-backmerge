@@ -35,6 +35,7 @@ const cgi = async (projects: string, request: Request): Promise<Response> => {
             CONTENT_TYPE: request.headers.get("content-type") ?? "",
             GIT_HTTP_EXPORT_ALL: "1",
             GIT_PROJECT_ROOT: projects,
+            PATH: process.env.PATH,
             PATH_INFO: url.pathname,
             QUERY_STRING: url.search.slice(1),
             REQUEST_METHOD: request.method,

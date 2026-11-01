@@ -1,3 +1,26 @@
+## [1.9.3](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.9.2...v1.9.3) (2026-11-01)
+
+### Chores
+
+* **deps:** lock file maintenance ([2b796b6](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/2b796b6884cd08feee702e79a1ddd45dd410cd1f))
+* **deps:** update bun to v1.4.2 ([f463e7c](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/f463e7cac25743f3e9545bedd60c716b22396c87))
+* **deps:** update node dependencies ([7fd4eda](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/7fd4edaad25bad31264a84b0cd60a35cd9a582d9))
+* **deps:** update node dev dependencies ([8e01c22](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/8e01c225526573992429069543dd41868646ebbd))
+* **deps:** update node dev dependencies ([5dc96e4](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/5dc96e433d5ce520013455b1e214ed5e5271cf8a))
+* **deps:** update node dev dependencies ([5757291](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/57572911197e0ffaed554523d76433ee69a3fcc1))
+
+### Continuous Integration
+
+* **layout:** regenerate kickr layout ([d227145](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/d227145dab4cb7f52377b18b4d0ab69a6ba7cdf3))
+
+### Styles
+
+* **package:** force indent 4 ([6ded166](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/6ded1661b0383e419f3b114bdc723f5742cf7620))
+
+### Tests
+
+* **integration:** reuse terminal PATH in case git is not installed globally ([20d1709](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/20d1709349328fb9c8e9f946fd0cf7deecebe5a1))
+
 ## [1.9.2](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.9.1...v1.9.2) (2026-09-20)
 
 ### Documentation

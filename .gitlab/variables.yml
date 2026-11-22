@@ -16,9 +16,9 @@ variables:
   #
   ####################################
 
-  SEMREL_IMAGE: docker.io/library/node:26.13.0-alpine3.23@sha256:e6c03d42b46af3b1e98207e59f06a43cfe5efd3ec4b4d3d9802bddf04f833374
-  KICKR_IMAGE: ghcr.io/jdx/mise:2026.10.24@sha256:3792f303ca3bef928e821a37b1b11fcb0e0b1d47bce9ba419842ce9d2b5123bc
-  PRE_COMMIT_IMAGE: docker.io/library/python:3.15.1-alpine3.23@sha256:cb295b554dbbea09b2c0e6e6d9ce55f051347c902fbb611e618c071addfb30a3
+  SEMREL_IMAGE: docker.io/library/node:26.13.1-alpine3.23@sha256:39d8c143e60e99ae98f014bebea1e72fc96d3c9bdf9504bc3a27af5c05bfa39f
+  KICKR_IMAGE: ghcr.io/jdx/mise:2026.11.10@sha256:80aa2afb17ba760cabe74ac90771ca2d1470773d514cc2bb79c69c8d3f92f150
+  PRE_COMMIT_IMAGE: docker.io/library/python:3.15.2-alpine3.23@sha256:32f06114a111c2467804d06194c5584f16804a78cfaf427fb1fcbb0b3391d0f1
 
-  NODE_IMAGE: docker.io/library/node:26.13.0-alpine3.23@sha256:e6c03d42b46af3b1e98207e59f06a43cfe5efd3ec4b4d3d9802bddf04f833374
-  NODE_SEMGREP_IMAGE: docker.io/semgrep/semgrep:1.182.1@sha256:451b3d875c00dac7ed5db5293e584a07de11449a409c10b3c2d2652f429630b6
+  NODE_IMAGE: docker.io/library/node:26.13.1-alpine3.23@sha256:39d8c143e60e99ae98f014bebea1e72fc96d3c9bdf9504bc3a27af5c05bfa39f
+  NODE_SEMGREP_IMAGE: docker.io/semgrep/semgrep:1.185.0@sha256:67518c174185a2043fdbed16c70631b79209499b3671178e7194379b48295a0d

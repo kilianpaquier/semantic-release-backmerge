@@ -179,15 +179,15 @@ class BitbucketCloud implements PlatformHandler {
 
     public async hasPull(owner: string, repository: string, from: string, to: string): Promise<boolean> {
         interface resultType {
-            next: string
+            next?: string
             values: {
                 destination: { branch: { name: string } }
                 source: { branch: { name: string } }
             }[]
         }
 
-        let url = `${this.apiUrl}/repositories/${owner}/${repository}/pullrequests?state=OPEN`
-        while (url !== "") {
+        let url: string | undefined = `${this.apiUrl}/repositories/${owner}/${repository}/pullrequests?state=OPEN`
+        while (url) {
             // https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/#api-repositories-workspace-repo-slug-pullrequests-get
             const response = await fetch(url, {
                 headers: { Authorization: `Bearer ${this.token}` },
@@ -196,11 +196,11 @@ class BitbucketCloud implements PlatformHandler {
             if (!response.ok) {
                 throw new Error(await response.text())
             }
-            const json = await response.json()
-            if (!isT<resultType>(json, "next", "values")) {
-                throw new Error(await response.text())
+            const json: unknown = await response.json()
+            if (!isT<resultType>(json, "values")) {
+                throw new Error(JSON.stringify(json)) // the body is already consumed by response.json()
             }
-            url = json.next // empty when it's the last page
+            url = json.next // absent when it's the last page
 
             // find the appropriate pull request target
             for (const pull of json.values) {

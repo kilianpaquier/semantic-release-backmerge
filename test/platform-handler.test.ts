@@ -317,7 +317,6 @@ describe("hasPull", () => {
         bunfetch(async (input): Promise<Response> => {
             pages.push(input as string)
             return bunresponse({
-                next: "",
                 values: [{ destination: { branch: { name: "develop" } }, source: { branch: { name: "main" } } }],
             })
         })

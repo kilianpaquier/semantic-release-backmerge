@@ -14,7 +14,7 @@ import { token } from "./platform-handler"
  *
  * @returns true if the input is not empty.
  */
-const stringNotEmpty = (value: string): boolean => value !== ""
+const stringNotEmpty = (value: unknown): boolean => value !== ""
 
 /**
  * validTargets validates an input slice of targets (meaning both from and to fields are present)
@@ -23,11 +23,10 @@ const stringNotEmpty = (value: string): boolean => value !== ""
  *
  * @returns true if all targets are valid.
  */
-const validTargetsArray = (targets: Partial<Target>[]): boolean => targets.
-    filter(target =>
-        typeof target.from === "string" && stringNotEmpty(target.from)
-        && typeof target.to === "string" && stringNotEmpty(target.to)
-    ).length === targets.length
+const validTargetsArray = (targets: unknown): boolean => isArray(targets) && targets.every((target: Partial<Target>) =>
+    typeof target.from === "string" && stringNotEmpty(target.from)
+    && typeof target.to === "string" && stringNotEmpty(target.to)
+)
 
 /**
  * validPlatform validates an input string platform.
@@ -36,7 +35,7 @@ const validTargetsArray = (targets: Partial<Target>[]): boolean => targets.
  *
  * @returns true if the input platform is valid.
  */
-const validPlatform = (input: Platform): boolean => Boolean(Object.values(Platform).find(platform => input === platform))
+const validPlatform = (input: unknown): boolean => Object.values<unknown>(Platform).includes(input)
 
 /**
  * ensureDefaults takes as input a partial backmerge configuration, alongside environment variables
@@ -66,7 +65,7 @@ export const ensureDefault = (config: Partial<BackmergeConfig>, env: Record<stri
  * @param config the configuration to validate.
  */
 export const verifyConfig = (config: BackmergeConfig): void => {
-    const validators: { [k in keyof BackmergeConfig]: ((value: any) => boolean)[] } = {
+    const validators: Record<keyof BackmergeConfig, ((value: unknown) => boolean)[]> = {
         apiPathPrefix: [isString],
         baseUrl: [isString],
         checkHasPull: [isBoolean],
@@ -80,14 +79,10 @@ export const verifyConfig = (config: BackmergeConfig): void => {
     }
 
     const errors: SemanticReleaseError[] = []
-    for (const [option, value] of Object.entries(config)) {
-        // @ts-expect-error option is a keyof BackmergeConfig
-        for (const validation of validators[option]) { // nosemgrep: gitlab.eslint.detect-object-injection
-            if (!validation(value)) { // oxlint-disable-line no-unsafe-call
-                // @ts-expect-error option is a keyof BackmergeConfig
-                errors.push(getConfigError(option, value))
-                break
-            }
+    for (const option of Object.keys(config) as (keyof BackmergeConfig)[]) {
+        const value = config[option] // nosemgrep: gitlab.eslint.detect-object-injection -- option is a keyof BackmergeConfig
+        if (!validators[option].every(validation => validation(value))) { // nosemgrep: gitlab.eslint.detect-object-injection -- option is a keyof BackmergeConfig
+            errors.push(getConfigError(option, value))
         }
     }
     if (errors.length > 0) {

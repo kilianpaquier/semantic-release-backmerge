@@ -93,8 +93,7 @@ describe("gitUser", () => {
 
     test("should throw an exception for invalid input platform", () => {
         // Act
-        // @ts-expect-error because we want to check invalid inputs
-        const matcher = expect(() => newPlatformHandler("invalid", "baseURL", "", "", {}))
+        const matcher = expect(() => newPlatformHandler("invalid" as unknown as Platform, "baseURL", "", "", {}))
 
         // Assert
         matcher.toThrowError(getConfigError("platform", "invalid"))

@@ -130,8 +130,7 @@ describe("verifyConfig", () => {
         // Arrange
         const config = ensureDefault({
             ...validConfig,
-            // @ts-expect-error because we want to check invalid inputs
-            platform: "some invalid value",
+            platform: "some invalid value" as unknown as Platform,
         }, { GITHUB_TOKEN: "some token" })
 
         // Act

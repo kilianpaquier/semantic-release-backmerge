@@ -80,6 +80,8 @@ export const clone = async (url: string, tmp: string): Promise<string> => {
     await execa("git", ["clone", `${url}/owner/repo.git`, cwd])
     await execa("git", ["config", "user.email", "integration@example.com"], { cwd })
     await execa("git", ["config", "user.name", "integration"], { cwd })
+    await execa("git", ["config", "--bool", "commit.gpgsign", "false"], { cwd }) // a user's global signing config must not leak in
+    await execa("git", ["config", "--bool", "tag.gpgsign", "false"], { cwd })
 
     // cloning an empty repository leaves the branch to init.defaultBranch unless git adopts the
     // remote HEAD, which only recent versions do, so name it like the bare repository was named

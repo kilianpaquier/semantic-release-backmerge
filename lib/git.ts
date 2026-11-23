@@ -31,7 +31,7 @@ const deblog = debug("semantic-release:backmerge")
  * @returns the computed remote url with all modifications' done.
  */
 export const authModificator = (url: GitUrl, user: string, token: string): string => {
-    const proto = url.protocols.length > 1 ? url.protocols[url.protocols.length - 1] : url.protocols[0] // nosemgrep: gitlab.eslint.detect-object-injection
+    const proto = url.protocols.at(-1)
     const origin = url.toString(proto)
     switch (proto) {
         case "ssh":

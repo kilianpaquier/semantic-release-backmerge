@@ -57,9 +57,7 @@ export const filter = (release: Branch, targets: Target[], branches: Branch[]): 
         filter(branch => branch.name !== release.name).
 
         // don't keep branches that doesn't match 'to' regexp
-        //
-        // ignore semgrep rule because 'target' (i.e. 'targets[*].to') comes from .releaserc file, owned by repositories running semantic-release-backmerge
-        // nosemgrep: gitlab.eslint.detect-non-literal-regexp
+        // nosemgrep: gitlab.eslint.detect-non-literal-regexp -- target comes from the .releaserc file
         filter(branch => targets.map(target => target.to).find(target => new RegExp(target).exec(branch.name))).
 
         // only keep upper version when it's a semver released branch

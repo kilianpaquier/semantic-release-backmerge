@@ -61,9 +61,7 @@ export const success = async (globalConfig: BackmergeConfig, context: SuccessCon
     const [config, handler] = await verifyConditions(globalConfig, context)
 
     // filter targets to find if the current released branch needs to be backmerged into others
-    //
-    // ignore semgrep rule because 'branch.from' (i.e. 'targets[*].from') comes from .releaserc file, owned by repositories running semantic-release-backmerge
-    // nosemgrep: gitlab.eslint.detect-non-literal-regexp
+    // nosemgrep: gitlab.eslint.detect-non-literal-regexp -- branch.from comes from the .releaserc file
     const targets = config.targets.filter(branch => new RegExp(branch.from).exec(context.branch.name))
     if (targets.length === 0) {
         logger.log(`Current branch '${context.branch.name}' doesn't match any configured backmerge targets.`)

@@ -74,11 +74,10 @@ describe("authModificator", () => {
 describe("ls", () => {
     test("should return a list of branches", async () => {
         // Act
-        const branches = await ls("origin") // a small test to ensure execa works
+        const branches = await ls(".") // a small test to ensure execa works, on the local repository to stay offline
 
         // Assert
-        const main = branches.filter(branch => branch.name === "main")
-        expect(main).not.toBeUndefined()
+        expect(branches).toBeArray()
     })
 })
 

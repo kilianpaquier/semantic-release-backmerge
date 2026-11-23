@@ -20,15 +20,8 @@ const deblog = debug("semantic-release:backmerge")
  *
  * @returns truthy if input value is really a T.
  */
-const isT = <T>(input: any, ...fields: (keyof T)[]): input is T => {
-    const cast = input as T
-    for (const field of fields) {
-        if (cast[field] === undefined) { // nosemgrep: gitlab.eslint.detect-object-injection
-            return false
-        }
-    }
-    return true
-}
+const isT = <T extends object>(input: unknown, ...fields: (keyof T)[]): input is T =>
+    typeof input === "object" && input !== null && fields.every(field => Object.hasOwn(input, field))
 
 /**
  * Pull represents a simplified pull request object.
@@ -193,10 +186,10 @@ class BitbucketCloud implements PlatformHandler {
             }[]
         }
 
-        let next = `${this.apiUrl}/repositories/${owner}/${repository}/pullrequests?state=OPEN`
-        while (next !== "") {
+        let url = `${this.apiUrl}/repositories/${owner}/${repository}/pullrequests?state=OPEN`
+        while (url !== "") {
             // https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/#api-repositories-workspace-repo-slug-pullrequests-get
-            const response = await fetch(next, {
+            const response = await fetch(url, {
                 headers: { Authorization: `Bearer ${this.token}` },
                 method: "GET",
             })
@@ -207,8 +200,7 @@ class BitbucketCloud implements PlatformHandler {
             if (!isT<resultType>(json, "next", "values")) {
                 throw new Error(await response.text())
             }
-            // next is empty when it's the last page
-            next = json.next // oxlint-disable-line prefer-destructuring
+            url = json.next // empty when it's the last page
 
             // find the appropriate pull request target
             for (const pull of json.values) {

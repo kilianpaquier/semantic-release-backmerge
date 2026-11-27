@@ -331,6 +331,26 @@ describe("hasPull", () => {
         expect(has).toBeTrue()
     })
 
+    test("should stop checking bitbucket cloud pull requests when next is absent", async () => {
+        // Arrange
+        const pages: string[] = []
+        bunfetch(async (input): Promise<Response> => {
+            pages.push(input as string)
+            return bunresponse({
+                values: [{ destination: { branch: { name: "staging" } }, source: { branch: { name: "main" } } }],
+            })
+        })
+
+        const handler = newPlatformHandler(Platform.BITBUCKET_CLOUD, "baseURL", "prefix", "some-token", {})
+
+        // Act
+        const has = await handler.hasPull("owner", "repository", "main", "develop")
+
+        // Assert
+        expect(pages).toEqual(["baseURL/prefix/repositories/owner/repository/pullrequests?state=OPEN"])
+        expect(has).toBeFalse()
+    })
+
     test("should check gitea pull request", async () => {
         // Arrange
         const expectedUrl = "baseURL/prefix/repos/owner/repository/pulls/develop/main"

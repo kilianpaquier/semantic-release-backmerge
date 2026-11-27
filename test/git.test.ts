@@ -1,7 +1,11 @@
 import { authModificator, ls, version } from "../lib/git"
-import { describe, expect, test } from "bun:test"
+import { describe, expect, onTestFinished, test } from "bun:test"
+import { mkdtemp, rm } from "node:fs/promises"
+import { tmpdir } from "node:os"
 
+import { execa } from "execa"
 import parse from "git-url-parse"
+import path from "node:path"
 
 describe("authModificator", () => {
     test("should return a valid authenticated git URL from one with a port and ssh", () => {
@@ -73,11 +77,20 @@ describe("authModificator", () => {
 
 describe("ls", () => {
     test("should return a list of branches", async () => {
+        // Arrange
+        const dir = await mkdtemp(path.join(tmpdir(), "backmerge-ls-")) // a fresh local repository, since a CI checkout may have no local branch
+        onTestFinished(async () => await rm(dir, { force: true, recursive: true }))
+
+        const git = async (...args: string[]): Promise<{ stdout: string }> => await execa("git", args, { cwd: dir })
+        await git("init", "--initial-branch", "main")
+        await git("-c", "user.name=test", "-c", "user.email=test@example.com", "-c", "commit.gpgsign=false", "commit", "--allow-empty", "-m", "init")
+        const { stdout: hash } = await git("rev-parse", "HEAD")
+
         // Act
-        const branches = await ls(".") // a small test to ensure execa works, on the local repository to stay offline
+        const branches = await ls(dir)
 
         // Assert
-        expect(branches).toBeArray()
+        expect(branches).toEqual([{ hash, name: "main" }])
     })
 })
 

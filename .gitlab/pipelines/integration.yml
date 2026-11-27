@@ -11,7 +11,7 @@ include:
 
   # Node.js template
   # https://gitlab.com/to-be-continuous/node
-  - remote: https://gitlab.com/to-be-continuous/node/-/raw/e07a9bc4a449b184e45d122d30d2d72526761808/templates/gitlab-ci-node.yml # 5.4.2
+  - remote: https://gitlab.com/to-be-continuous/node/-/raw/613fea51d330d29b286fc7634a0ebb621a532279/templates/gitlab-ci-node.yml # 5.5.0
     inputs:
       build-dir: $BUILD_DIR
       build-disabled: false

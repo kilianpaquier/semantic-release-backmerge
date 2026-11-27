@@ -1,3 +1,28 @@
+## [1.9.4](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.9.3...v1.9.4) (2026-11-27)
+
+### Bug Fixes
+
+* **bitbucket cloud:** ensure hasPull check doesn't fail when the API response doesn't have "next" key ([4b75716](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/4b7571661f53e4f250a2d5dfa727ed3acc9c6613))
+* **lint:** rework some code parts to remove linting and sandboxing issues ([cfe8300](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/cfe8300007514781a466fc5018130458318104a6))
+
+### Chores
+
+* **deps:** update bun to v1.4.5 ([c206eab](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/c206eab3688cd4f228292875f804017cb6eb33fc))
+* **deps:** update dependency semver to v7.8.6 ([244d448](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/244d448c00c8758fbe1185db0f3e19aa2125ae25))
+* **deps:** update node dev dependencies ([6eeabf7](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/6eeabf79645f80a88ebbdea2a1929151a80c68db))
+* **deps:** update node dev dependencies ([a649080](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/a6490806b173f779f0da9563c679f0343d01a2d6))
+* **merge:** remote-tracking branch 'origin/renovate/main-node-dev-dependencies' ([24a1122](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/24a1122182b2281ec665c92db330f87bfb9e3da3))
+
+### Continuous Integration
+
+* **gcl:** add .gitignore ([cf204e6](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/cf204e67bff20cbe6209808770ba121033bbd0dc))
+* **layout:** regenerate kickr layout ([484f944](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/484f9449f90609112d0e2a8b301c53a660e4071c))
+* **layout:** regenerate kickr layout ([e3d6375](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/e3d6375ad7f3496cd68b1fdadd2167479978dafc))
+
+### Tests
+
+* assert ls branches and bitbucket cloud last page ([c13e8aa](https://gitlab.com/kilianpaquier/semantic-release-backmerge/commit/c13e8aad837877af516cd178dfab2b0a766e6617))
+
 ## [1.9.3](https://gitlab.com/kilianpaquier/semantic-release-backmerge/compare/v1.9.2...v1.9.3) (2026-11-01)
 
 ### Chores
